@@ -1,0 +1,259 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;600;700&display=swap');
+
+/* Variables (Easy to customize colors) */
+:root {
+    --primary-color: #0d6efd; /* Bootstrap blue - change if desired */
+    --secondary-color: #6c757d; /* Bootstrap gray */
+    --light-bg: #f8f9fa;     /* Bootstrap light gray */
+    --dark-bg: #212529;      /* Bootstrap dark gray */
+    --text-dark: #343a40;
+    --text-light: #f8f9fa;
+    --heading-font: 'Montserrat', sans-serif;
+    --body-font: 'Lato', sans-serif;
+    --section-padding: 5rem 0;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--body-font);
+    color: var(--text-dark);
+    padding-top: 56px; /* Adjust if your navbar height changes */
+    scroll-behavior: smooth; /* Enables smooth scrolling natively, JS enhances it */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    font-weight: 600;
+}
+
+p {
+    line-height: 1.7;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: darken(var(--primary-color), 10%);
+    text-decoration: none; /* Often looks cleaner */
+}
+
+/* Section Styling */
+section {
+    padding: var(--section-padding);
+    overflow: hidden; /* Prevents horizontal scrollbars from animations */
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--text-dark);
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 3rem; /* Increased margin */
+}
+
+/* Simple underline effect for titles */
+.section-title::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--primary-color);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bg-light {
+    background-color: var(--light-bg) !important;
+}
+
+/* Navbar */
+.navbar {
+    transition: background-color 0.3s ease;
+}
+
+.navbar .navbar-brand {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem; /* Ensure consistent padding */
+    font-weight: 600;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #fff;
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 95vh; /* Almost full viewport height */
+    background: linear-gradient(rgba(40, 50, 70, 0.7), rgba(40, 50, 70, 0.7)), url('placeholder-background.jpg') no-repeat center center;
+    /* *** Replace placeholder-background.jpg with a cool background image! *** */
+    background-size: cover;
+    position: relative; /* Needed for potential pseudo-elements */
+    animation: fadeIn 1.5s ease-in-out; /* Simple fade-in for hero */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.hero-title {
+    font-weight: 700;
+    font-size: 3.5rem; /* Responsive adjustments might be needed */
+    margin-bottom: 1rem;
+    animation: slideInDown 1s ease-out 0.5s backwards; /* Animate title */
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+     animation: slideInUp 1s ease-out 0.5s backwards; /* Animate subtitle */
+}
+
+@keyframes slideInDown {
+  from { transform: translateY(-50px); opacity: 0;}
+  to { transform: translateY(0); opacity: 1;}
+}
+
+@keyframes slideInUp {
+   from { transform: translateY(50px); opacity: 0;}
+   to { transform: translateY(0); opacity: 1;}
+}
+
+
+/* About Section */
+.profile-pic {
+    max-width: 250px; /* Adjust size as needed */
+    border: 5px solid #fff; /* Optional white border */
+}
+
+/* Project Cards */
+.project-card {
+    border: none; /* Remove default border */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.project-card .card-title {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Publication List */
+.publication-item {
+    border-bottom: 1px solid #eee !important;
+    transition: background-color 0.3s ease;
+}
+.publication-item:hover {
+    background-color: #f8f9fa; /* Subtle hover highlight */
+}
+.publication-item h6 {
+    margin-bottom: 0.25rem;
+    color: var(--text-dark);
+}
+
+/* Services Section */
+.service-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff; /* Ensure background for shadow */
+}
+.service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+}
+.service-item i { /* Style for icons */
+    transition: transform 0.3s ease;
+}
+.service-item:hover i {
+    transform: scale(1.1);
+}
+
+/* Contact Form */
+#contact form .form-control {
+    border-radius: 0; /* Sharper edges - stylistic choice */
+    border: 1px solid #ced4da;
+     padding: 0.75rem 1rem;
+}
+#contact form .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25); /* Use Bootstrap's focus color */
+    border-color: var(--primary-color);
+}
+#contact button[type="submit"] {
+     padding: 0.75rem 2rem;
+     font-weight: 600;
+     transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#contact button[type="submit"]:hover {
+     background-color: darken(var(--primary-color), 10%);
+     transform: translateY(-2px);
+}
+
+
+/* Footer */
+footer {
+    color: var(--text-light);
+    background-color: var(--dark-bg); /* Ensures dark background */
+}
+footer a {
+    color: rgba(255,255,255, 0.8);
+}
+footer a:hover {
+     color: #fff;
+}
+
+/* Animations (Simple Transitions applied above) */
+/* Add specific entrance animations using Keyframes if needed, */
+/* or uncomment and use AOS library */
+
+/* Example: Simple fade-in for sections on scroll (requires JS observer or AOS) */
+.content-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Add a class via JS when section is in view */
+.content-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    section {
+        padding: 3rem 0;
+    }
+    .section-title {
+         margin-bottom: 2rem;
+    }
+    body {
+        padding-top: 56px; /* Matches default Bootstrap navbar height */
+    }
+}
