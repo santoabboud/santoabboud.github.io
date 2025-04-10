@@ -99,7 +99,7 @@ section {
 /* Hero Section */
 .hero-section {
     min-height: 95vh; /* Almost full viewport height */
-    background: linear-gradient(rgba(40, 50, 70, 0.7), rgba(40, 50, 70, 0.7)), url('flowers.jpg') no-repeat center center;
+    background: linear-gradient(rgba(40, 50, 70, 0.7), rgba(40, 50, 70, 0.7)), url('assets/img/flowers.jpg') no-repeat center center;
     /* *** Replace placeholder-background.jpg with a cool background image! *** */
     background-size: cover;
     position: relative; /* Needed for potential pseudo-elements */
