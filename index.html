@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilal Abboud - Laser Scientist & Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- Main Site Styles --- */
@@ -462,6 +463,7 @@
             let visiblePeaks = [];
             let isResizing = false;
 
+            // --- DOM Element References ---
             const viewerModal = document.getElementById('viewer-modal');
             const periodicTableContainer = document.getElementById('periodic-table');
             const categoryLegendContainer = document.getElementById('category-legend');
@@ -489,40 +491,33 @@
             ];
             const categories = { 'alkali': { name: 'Alkali Metal' },'alkaline-earth': { name: 'Alkaline Earth' },'lanthanide': { name: 'Lanthanide' },'actinide': { name: 'Actinide' },'transition': { name: 'Transition Metal' },'post-transition': { name: 'Post-Transition Metal' },'metalloid': { name: 'Metalloid' },'nonmetal': { name: 'Nonmetal' },'noble-gas': { name: 'Noble Gas' } };
             
-            // --- Private Methods ---
+            // --- Core Functions ---
             
             /**
-             * [FIXED] Finds spectral data for a given element symbol.
-             * This function is now more robust. It finds the key in the loaded `atomicData`
-             * by performing a case-insensitive search for the element's name. This prevents
-             * failures due to minor spelling differences between the local elements array and
-             * the keys in the fetched JSON data (e.g., "Aluminium" vs. "Aluminum").
+             * [FIX #2 - CRITICAL] Finds all ionization states for a given element symbol.
+             * This version, adapted from the working reference file, uses a regular expression
+             * to find all keys in the `atomicData` object that start with the element symbol
+             * (e.g., "Fe", "Fe I", "Fe II"). This correctly handles the structure of the NIST
+             * JSON data and is the primary fix for the non-interactive buttons.
              * @param {string} symbol The element symbol (e.g., "Fe").
              * @returns {object|null} An object with the element's data or null if not found.
              */
             const findDataForElement = (symbol) => {
-                const elementInfo = elements.find(el => el.symbol === symbol);
-                if (!elementInfo || !isDataLoaded) return null;
+                if(Object.keys(atomicData).length === 0) return null;
 
-                // Find the corresponding key in the loaded atomicData object, ignoring case.
-                const dataKey = Object.keys(atomicData).find(key => key.toLowerCase() === elementInfo.name.toLowerCase());
+                const regex = new RegExp(`^${symbol}(\\s|$)`);
+                const keys = Object.keys(atomicData).filter(key => regex.test(key));
+                if(keys.length === 0) return null;
 
-                if (!dataKey) {
-                    return null; // No data found for this element's name.
-                }
-                
-                const elementIonStates = atomicData[dataKey];
-                if (!elementIonStates) return null;
-
+                // Combine all lines from all ionization states
                 let allLines = [];
-                for (const ionKey in elementIonStates) {
-                    if (Array.isArray(elementIonStates[ionKey])) {
-                        allLines.push(...elementIonStates[ionKey].map(line => ({ ...line, ion: ionKey })));
+                keys.forEach(key => {
+                    if (atomicData[key] && atomicData[key].length > 0) {
+                        allLines = allLines.concat(atomicData[key].map(line => ({ ...line, ion: key })));
                     }
-                }
-                // Use the actual key from the data (dataKey) for the name to be consistent.
-                return allLines.length > 0 ? { symbol, name: dataKey, lines: allLines } : null;
-            };
+                });
+                return allLines.length > 0 ? { symbol, lines: allLines } : null;
+            }
             
             const createPeriodicTable = () => {  
                 periodicTableContainer.innerHTML = '';
@@ -538,8 +533,9 @@
                             cell.dataset.symbol = elementData.symbol;
                             cell.style.gridRowStart = row;
                             cell.style.gridColumnStart = col;
-                            // This check now works correctly because findDataForElement is fixed.
-                            // It will correctly enable buttons for which data exists.
+                            
+                            // [FIX #2 - CRITICAL] Disabling the cell now relies on the corrected
+                            // findDataForElement function, ensuring cells are enabled correctly.
                             cell.disabled = !findDataForElement(elementData.symbol);
                             cell.addEventListener('click', () => handleElementClick(elementData.symbol));
                             fragment.appendChild(cell);
@@ -579,99 +575,108 @@
             };
 
             const resizeCanvas = () => {
-                const { width, height } = spectrumCanvas.getBoundingClientRect();
-                if (spectrumCanvas.width !== width || spectrumCanvas.height !== height) {
-                    spectrumCanvas.width = width;
-                    spectrumCanvas.height = height;
-                }
+                const dpr = window.devicePixelRatio || 1;
+                const rect = spectrumCanvas.getBoundingClientRect();
+                spectrumCanvas.width = rect.width * dpr;
+                spectrumCanvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
             };
             
+            /**
+             * [UPGRADE] Converts a wavelength to an RGB color.
+             * This now uses d3.interpolateSpectral for accurate visible light color
+             * and has custom logic for UV and IR, matching the reference file.
+             * @param {number} wavelength Wavelength in nanometers.
+             * @returns {string} CSS color string.
+             */
             const wavelengthToRgb = (wavelength) => {
-                let r, g, b;
-                if (wavelength >= 380 && wavelength <= 439) { r = -(wavelength - 440) / (440 - 380); g = 0.0; b = 1.0; } 
-                else if (wavelength >= 440 && wavelength <= 489) { r = 0.0; g = (wavelength - 440) / (490 - 440); b = 1.0; } 
-                else if (wavelength >= 490 && wavelength <= 509) { r = 0.0; g = 1.0; b = -(wavelength - 510) / (510 - 490); } 
-                else if (wavelength >= 510 && wavelength <= 579) { r = (wavelength - 510) / (580 - 510); g = 1.0; b = 0.0; } 
-                else if (wavelength >= 580 && wavelength <= 644) { r = 1.0; g = -(wavelength - 645) / (645 - 580); b = 0.0; } 
-                else if (wavelength >= 645 && wavelength <= 780) { r = 1.0; g = 0.0; b = 0.0; } 
-                else { return `rgba(255, 255, 255, 0.7)`; }
-                let factor;
-                if (wavelength >= 380 && wavelength <= 419) { factor = 0.3 + 0.7 * (wavelength - 380) / (420 - 380); } 
-                else if (wavelength >= 420 && wavelength <= 700) { factor = 1.0; } 
-                else if (wavelength >= 701 && wavelength <= 780) { factor = 0.3 + 0.7 * (780 - wavelength) / (780 - 700); } 
-                else { factor = 0; }
-                const gamma = 0.8;
-                const R = Math.pow(r * factor, gamma) * 255;
-                const G = Math.pow(g * factor, gamma) * 255;
-                const B = Math.pow(b * factor, gamma) * 255;
-                return `rgb(${Math.round(R)}, ${Math.round(G)}, ${Math.round(B)})`;
-            };
+                if (wavelength < 380) { // UV
+                    const intensity = 0.5 + 0.5 * (wavelength - 200) / 180;
+                    return `rgb(${Math.round(intensity*150)}, ${Math.round(intensity*0)}, ${Math.round(intensity*200)})`;
+                }
+                if (wavelength > 750) { // IR
+                    const intensity = 1.0 - 0.7 * (wavelength - 750) / (1000 - 750);
+                    return `rgb(${Math.round(intensity*139)}, 0, 0)`;
+                }
+                // VISIBLE using D3's color scale
+                const t = 1 - ((wavelength - 380) / (750 - 380));
+                return d3.interpolateSpectral(t);
+            }
 
+            /**
+             * [UPGRADE] Main function to draw the spectra on the canvas.
+             * This has been updated to use the superior logic from the reference file,
+             * including logarithmic scaling for intensity and a split view for comparison.
+             */
             const drawSpectra = () => {
                 resizeCanvas();
-                const { width, height } = ctx.canvas;
-                ctx.clearRect(0, 0, width, height);
+                const { clientWidth, clientHeight } = spectrumCanvas;
+                ctx.clearRect(0, 0, clientWidth, clientHeight);
                 visiblePeaks = [];
 
-                if (appState.selectedElements.length === 0) {
-                    ctx.fillStyle = '#6b7280';
-                    ctx.font = '16px Inter';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Select an element to view its spectrum.', width / 2, height / 2);
+                const elementsToDraw = appState.selectedElements
+                    .map(symbol => findDataForElement(symbol))
+                    .filter(data => data !== null);
+
+                if (elementsToDraw.length === 0) {
+                     ctx.fillStyle = '#6b7280';
+                     ctx.font = '16px Inter';
+                     ctx.textAlign = 'center';
+                     ctx.fillText('Select an element to view its spectrum.', clientWidth / 2, clientHeight / 2);
                     return;
                 }
 
-                let maxIntensity = 0;
-                appState.selectedElements.forEach(symbol => {
-                    const data = findDataForElement(symbol);
-                    if (data && data.lines) {
-                        data.lines.forEach(line => {
-                            const intensity = parseFloat(String(line.rel_intensity).replace(/"/g, '')) || 0;
-                            if (intensity > maxIntensity) maxIntensity = intensity;
-                        });
-                    }
+                // Find the global max intensity for normalization
+                let globalMaxIntensity = 0;
+                elementsToDraw.forEach(elementData => {
+                    elementData.lines.forEach(line => {
+                        // [FIX] Use `intensity_obs` and parse it correctly
+                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
+                        if (!isNaN(intensity) && intensity > globalMaxIntensity) {
+                            globalMaxIntensity = intensity;
+                        }
+                    });
                 });
-                if (maxIntensity === 0) maxIntensity = 1;
+                if(globalMaxIntensity === 0) globalMaxIntensity = 1;
 
-                const axisY = height - 25;
-                ctx.strokeStyle = '#4b5563';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(0, axisY);
-                ctx.lineTo(width, axisY);
-                ctx.stroke();
+                const numSpectra = elementsToDraw.length;
+                const spectrumHeight = clientHeight / numSpectra;
 
-                ctx.fillStyle = '#9ca3af';
-                ctx.font = '12px Inter';
-                ctx.textAlign = 'center';
-                const numTicks = Math.max(2, Math.floor(width / 100));
-                for (let i = 0; i <= numTicks; i++) {
-                    const x = (width / numTicks) * i;
-                    const wavelength = viewState.minWavelength + (viewState.maxWavelength - viewState.minWavelength) * (i / numTicks);
-                    ctx.fillText(Math.round(wavelength), x, height - 5);
-                }
-                
-                const compareColors = ['#3b82f6', '#14b8a6', '#ef4444'];
-                appState.selectedElements.forEach((symbol, index) => {
-                    const data = findDataForElement(symbol);
-                    if (!data || !data.lines) return;
+                elementsToDraw.forEach((elementData, index) => {
+                    const yOffset = index * spectrumHeight;
 
-                    data.lines.forEach(line => {
-                        const wavelength = parseFloat(line.obs_wl_air_nm);
-                        if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) return;
+                    if (appState.isCompareMode && numSpectra > 1) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.font = 'bold 14px Inter';
+                        ctx.textAlign = 'left';
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(elementData.symbol, 10, yOffset + 10);
+                    }
+
+                    elementData.lines.forEach(line => {
+                        // [FIX] Use `wavelength` from the data
+                        const wavelength = parseFloat(line.wavelength);
+                        if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) {
+                            return;
+                        }
                         
-                        const intensity = parseFloat(String(line.rel_intensity).replace(/"/g, '')) || 0;
-                        const normalizedHeight = (intensity / maxIntensity) * (axisY - 10);
-                        const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * width;
-                        const y = axisY - normalizedHeight;
+                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
+                        if (isNaN(intensity) || intensity <= 0) return;
 
+                        const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * clientWidth;
+                        
+                        visiblePeaks.push({ wavelength, x, intensity, symbol: elementData.symbol });
+
+                        const logIntensity = Math.log10(intensity + 1);
+                        const logMax = Math.log10(globalMaxIntensity + 1);
+                        const lineHeight = (logIntensity / logMax) * (spectrumHeight * 0.9);
+                        
+                        ctx.strokeStyle = wavelengthToRgb(wavelength);
+                        ctx.lineWidth = 1.5;
                         ctx.beginPath();
-                        ctx.strokeStyle = appState.isCompareMode ? compareColors[index % compareColors.length] : wavelengthToRgb(wavelength);
-                        ctx.lineWidth = 2;
-                        ctx.moveTo(x, axisY);
-                        ctx.lineTo(x, y);
+                        ctx.moveTo(x, yOffset + spectrumHeight);
+                        ctx.lineTo(x, yOffset + spectrumHeight - lineHeight);
                         ctx.stroke();
-                        visiblePeaks.push({ x, y, wavelength, intensity, symbol });
                     });
                 });
             };
@@ -681,7 +686,7 @@
                 const deltaX = e.clientX - viewState.lastX;
                 viewState.lastX = e.clientX;
                 const range = viewState.maxWavelength - viewState.minWavelength;
-                const deltaWavelength = (deltaX / spectrumCanvas.width) * range;
+                const deltaWavelength = (deltaX / spectrumCanvas.clientWidth) * range;
                 viewState.minWavelength -= deltaWavelength;
                 viewState.maxWavelength -= deltaWavelength;
                 drawSpectra();
@@ -694,14 +699,12 @@
                 const currentWavelength = viewState.minWavelength + (x / rect.width) * (viewState.maxWavelength - viewState.minWavelength);
                 const zoomFactor = e.deltaY < 0 ? 0.8 : 1.25;
                 const newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
+                
+                if (newRange < 1) return; // Prevent zooming in too far
+                if (newRange > 50000) return; // Prevent zooming out too far
+
                 viewState.minWavelength = currentWavelength - (x / rect.width) * newRange;
                 viewState.maxWavelength = viewState.minWavelength + newRange;
-                if (viewState.maxWavelength - viewState.minWavelength < 1) { viewState.maxWavelength = viewState.minWavelength + 1; }
-                if (viewState.maxWavelength - viewState.minWavelength > 20000) { 
-                    const mid = (viewState.maxWavelength + viewState.minWavelength) / 2;
-                    viewState.minWavelength = mid - 10000;
-                    viewState.maxWavelength = mid + 10000;
-                }
                 drawSpectra();
             };
 
@@ -715,9 +718,9 @@
                     return distance < closest.distance ? { ...peak, distance } : closest;
                 }, { distance: Infinity });
 
-                if (closestPeak.distance < 10) {
+                if (closestPeak.distance < 10) { // Snap threshold
                     wavelengthTooltip.style.opacity = '1';
-                    wavelengthTooltip.style.left = `${x + 15}px`;
+                    wavelengthTooltip.style.left = `${closestPeak.x + 15}px`;
                     wavelengthTooltip.style.top = `${y}px`;
                     wavelengthTooltip.innerHTML = `<strong>${closestPeak.symbol}:</strong> ${closestPeak.wavelength.toFixed(3)} nm<br><strong>Int:</strong> ${closestPeak.intensity}`;
                 } else {
@@ -728,29 +731,33 @@
             const handleFind = () => {
                 const target = parseFloat(wavelengthInput.value);
                 const tolerance = parseFloat(toleranceInput.value) || 0.1;
-                if (isNaN(target)) { 
-                    // A non-blocking notification is better than alert()
-                    const originalBorder = wavelengthInput.style.borderColor;
-                    wavelengthInput.style.borderColor = 'red';
-                    setTimeout(() => { wavelengthInput.style.borderColor = originalBorder; }, 2000);
-                    return; 
-                }
+                if (isNaN(target)) { return; }
                 
+                if (Object.keys(atomicData).length === 0) {
+                     uploadStatus.textContent = 'Please load data before using the finder.';
+                     uploadStatus.classList.remove('text-green-400');
+                     uploadStatus.classList.add('text-red-400');
+                     return;
+                }
+
                 const results = [];
+                // Use `elements` array to iterate, then `findDataForElement` to get lines
                 elements.forEach(elementInfo => {
                     const elementData = findDataForElement(elementInfo.symbol);
                     if (!elementData) return;
 
                     const matchingLines = elementData.lines.filter(line => 
-                        Math.abs(parseFloat(line.obs_wl_air_nm) - target) <= tolerance
+                        Math.abs(parseFloat(line.wavelength) - target) <= tolerance
                     );
                     
                     if (matchingLines.length > 0) {
-                        results.push({
-                            symbol: elementInfo.symbol,
-                            name: elementData.name, // Use the name from the found data for consistency
-                            lines: matchingLines
-                        });
+                         matchingLines.forEach(line => {
+                             results.push({
+                                 element: line.ion,
+                                 wavelength: parseFloat(line.wavelength),
+                                 intensity: line.intensity_obs
+                             });
+                         });
                     }
                 });
                 displayFinderResults(results, target, tolerance);
@@ -759,16 +766,14 @@
             const displayFinderResults = (results, target, tolerance) => {
                 finderModal.style.display = 'flex';
                 finderModalResults.innerHTML = '';
-                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> element(s) with lines at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
+                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> line(s) at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
                 if (results.length === 0) {
-                    finderModalResults.innerHTML += '<p>No matching elements found in the loaded data.</p>';
+                    finderModalResults.innerHTML += '<p>No matching spectral lines found in the loaded data.</p>';
                     return;
                 }
-                results.forEach(result => {
-                    let content = `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.name} (${result.symbol})</h3>`;
-                    result.lines.forEach(line => {
-                         content += `<div class="text-sm text-gray-300 ml-2">→ <strong>${parseFloat(line.obs_wl_air_nm).toFixed(3)} nm</strong> (Rel. Int: ${line.rel_intensity})</div>`;
-                    });
+                results.sort((a,b) => a.wavelength - b.wavelength).forEach(result => {
+                    let content = `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.element}</h3>`;
+                    content += `<div class="text-sm text-gray-300 ml-2">→ <strong>${result.wavelength.toFixed(4)} nm</strong> (Rel. Int: ${result.intensity})</div>`;
                     content += `</div>`;
                     finderModalResults.innerHTML += content;
                 });
@@ -820,7 +825,7 @@
                 uploadStatus.textContent = '✅ Data loaded successfully.';
                 uploadStatus.classList.remove('text-gray-400', 'text-red-400');
                 uploadStatus.classList.add('text-green-400');
-                createPeriodicTable();
+                createPeriodicTable(); // Re-create the table to enable elements
                 if(categoryLegendContainer.children.length === 0) createCategoryLegend();
             };
 
@@ -894,10 +899,11 @@
             return {
                 open: () => {
                     viewerModal.style.display = 'flex';
-                    drawSpectra();
+                    createPeriodicTable(); // Create empty table on open
                     if (!isDataLoaded) {
                         loadDataFromRepo();
                     }
+                    drawSpectra(); // Initial draw
                 }
             };
         })();
