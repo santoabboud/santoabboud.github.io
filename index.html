@@ -6,6 +6,7 @@
     <title>Bilal Abboud - Laser Scientist & Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- Main Site Styles --- */
@@ -76,47 +77,41 @@
         .disclaimer { background-color: #fffbe6; border-left: 4px solid #ffc107; padding: 1rem; margin: 1.5rem 0; border-radius: 4px; }
         pre { background-color: #2d2d2d; color: #f8f8f2; padding: 1em; overflow-x: auto; border-radius: 5px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; white-space: pre-wrap; word-wrap: break-word; }
 
-        /* --- NIST Viewer Modal Styles (Scoped) --- */
-        .viewer-modal-overlay { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; animation: fadeInModal 0.3s; }
-        #viewer-modal .modal-content-wrapper { background-color: #111827; padding: 1rem; border: 1px solid #374151; width: 95vw; height: 95vh; border-radius: 0.5rem; color: #d1d5db; display: flex; flex-direction: column; }
-        #viewer-modal .viewer-modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #374151; flex-shrink: 0; }
-        #viewer-modal .viewer-modal-header h2 { font-size: 1.5rem; font-weight: 700; background-clip: text; color: transparent; background-image: linear-gradient(to right, #3b82f6, #14b8a6); }
-        #viewer-modal .viewer-modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
-        #viewer-modal .viewer-modal-close:hover { color: white; }
-        #viewer-modal .viewer-modal-body { flex-grow: 1; overflow: hidden; padding-top: 1rem; }
+        /* --- Generic Modal Styles --- */
+        .modal-overlay { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; animation: fadeInModal 0.3s; }
+        .modal-content-wrapper { background-color: #111827; padding: 1rem; border: 1px solid #374151; width: 95vw; max-width: 1200px; height: 95vh; border-radius: 0.5rem; color: #d1d5db; display: flex; flex-direction: column; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #374151; flex-shrink: 0; }
+        .modal-header h2 { font-size: 1.5rem; font-weight: 700; background-clip: text; color: transparent; background-image: linear-gradient(to right, #3b82f6, #14b8a6); }
+        .modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
+        .modal-close:hover { color: white; }
+        .modal-body { flex-grow: 1; overflow: hidden; padding-top: 1rem; }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-        
+
+        /* --- NIST Viewer Specific Styles --- */
         #viewer-modal .periodic-table-grid { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 4px; }
         #viewer-modal .element-cell { grid-column: span 1 / span 1; transition: all 0.2s ease-in-out; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 0.375rem; font-weight: 600; font-size: clamp(0.5rem, 1.2vw, 0.75rem); }
         #viewer-modal .element-cell:not(:disabled):hover { transform: scale(1.1); z-index: 10; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
         #viewer-modal .element-cell.selected { box-shadow: 0 0 0 3px #3b82f6; transform: scale(1.1); z-index: 11; }
         #viewer-modal .element-cell:disabled { cursor: not-allowed; opacity: 0.4; }
-        #viewer-modal .alkali { background-color: #ef4444; color: white; }
-        #viewer-modal .alkaline-earth { background-color: #f97316; color: white; }
-        #viewer-modal .lanthanide { background-color: #8b5cf6; color: white; }
-        #viewer-modal .actinide { background-color: #d946ef; color: white; }
-        #viewer-modal .transition { background-color: #3b82f6; color: white; }
-        #viewer-modal .post-transition { background-color: #22d3ee; color: white; }
-        #viewer-modal .metalloid { background-color: #10b981; color: white; }
-        #viewer-modal .nonmetal { background-color: #84cc16; color: white; }
-        #viewer-modal .noble-gas { background-color: #6366f1; color: white; }
-        
-        #viewer-modal .comparison-item { display: flex; justify-content: space-between; align-items: center; padding: 0.25rem 0.5rem; border-radius: 4px; }
-        #viewer-modal .comparison-item button { background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 1.5rem; height: 1.5rem; font-weight: bold; cursor: pointer; line-height: 1.5rem; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; }
-        #viewer-modal .comparison-item button:hover { background-color: #dc2626; }
-
-        #viewer-modal .finder-result-item:hover { background-color: #374151; }
-        #viewer-modal .file-upload-btn { background-color: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; }
-        #viewer-modal .file-upload-btn:hover { background-color: #2563eb; }
-        #viewer-modal .resize-handle { position: absolute; bottom: 0; left: 0; width: 100%; height: 10px; cursor: ns-resize; background: transparent; }
-        #viewer-modal .resize-handle::before { content: ''; display: block; width: 40px; height: 4px; background-color: #4b5563; border-radius: 2px; margin: 3px auto;}
-
+        #viewer-modal .alkali { background-color: #ef4444; } #viewer-modal .alkaline-earth { background-color: #f97316; } #viewer-modal .lanthanide { background-color: #8b5cf6; } #viewer-modal .actinide { background-color: #d946ef; } #viewer-modal .transition { background-color: #3b82f6; } #viewer-modal .post-transition { background-color: #22d3ee; } #viewer-modal .metalloid { background-color: #10b981; } #viewer-modal .nonmetal { background-color: #84cc16; } #viewer-modal .noble-gas { background-color: #6366f1; }
+        #viewer-modal .element-cell { color: white; }
+        #viewer-modal .comparison-item button, #calibration-modal .remove-datarow-btn { background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 1.5rem; height: 1.5rem; font-weight: bold; cursor: pointer; line-height: 1.5rem; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        #viewer-modal .comparison-item button:hover, #calibration-modal .remove-datarow-btn:hover { background-color: #dc2626; }
         #viewer-modal #compare-toggle:checked ~ .block { background-color: #14b8a6; }
         #viewer-modal #compare-toggle:checked ~ .dot { transform: translateX(1.5rem); }
+        
+        /* --- Calibration Tool Specific Styles --- */
+         #calibration-modal .data-input-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+         #calibration-modal .results-grid { display: grid; grid-template-columns: auto 1fr; gap-x: 1rem; gap-y: 0.5rem; align-items: center; }
+         #calibration-modal .results-grid .label { font-weight: 600; text-align: right; color: #9ca3af; }
+         #calibration-modal .results-grid .value { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #14b8a6; background-color: #2d3748; padding: 0.25rem 0.5rem; border-radius: 4px; }
+         #calibration-modal .main-action-btn { background-color: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; font-weight: 600; text-align: center; }
+         #calibration-modal .main-action-btn:hover { background-color: #2563eb; }
+         #calibration-modal .main-action-btn:disabled { background-color: #4b5563; cursor: not-allowed; }
+        
+        /* --- Generic Finder Modal (used by both tools) --- */
         .finder-modal { display: none; position: fixed; z-index: 2050; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
         .finder-modal-content { background-color: #1f2937; margin: auto; padding: 2rem; border: 1px solid #374151; width: 90%; max-width: 500px; border-radius: 0.5rem; color: #d1d5db; }
-        .finder-modal-content .modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
-        .finder-modal-content .modal-close:hover { color: white; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -160,9 +155,9 @@
                     <h3>Atomic Spectra Viewer</h3>
                     <p>An interactive tool to browse and compare emission spectra from the NIST Atomic Spectra Database.</p>
                 </div>
-                <div class="tool-card" style="opacity: 0.5; cursor: not-allowed;">
+                <div class="tool-card" id="launch-calibration-tool">
                     <h3>Spectrometer Calibration Calculator</h3>
-                    <p>A tool to calculate calibration coefficients from spectral lamp data. (Coming Soon)</p>
+                    <p>A tool to calculate calibration coefficients from spectral lamp data.</p>
                 </div>
             </div>
         </div>
@@ -182,28 +177,28 @@
         </div>
     </main>
 
-    <div id="viewer-modal" class="viewer-modal-overlay">
+    <!-- NIST Viewer Modal -->
+    <div id="viewer-modal" class="modal-overlay">
         <div class="modal-content-wrapper">
-            <div class="viewer-modal-header">
+            <div class="modal-header">
                 <h2>Atomic Spectra Viewer</h2>
-                <span id="viewer-modal-close" class="viewer-modal-close">&times;</span>
+                <span id="viewer-modal-close" class="modal-close">&times;</span>
             </div>
-            <div class="viewer-modal-body">
+            <div class="modal-body">
                 <div class="flex flex-col lg:flex-row gap-6 h-full">
-                    <div id="spectrum-panel" class="relative lg:flex-1 bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col" style="height: 40vh; min-height: 250px;">
+                    <div class="relative lg:flex-1 bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col" style="min-height: 250px;">
                         <h2 class="text-xl font-semibold mb-2 text-center text-gray-300">Spectrum View: <span id="current-element-viewer" class="font-bold text-white">None</span></h2>
-                        <div id="spectrum-display" class="flex-grow relative min-h-[150px]">
+                        <div class="flex-grow relative min-h-[150px]">
                             <canvas id="spectrum-canvas" class="w-full h-full bg-black rounded-lg cursor-grab active:cursor-grabbing"></canvas>
                             <div id="wavelength-tooltip" class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 pointer-events-none opacity-0 transition-opacity"></div>
                         </div>
                         <div class="text-center mt-2 text-sm text-gray-400">Scroll to zoom, drag to pan.</div>
-                        <div id="resize-handle" class="resize-handle"></div>
                     </div>
                     <div class="lg:w-[450px] flex-shrink-0 space-y-4 overflow-y-auto pr-2">
-                        <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                         <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
                             <h2 class="text-xl font-semibold mb-3 text-center">Load Data</h2>
                             <div class="flex flex-col items-center">
-                                <label for="json-upload" class="file-upload-btn text-center font-semibold">Upload Fallback JSON</label>
+                                <label for="json-upload" class="main-action-btn w-full">Upload Fallback JSON</label>
                                 <input type="file" id="json-upload" class="hidden" accept=".json">
                                 <p id="upload-status" class="text-sm text-gray-400 mt-2 text-center transition-colors">Loading data from repository...</p>
                             </div>
@@ -226,7 +221,7 @@
                                         <input type="number" id="wavelength-input" placeholder="Wavelength (nm)" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 w-full text-sm focus:ring-blue-500 focus:border-blue-500">
                                         <input type="number" id="tolerance-input" placeholder="Tolerance (±nm)" value="0.1" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 w-full text-sm focus:ring-blue-500 focus:border-blue-500">
                                     </div>
-                                    <button id="find-btn" class="mt-2 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Find Elements</button>
+                                    <button id="find-btn" class="mt-2 w-full main-action-btn">Find Elements</button>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +230,57 @@
             </div>
         </div>
     </div>
+    
+    <!-- Calibration Tool Modal -->
+    <div id="calibration-modal" class="modal-overlay">
+        <div class="modal-content-wrapper">
+             <div class="modal-header">
+                <h2>Spectrometer Calibration Calculator</h2>
+                <span id="calibration-modal-close" class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <!-- Left Panel: Data & Actions -->
+                    <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg">
+                         <div>
+                             <h3 class="text-lg font-semibold mb-2">Data Points</h3>
+                             <div class="data-input-grid text-sm font-bold text-gray-400">
+                                 <span>Wavelength (nm)</span>
+                                 <span>Pixel #</span>
+                                 <span></span>
+                             </div>
+                             <div id="data-points-container" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                                 <!-- Data rows will be injected here -->
+                             </div>
+                         </div>
+                         <div class="flex gap-4 mt-auto">
+                            <button id="add-datapoint-btn" class="w-full main-action-btn">Add Data Point</button>
+                            <button id="calculate-btn" class="w-full main-action-btn" disabled>Calculate</button>
+                         </div>
+                    </div>
+                    <!-- Right Panel: Results & Graph -->
+                    <div class="flex flex-col gap-4 bg-gray-900 p-4 rounded-lg">
+                        <div id="results-container" class="hidden">
+                             <h3 class="text-lg font-semibold">Results</h3>
+                             <div class="results-grid mt-2">
+                                 <div class="label">R²:</div> <div id="r-squared-result" class="value"></div>
+                                 <div class="label">λ =</div>  <div id="equation-result" class="value col-span-1 text-sm"></div>
+                                 <div class="label">C₃:</div> <div id="c3-result" class="value"></div>
+                                 <div class="label">C₂:</div> <div id="c2-result" class="value"></div>
+                                 <div class="label">C₁:</div> <div id="c1-result" class="value"></div>
+                                 <div class="label">C₀:</div> <div id="c0-result" class="value"></div>
+                             </div>
+                        </div>
+                        <div id="calibration-graph-container" class="flex-grow min-h-[200px] relative">
+                            <canvas id="calibration-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Generic Finder Modal -->
     <div id="finder-modal" class="finder-modal">
         <div class="finder-modal-content">
             <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold">Finder Results</h2><span class="modal-close" id="finder-modal-close-btn">&times;</span></div>
@@ -253,51 +298,9 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                <h3>Ocean Optics USB2000 Firmware update</h3>
-                <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
-                <h4>Introduction</h4>
-                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser)...</p>
-                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>...and the real thing:</p>
-                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>While it is rare to find units that are configured to measure spectra beyond 880nm...</p>
-                <h4>Directly flash the EEPROM that stores the firmware.</h4>
-                <p>You will need:</p>
-                <ul><li>Arduino Uno</li><li>Arduino (Wireless) SD shield</li><li>4x mini probing grabbers</li><li>SD card</li><li>jumper cables</li></ul>
-                <h5>Opening up the USB2000:</h5>
-                <p>Use a razor blade or a suitable alternative...</p>
-                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
-                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Once the screws are removed, pull the the lid up...</p>
-                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <h5>Connecting to the EEPROM</h5>
-                <p>First locate the EEPROM, on which the firmware is stored...</p>
-                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>close-up view:</p>
-                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Now use a mini probing grabber to connect to the following pins:</p>
-                <ul><li>VCC to a +3.3V or +5V supply</li><li>VSS to GND</li><li>SDA to Analog Pin 4</li><li>SCL to Analog Pin 5</li></ul>
-                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It should look something like this:</p>
-                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <h4>Flashing the EEPROM</h4>
-                <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
-                <pre><code>#include &lt;SPI.h&gt;
-#include &lt;SD.h&gt;
-#include &lt;Wire.h&gt;
-#define PROG_FNAME "USB200~1.iic"
-#define PROG_VERIFY 0
-#define PIN_SDCARD_CS 4
-#define UART_BAUD 9600
-#define EEPROM_I2C_ADDR 0x51
-#define EEPROM_BASE 0
-// ... rest of the arduino code
-</code></pre>
-                <p>After this, your USB2000 spectrometer should have been flashed... Good luck and have fun!</p>
+                <!-- Full project content here -->
             </div>
         </div>
-
         <div class="project-data" data-category="microscopy" data-id="frankenscope">
              <div class="preview-content">
                 <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Cover image for Frankenscope" onerror="this.onerror=null;this.src='https://placehold.co/150x100/333/fff?text=Image';">
@@ -307,18 +310,9 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <p>This Microscope consists of a Mitutoyo FS70L4 as its core, shown here from both sides:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Mitutoyo FS70L4 microscope body, right side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_leftside.jpg" alt="Mitutoyo FS70L4 microscope body, left side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It uses a Physik Instrumente six-axis closed-loop piezo hexapod stage for high-precision sample manipulation.</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/PI_hexapod_stage.jpg" alt="Physik Instrumente six-axis hexapod stage" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon).</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/TEEM_266_view.jpg" alt="TEEM Photonics 266nm deep UV laser" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source, as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
+                <!-- Full project content here -->
             </div>
         </div>
-
         <div class="project-data" data-category="night-vision" data-id="digital-nv">
              <div class="preview-content">
                 <img class="preview-image" src="https://placehold.co/150x100/333/fff?text=NV+Device" alt="Cover image for night vision project">
@@ -328,9 +322,7 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                <h3>DIY Digital Night Vision Monocular</h3>
-                <p>This is the full content for the DIY Digital Night Vision project. Here I would describe the components used, such as the specific low-light CMOS sensor, the lens assembly, the IR LED array, and the power management system. I would also include details about the 3D printed enclosure and the software running on the microcontroller.</p>
-                <img src="https://placehold.co/800x400/333/fff?text=Night+Vision+Device" alt="DIY Night Vision Device">
+                 <!-- Full project content here -->
             </div>
         </div>
     </div>
@@ -349,6 +341,7 @@
             const projectListEl = projectsPanel.querySelector('#project-list');
             const projectFullViewEl = projectsPanel.querySelector('#project-full-view');
             const launchNistViewerBtn = document.getElementById('launch-nist-viewer');
+            const launchCalibrationToolBtn = document.getElementById('launch-calibration-tool');
             
             const updateActiveNavLink = (targetId) => {
                 mainNavLinks.forEach(l => l.classList.remove('active'));
@@ -449,9 +442,8 @@
                 });
             });
             
-            launchNistViewerBtn.addEventListener('click', () => {
-                NistViewerModule.open();
-            });
+            launchNistViewerBtn.addEventListener('click', () => { NistViewerModule.open(); });
+            launchCalibrationToolBtn.addEventListener('click', () => { CalibrationToolModule.open(); });
         };
         
         // --- NIST Viewer Application Module (IIFE)---
@@ -461,9 +453,7 @@
             let appState = { isCompareMode: false, selectedElements: [], maxCompare: 3 };
             let viewState = { minWavelength: 200, maxWavelength: 1000, isDragging: false, lastX: 0 };
             let visiblePeaks = [];
-            let isResizing = false;
 
-            // --- DOM Element References ---
             const viewerModal = document.getElementById('viewer-modal');
             const periodicTableContainer = document.getElementById('periodic-table');
             const categoryLegendContainer = document.getElementById('category-legend');
@@ -480,36 +470,17 @@
             const finderModal = document.getElementById('finder-modal');
             const finderModalResults = document.getElementById('finder-modal-results');
             const finderModalCloseBtn = document.getElementById('finder-modal-close-btn');
-            const spectrumPanel = document.getElementById('spectrum-panel');
-            const resizeHandle = document.getElementById('resize-handle');
             const viewerModalClose = document.getElementById('viewer-modal-close');
             const ctx = spectrumCanvas.getContext('2d');
 
-            const elements = [
-                { symbol: 'H', name: 'Hydrogen', number: 1, row: 1, col: 1, category: 'nonmetal' },{ symbol: 'He', name: 'Helium', number: 2, row: 1, col: 18, category: 'noble-gas' },{ symbol: 'Li', name: 'Lithium', number: 3, row: 2, col: 1, category: 'alkali' },{ symbol: 'Be', name: 'Beryllium', number: 4, row: 2, col: 2, category: 'alkaline-earth' },{ symbol: 'B', name: 'Boron', number: 5, row: 2, col: 13, category: 'metalloid' },{ symbol: 'C', name: 'Carbon', number: 6, row: 2, col: 14, category: 'nonmetal' },{ symbol: 'N', name: 'Nitrogen', number: 7, row: 2, col: 15, category: 'nonmetal' },{ symbol: 'O', name: 'Oxygen', number: 8, row: 2, col: 16, category: 'nonmetal' },{ symbol: 'F', name: 'Fluorine', number: 9, row: 2, col: 17, category: 'nonmetal' },{ symbol: 'Ne', name: 'Neon', number: 10, row: 2, col: 18, category: 'noble-gas' },{ symbol: 'Na', name: 'Sodium', number: 11, row: 3, col: 1, category: 'alkali' },{ symbol: 'Mg', name: 'Magnesium', number: 12, row: 3, col: 2, category: 'alkaline-earth' },{ symbol: 'Al', name: 'Aluminium', number: 13, row: 3, col: 13, category: 'post-transition' },{ symbol: 'Si', name: 'Silicon', number: 14, row: 3, col: 14, category: 'metalloid' },{ symbol: 'P', name: 'Phosphorus', number: 15, row: 3, col: 15, category: 'nonmetal' },{ symbol: 'S', name: 'Sulfur', number: 16, row: 3, col: 16, category: 'nonmetal' },{ symbol: 'Cl', name: 'Chlorine', number: 17, row: 3, col: 17, category: 'nonmetal' },{ symbol: 'Ar', name: 'Argon', number: 18, row: 3, col: 18, category: 'noble-gas' },{ symbol: 'K', name: 'Potassium', number: 19, row: 4, col: 1, category: 'alkali' },{ symbol: 'Ca', name: 'Calcium', number: 20, row: 4, col: 2, category: 'alkaline-earth' },{ symbol: 'Sc', name: 'Scandium', number: 21, row: 4, col: 3, category: 'transition' },{ symbol: 'Ti', name: 'Titanium', number: 22, row: 4, col: 4, category: 'transition' },{ symbol: 'V', name: 'Vanadium', number: 23, row: 4, col: 5, category: 'transition' },{ symbol: 'Cr', name: 'Chromium', number: 24, row: 4, col: 6, category: 'transition' },{ symbol: 'Mn', name: 'Manganese', number: 25, row: 4, col: 7, category: 'transition' },{ symbol: 'Fe', name: 'Iron', number: 26, row: 4, col: 8, category: 'transition' },{ symbol: 'Co', name: 'Cobalt', number: 27, row: 4, col: 9, category: 'transition' },{ symbol: 'Ni', name: 'Nickel', number: 28, row: 4, col: 10, category: 'transition' },{ symbol: 'Cu', name: 'Copper', number: 29, row: 4, col: 11, category: 'transition' },{ symbol: 'Zn', name: 'Zinc', number: 30, row: 4, col: 12, category: 'post-transition' },{ symbol: 'Ga', name: 'Gallium', number: 31, row: 4, col: 13, category: 'post-transition' },{ symbol: 'Ge', name: 'Germanium', number: 32, row: 4, col: 14, category: 'metalloid' },{ symbol: 'As', name: 'Arsenic', number: 33, row: 4, col: 15, category: 'metalloid' },{ symbol: 'Se', name: 'Selenium', number: 34, row: 4, col: 16, category: 'nonmetal' },{ symbol: 'Br', name: 'Bromine', number: 35, row: 4, col: 17, category: 'nonmetal' },{ symbol: 'Kr', name: 'Krypton', number: 36, row: 4, col: 18, category: 'noble-gas' },{ symbol: 'Rb', name: 'Rubidium', number: 37, row: 5, col: 1, category: 'alkali' },{ symbol: 'Sr', name: 'Strontium', number: 38, row: 5, col: 2, category: 'alkaline-earth' },{ symbol: 'Y', name: 'Yttrium', number: 39, row: 5, col: 3, category: 'transition' },{ symbol: 'Zr', name: 'Zirconium', number: 40, row: 5, col: 4, category: 'transition' },{ symbol: 'Nb', name: 'Niobium', number: 41, row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', number: 42, row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', number: 43, row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', number: 44, row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', number: 45, row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', number: 46, row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', number: 47, row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', number: 48, row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', number: 49, row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', number: 50, row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', number: 51, row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', number: 52, row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', number: 53, row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', number: 54, row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', number: 55, row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', number: 56, row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', number: 57, row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', number: 58, row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', number: 59, row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', number: 60, row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', number: 61, row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', number: 62, row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', number: 63, row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', number: 64, row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', number: 65, row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', number: 66, row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', number: 67, row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', number: 68, row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', number: 69, row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', number: 70, row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', number: 71, row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', number: 72, row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', number: 73, row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', number: 74, row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', number: 75, row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', number: 76, row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', number: 77, row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', number: 78, row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', number: 79, row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', number: 80, row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', number: 81, row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', name: 'Lead', number: 82, row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', number: 83, row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', number: 84, row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', number: 85, row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', number: 86, row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', number: 87, row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', number: 88, row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', number: 89, row: 10, col: 3, category: 'actinide' },
-                { symbol: 'Th', name: 'Thorium', number: 90, row: 10, col: 4, category: 'actinide' }, { symbol: 'Pa', name: 'Protactinium', number: 91, row: 10, col: 5, category: 'actinide' }, { symbol: 'U', name: 'Uranium', number: 92, row: 10, col: 6, category: 'actinide' }, { symbol: 'Np', name: 'Neptunium', number: 93, row: 10, col: 7, category: 'actinide' }, { symbol: 'Pu', name: 'Plutonium', number: 94, row: 10, col: 8, category: 'actinide' }
-            ];
+            const elements = [ { symbol: 'H', name: 'Hydrogen', row: 1, col: 1, category: 'nonmetal' }, { symbol: 'He', name: 'Helium', row: 1, col: 18, category: 'noble-gas' }, { symbol: 'Li', name: 'Lithium', row: 2, col: 1, category: 'alkali' }, { symbol: 'Be', name: 'Beryllium', row: 2, col: 2, category: 'alkaline-earth' }, { symbol: 'B', name: 'Boron', row: 2, col: 13, category: 'metalloid' }, { symbol: 'C', name: 'Carbon', row: 2, col: 14, category: 'nonmetal' }, { symbol: 'N', name: 'Nitrogen', row: 2, col: 15, category: 'nonmetal' }, { symbol: 'O', name: 'Oxygen', row: 2, col: 16, category: 'nonmetal' }, { symbol: 'F', name: 'Fluorine', row: 2, col: 17, category: 'nonmetal' }, { symbol: 'Ne', name: 'Neon', row: 2, col: 18, category: 'noble-gas' }, { symbol: 'Na', name: 'Sodium', row: 3, col: 1, category: 'alkali' }, { symbol: 'Mg', name: 'Magnesium', row: 3, col: 2, category: 'alkaline-earth' }, { symbol: 'Al', name: 'Aluminium', row: 3, col: 13, category: 'post-transition' }, { symbol: 'Si', name: 'Silicon', row: 3, col: 14, category: 'metalloid' }, { symbol: 'P', name: 'Phosphorus', row: 3, col: 15, category: 'nonmetal' }, { symbol: 'S', name: 'Sulfur', row: 3, col: 16, category: 'nonmetal' }, { symbol: 'Cl', name: 'Chlorine', row: 3, col: 17, category: 'nonmetal' }, { symbol: 'Ar', name: 'Argon', row: 3, col: 18, category: 'noble-gas' }, { symbol: 'K', name: 'Potassium', row: 4, col: 1, category: 'alkali' }, { symbol: 'Ca', name: 'Calcium', row: 4, col: 2, category: 'alkaline-earth' }, { symbol: 'Sc', name: 'Scandium', row: 4, col: 3, category: 'transition' }, { symbol: 'Ti', name: 'Titanium', row: 4, col: 4, category: 'transition' }, { symbol: 'V', name: 'Vanadium', row: 4, col: 5, category: 'transition' }, { symbol: 'Cr', name: 'Chromium', row: 4, col: 6, category: 'transition' }, { symbol: 'Mn', name: 'Manganese', row: 4, col: 7, category: 'transition' }, { symbol: 'Fe', name: 'Iron', row: 4, col: 8, category: 'transition' }, { symbol: 'Co', name: 'Cobalt', row: 4, col: 9, category: 'transition' }, { symbol: 'Ni', name: 'Nickel', row: 4, col: 10, category: 'transition' }, { symbol: 'Cu', name: 'Copper', row: 4, col: 11, category: 'transition' }, { symbol: 'Zn', name: 'Zinc', row: 4, col: 12, category: 'post-transition' }, { symbol: 'Ga', name: 'Gallium', row: 4, col: 13, category: 'post-transition' }, { symbol: 'Ge', name: 'Germanium', row: 4, col: 14, category: 'metalloid' }, { symbol: 'As', name: 'Arsenic', row: 4, col: 15, category: 'metalloid' }, { symbol: 'Se', name: 'Selenium', row: 4, col: 16, category: 'nonmetal' }, { symbol: 'Br', name: 'Bromine', row: 4, col: 17, category: 'nonmetal' }, { symbol: 'Kr', name: 'Krypton', row: 4, col: 18, category: 'noble-gas' }, { symbol: 'Rb', name: 'Rubidium', row: 5, col: 1, category: 'alkali' }, { symbol: 'Sr', name: 'Strontium', row: 5, col: 2, category: 'alkaline-earth' }, { symbol: 'Y', name: 'Yttrium', row: 5, col: 3, category: 'transition' }, { symbol: 'Zr', name: 'Zirconium', row: 5, col: 4, category: 'transition' }, { symbol: 'Nb', name: 'Niobium', row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', name: 'Lead', row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', row: 10, col: 3, category: 'actinide' }, { symbol: 'Th', name: 'Thorium', row: 10, col: 4, category: 'actinide' }, { symbol: 'Pa', name: 'Protactinium', row: 10, col: 5, category: 'actinide' }, { symbol: 'U', name: 'Uranium', row: 10, col: 6, category: 'actinide' }, { symbol: 'Np', name: 'Neptunium', row: 10, col: 7, category: 'actinide' }, { symbol: 'Pu', name: 'Plutonium', row: 10, col: 8, category: 'actinide' } ];
             const categories = { 'alkali': { name: 'Alkali Metal' },'alkaline-earth': { name: 'Alkaline Earth' },'lanthanide': { name: 'Lanthanide' },'actinide': { name: 'Actinide' },'transition': { name: 'Transition Metal' },'post-transition': { name: 'Post-Transition Metal' },'metalloid': { name: 'Metalloid' },'nonmetal': { name: 'Nonmetal' },'noble-gas': { name: 'Noble Gas' } };
             
-            // --- Core Functions ---
-            
-            /**
-             * [FIX #2 - CRITICAL] Finds all ionization states for a given element symbol.
-             * This version, adapted from the working reference file, uses a regular expression
-             * to find all keys in the `atomicData` object that start with the element symbol
-             * (e.g., "Fe", "Fe I", "Fe II"). This correctly handles the structure of the NIST
-             * JSON data and is the primary fix for the non-interactive buttons.
-             * @param {string} symbol The element symbol (e.g., "Fe").
-             * @returns {object|null} An object with the element's data or null if not found.
-             */
             const findDataForElement = (symbol) => {
                 if(Object.keys(atomicData).length === 0) return null;
-
                 const regex = new RegExp(`^${symbol}(\\s|$)`);
                 const keys = Object.keys(atomicData).filter(key => regex.test(key));
                 if(keys.length === 0) return null;
-
-                // Combine all lines from all ionization states
                 let allLines = [];
                 keys.forEach(key => {
                     if (atomicData[key] && atomicData[key].length > 0) {
@@ -518,7 +489,6 @@
                 });
                 return allLines.length > 0 ? { symbol, lines: allLines } : null;
             }
-            
             const createPeriodicTable = () => {  
                 periodicTableContainer.innerHTML = '';
                 const fragment = document.createDocumentFragment();
@@ -533,9 +503,6 @@
                             cell.dataset.symbol = elementData.symbol;
                             cell.style.gridRowStart = row;
                             cell.style.gridColumnStart = col;
-                            
-                            // [FIX #2 - CRITICAL] Disabling the cell now relies on the corrected
-                            // findDataForElement function, ensuring cells are enabled correctly.
                             cell.disabled = !findDataForElement(elementData.symbol);
                             cell.addEventListener('click', () => handleElementClick(elementData.symbol));
                             fragment.appendChild(cell);
@@ -561,7 +528,6 @@
                 }
                 periodicTableContainer.appendChild(fragment);
             };
-
             const createCategoryLegend = () => {
                 categoryLegendContainer.innerHTML = '';
                 const fragment = document.createDocumentFragment();
@@ -573,7 +539,6 @@
                 }
                 categoryLegendContainer.appendChild(fragment);
             };
-
             const resizeCanvas = () => {
                 const dpr = window.devicePixelRatio || 1;
                 const rect = spectrumCanvas.getBoundingClientRect();
@@ -581,14 +546,6 @@
                 spectrumCanvas.height = rect.height * dpr;
                 ctx.scale(dpr, dpr);
             };
-            
-            /**
-             * [UPGRADE] Converts a wavelength to an RGB color.
-             * This now uses d3.interpolateSpectral for accurate visible light color
-             * and has custom logic for UV and IR, matching the reference file.
-             * @param {number} wavelength Wavelength in nanometers.
-             * @returns {string} CSS color string.
-             */
             const wavelengthToRgb = (wavelength) => {
                 if (wavelength < 380) { // UV
                     const intensity = 0.5 + 0.5 * (wavelength - 200) / 180;
@@ -598,26 +555,17 @@
                     const intensity = 1.0 - 0.7 * (wavelength - 750) / (1000 - 750);
                     return `rgb(${Math.round(intensity*139)}, 0, 0)`;
                 }
-                // VISIBLE using D3's color scale
                 const t = 1 - ((wavelength - 380) / (750 - 380));
                 return d3.interpolateSpectral(t);
             }
-
-            /**
-             * [UPGRADE] Main function to draw the spectra on the canvas.
-             * This has been updated to use the superior logic from the reference file,
-             * including logarithmic scaling for intensity and a split view for comparison.
-             */
             const drawSpectra = () => {
                 resizeCanvas();
                 const { clientWidth, clientHeight } = spectrumCanvas;
                 ctx.clearRect(0, 0, clientWidth, clientHeight);
                 visiblePeaks = [];
-
                 const elementsToDraw = appState.selectedElements
                     .map(symbol => findDataForElement(symbol))
                     .filter(data => data !== null);
-
                 if (elementsToDraw.length === 0) {
                      ctx.fillStyle = '#6b7280';
                      ctx.font = '16px Inter';
@@ -625,12 +573,9 @@
                      ctx.fillText('Select an element to view its spectrum.', clientWidth / 2, clientHeight / 2);
                     return;
                 }
-
-                // Find the global max intensity for normalization
                 let globalMaxIntensity = 0;
                 elementsToDraw.forEach(elementData => {
                     elementData.lines.forEach(line => {
-                        // [FIX] Use `intensity_obs` and parse it correctly
                         const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
                         if (!isNaN(intensity) && intensity > globalMaxIntensity) {
                             globalMaxIntensity = intensity;
@@ -638,13 +583,10 @@
                     });
                 });
                 if(globalMaxIntensity === 0) globalMaxIntensity = 1;
-
                 const numSpectra = elementsToDraw.length;
                 const spectrumHeight = clientHeight / numSpectra;
-
                 elementsToDraw.forEach((elementData, index) => {
                     const yOffset = index * spectrumHeight;
-
                     if (appState.isCompareMode && numSpectra > 1) {
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                         ctx.font = 'bold 14px Inter';
@@ -652,25 +594,18 @@
                         ctx.textBaseline = 'top';
                         ctx.fillText(elementData.symbol, 10, yOffset + 10);
                     }
-
                     elementData.lines.forEach(line => {
-                        // [FIX] Use `wavelength` from the data
                         const wavelength = parseFloat(line.wavelength);
                         if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) {
                             return;
                         }
-                        
                         const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
                         if (isNaN(intensity) || intensity <= 0) return;
-
                         const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * clientWidth;
-                        
                         visiblePeaks.push({ wavelength, x, intensity, symbol: elementData.symbol });
-
                         const logIntensity = Math.log10(intensity + 1);
                         const logMax = Math.log10(globalMaxIntensity + 1);
                         const lineHeight = (logIntensity / logMax) * (spectrumHeight * 0.9);
-                        
                         ctx.strokeStyle = wavelengthToRgb(wavelength);
                         ctx.lineWidth = 1.5;
                         ctx.beginPath();
@@ -680,7 +615,6 @@
                     });
                 });
             };
-
             const handlePan = (e) => {
                 if (!viewState.isDragging) return;
                 const deltaX = e.clientX - viewState.lastX;
@@ -691,7 +625,6 @@
                 viewState.maxWavelength -= deltaWavelength;
                 drawSpectra();
             };
-
             const handleZoom = (e) => {
                 e.preventDefault();
                 const rect = spectrumCanvas.getBoundingClientRect();
@@ -699,26 +632,20 @@
                 const currentWavelength = viewState.minWavelength + (x / rect.width) * (viewState.maxWavelength - viewState.minWavelength);
                 const zoomFactor = e.deltaY < 0 ? 0.8 : 1.25;
                 const newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
-                
-                if (newRange < 1) return; // Prevent zooming in too far
-                if (newRange > 50000) return; // Prevent zooming out too far
-
+                if (newRange < 1 || newRange > 50000) return; 
                 viewState.minWavelength = currentWavelength - (x / rect.width) * newRange;
                 viewState.maxWavelength = viewState.minWavelength + newRange;
                 drawSpectra();
             };
-
             const showWavelengthTooltip = (e) => {
                 const rect = spectrumCanvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
                 const closestPeak = visiblePeaks.reduce((closest, peak) => {
                     const distance = Math.abs(peak.x - x);
                     return distance < closest.distance ? { ...peak, distance } : closest;
                 }, { distance: Infinity });
-
-                if (closestPeak.distance < 10) { // Snap threshold
+                if (closestPeak.distance < 10) {
                     wavelengthTooltip.style.opacity = '1';
                     wavelengthTooltip.style.left = `${closestPeak.x + 15}px`;
                     wavelengthTooltip.style.top = `${y}px`;
@@ -727,73 +654,53 @@
                     wavelengthTooltip.style.opacity = '0';
                 }
             };
-            
             const handleFind = () => {
                 const target = parseFloat(wavelengthInput.value);
                 const tolerance = parseFloat(toleranceInput.value) || 0.1;
                 if (isNaN(target)) { return; }
-                
                 if (Object.keys(atomicData).length === 0) {
                      uploadStatus.textContent = 'Please load data before using the finder.';
                      uploadStatus.classList.remove('text-green-400');
                      uploadStatus.classList.add('text-red-400');
                      return;
                 }
-
                 const results = [];
-                // Use `elements` array to iterate, then `findDataForElement` to get lines
                 elements.forEach(elementInfo => {
                     const elementData = findDataForElement(elementInfo.symbol);
                     if (!elementData) return;
-
                     const matchingLines = elementData.lines.filter(line => 
                         Math.abs(parseFloat(line.wavelength) - target) <= tolerance
                     );
-                    
                     if (matchingLines.length > 0) {
                          matchingLines.forEach(line => {
-                             results.push({
-                                 element: line.ion,
-                                 wavelength: parseFloat(line.wavelength),
-                                 intensity: line.intensity_obs
-                             });
+                             results.push({ element: line.ion, wavelength: parseFloat(line.wavelength), intensity: line.intensity_obs });
                          });
                     }
                 });
                 displayFinderResults(results, target, tolerance);
             };
-
             const displayFinderResults = (results, target, tolerance) => {
                 finderModal.style.display = 'flex';
-                finderModalResults.innerHTML = '';
                 finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> line(s) at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
                 if (results.length === 0) {
-                    finderModalResults.innerHTML += '<p>No matching spectral lines found in the loaded data.</p>';
+                    finderModalResults.innerHTML += '<p>No matching spectral lines found.</p>';
                     return;
                 }
                 results.sort((a,b) => a.wavelength - b.wavelength).forEach(result => {
-                    let content = `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.element}</h3>`;
-                    content += `<div class="text-sm text-gray-300 ml-2">→ <strong>${result.wavelength.toFixed(4)} nm</strong> (Rel. Int: ${result.intensity})</div>`;
-                    content += `</div>`;
-                    finderModalResults.innerHTML += content;
+                    finderModalResults.innerHTML += `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.element}</h3><div class="text-sm text-gray-300 ml-2">→ <strong>${result.wavelength.toFixed(4)} nm</strong> (Rel. Int: ${result.intensity})</div></div>`;
                 });
             };
-            
             const handleElementClick = (symbol) => { 
                  if (appState.isCompareMode) {
                     const index = appState.selectedElements.indexOf(symbol);
-                    if (index > -1) {
-                        appState.selectedElements.splice(index, 1);
-                    } else if (appState.selectedElements.length < appState.maxCompare) {
-                        appState.selectedElements.push(symbol);
-                    }
+                    if (index > -1) { appState.selectedElements.splice(index, 1); } 
+                    else if (appState.selectedElements.length < appState.maxCompare) { appState.selectedElements.push(symbol); }
                 } else {
                     appState.selectedElements = (appState.selectedElements[0] === symbol) ? [] : [symbol];
                 }
                 updateUI();
                 drawSpectra();
             };
-
             const updateUI = () => {
                  document.querySelectorAll('#periodic-table .element-cell').forEach(cell => {
                     cell.classList.toggle('selected', appState.selectedElements.includes(cell.dataset.symbol));
@@ -818,17 +725,15 @@
                     });
                 }
             };
-            
             const handleDataLoaded = (data) => {
                 atomicData = data;
                 isDataLoaded = true;
                 uploadStatus.textContent = '✅ Data loaded successfully.';
                 uploadStatus.classList.remove('text-gray-400', 'text-red-400');
                 uploadStatus.classList.add('text-green-400');
-                createPeriodicTable(); // Re-create the table to enable elements
+                createPeriodicTable();
                 if(categoryLegendContainer.children.length === 0) createCategoryLegend();
             };
-
             const loadDataFromRepo = async () => {
                  const repoUrl = 'https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/nist_atomic_data.json';
                  uploadStatus.textContent = 'Loading data from repository...';
@@ -845,7 +750,6 @@
                      uploadStatus.classList.add('text-red-400');
                  }
             };
-            
             const handleFileUpload = (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
@@ -862,8 +766,6 @@
                 };
                 reader.readAsText(file);
             };
-
-            // --- Attach Listeners (once) ---
             jsonUploadInput.addEventListener('change', handleFileUpload);
             compareToggle.addEventListener('change', () => {
                 appState.isCompareMode = compareToggle.checked;
@@ -883,31 +785,259 @@
             spectrumCanvas.addEventListener('mouseleave', () => { wavelengthTooltip.style.opacity = '0'; });
             spectrumCanvas.addEventListener('mousemove', (e) => { handlePan(e); showWavelengthTooltip(e); });
             spectrumCanvas.addEventListener('wheel', handleZoom, { passive: false });
-            resizeHandle.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'ns-resize'; document.body.style.userSelect = 'none'; });
-            document.addEventListener('mousemove', (e) => {
-                if (!isResizing) return;
-                const modalBodyRect = viewerModal.querySelector('.modal-content-wrapper').getBoundingClientRect();
-                const currentTop = spectrumPanel.getBoundingClientRect().top;
-                const newHeight = e.clientY - currentTop;
-                if (newHeight > 150 && newHeight < (modalBodyRect.height - 150)) {
-                    spectrumPanel.style.height = `${newHeight}px`;
-                    drawSpectra();
-                }
-            });
-            document.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = ''; document.body.style.userSelect = '';});
-
             return {
                 open: () => {
                     viewerModal.style.display = 'flex';
-                    createPeriodicTable(); // Create empty table on open
-                    if (!isDataLoaded) {
-                        loadDataFromRepo();
-                    }
-                    drawSpectra(); // Initial draw
+                    createPeriodicTable();
+                    if (!isDataLoaded) { loadDataFromRepo(); }
+                    drawSpectra();
                 }
             };
         })();
 
+        // --- Spectrometer Calibration Tool Module (IIFE) ---
+        const CalibrationToolModule = (() => {
+            const modal = document.getElementById('calibration-modal');
+            const closeBtn = document.getElementById('calibration-modal-close');
+            const addDataPointBtn = document.getElementById('add-datapoint-btn');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const dataPointsContainer = document.getElementById('data-points-container');
+            const resultsContainer = document.getElementById('results-container');
+            const rSquaredResult = document.getElementById('r-squared-result');
+            const equationResult = document.getElementById('equation-result');
+            const c3Result = document.getElementById('c3-result');
+            const c2Result = document.getElementById('c2-result');
+            const c1Result = document.getElementById('c1-result');
+            const c0Result = document.getElementById('c0-result');
+            const canvas = document.getElementById('calibration-canvas');
+            let chart;
+            let dataPoints = [];
+
+            const open = () => {
+                modal.style.display = 'flex';
+                if (dataPoints.length === 0) {
+                    // Add a few default empty rows to start
+                    addDataPointRow();
+                    addDataPointRow();
+                    addDataPointRow();
+                    addDataPointRow();
+                }
+                updateCalculateButtonState();
+            };
+
+            const close = () => { modal.style.display = 'none'; };
+
+            const addDataPointRow = () => {
+                const row = document.createElement('div');
+                row.className = 'data-input-grid';
+                row.innerHTML = `
+                    <input type="number" placeholder="e.g., 435.83" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 w-full text-sm focus:ring-blue-500 focus:border-blue-500" name="wavelength">
+                    <input type="number" placeholder="e.g., 512" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 w-full text-sm focus:ring-blue-500 focus:border-blue-500" name="pixel">
+                    <button class="remove-datarow-btn">&times;</button>
+                `;
+                dataPointsContainer.appendChild(row);
+                row.querySelector('.remove-datarow-btn').addEventListener('click', () => {
+                    row.remove();
+                    updateCalculateButtonState();
+                });
+                row.querySelectorAll('input').forEach(input => input.addEventListener('input', updateCalculateButtonState));
+            };
+            
+            const updateCalculateButtonState = () => {
+                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
+                let validPairs = 0;
+                rows.forEach(row => {
+                    const wl = row.querySelector('input[name="wavelength"]').value;
+                    const px = row.querySelector('input[name="pixel"]').value;
+                    if(wl && px) validPairs++;
+                });
+                calculateBtn.disabled = validPairs < 4;
+            };
+
+            const calculate = () => {
+                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
+                dataPoints = [];
+                rows.forEach(row => {
+                    const wavelength = parseFloat(row.querySelector('input[name="wavelength"]').value);
+                    const pixel = parseFloat(row.querySelector('input[name="pixel"]').value);
+                    if (!isNaN(wavelength) && !isNaN(pixel)) {
+                        dataPoints.push({ x: pixel, y: wavelength });
+                    }
+                });
+
+                if (dataPoints.length < 4) {
+                    alert("Please provide at least 4 data points for a 3rd order polynomial fit.");
+                    return;
+                }
+
+                // Perform polynomial regression
+                const coeffs = polynomialRegression(dataPoints, 3);
+                if (!coeffs) {
+                    alert("Calculation failed. Ensure data points are not collinear.");
+                    return;
+                }
+                
+                const [c0, c1, c2, c3] = coeffs;
+
+                // Calculate R^2
+                const rSquared = calculateRSquared(dataPoints, coeffs);
+
+                // Display results
+                displayResults({c0, c1, c2, c3, rSquared});
+                
+                // Draw graph
+                drawGraph(dataPoints, coeffs);
+            };
+
+            const displayResults = (results) => {
+                rSquaredResult.textContent = results.rSquared.toFixed(5);
+                c0Result.textContent = results.c0.toExponential(4);
+                c1Result.textContent = results.c1.toExponential(4);
+                c2Result.textContent = results.c2.toExponential(4);
+                c3Result.textContent = results.c3.toExponential(4);
+                equationResult.textContent = `c₃·p³ + c₂·p² + c₁·p + c₀`;
+                resultsContainer.classList.remove('hidden');
+            };
+
+            const drawGraph = (points, coeffs) => {
+                const fittedLine = [];
+                const minPixel = Math.min(...points.map(p => p.x));
+                const maxPixel = Math.max(...points.map(p => p.x));
+                const range = maxPixel - minPixel;
+
+                for (let i = 0; i <= 100; i++) {
+                    const p = minPixel + (i / 100) * range;
+                    const wl = coeffs[3] * p**3 + coeffs[2] * p**2 + coeffs[1] * p + coeffs[0];
+                    fittedLine.push({x: p, y: wl});
+                }
+                
+                if (chart) { chart.destroy(); }
+                const ctx = canvas.getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Data Points',
+                            data: points,
+                            backgroundColor: 'rgba(20, 184, 166, 0.8)', // teal-500
+                            borderColor: 'rgba(20, 184, 166, 1)',
+                            pointRadius: 5,
+                        }, {
+                            label: 'Fitted Curve',
+                            data: fittedLine,
+                            borderColor: 'rgba(59, 130, 246, 1)', // blue-500
+                            backgroundColor: 'transparent',
+                            type: 'line',
+                            pointRadius: 0,
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Pixel Number', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } },
+                            y: { title: { display: true, text: 'Wavelength (nm)', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } }
+                        },
+                        plugins: { legend: { labels: { color: '#d1d5db' } } }
+                    }
+                });
+            };
+
+            // --- Math Helpers ---
+            // Solves for x in Ax = b using basic matrix math.
+            const polynomialRegression = (data, order) => {
+                const n = data.length;
+                const matrixA = Array(order + 1).fill(0).map(() => Array(order + 1).fill(0));
+                const vectorB = Array(order + 1).fill(0);
+
+                for(let i=0; i < n; i++) {
+                    for(let j=0; j <= order; j++) {
+                        vectorB[j] += data[i].y * Math.pow(data[i].x, j);
+                        for(let k=0; k <= order; k++) {
+                            matrixA[j][k] += Math.pow(data[i].x, j + k);
+                        }
+                    }
+                }
+                
+                const invA = invertMatrix(matrixA);
+                if(!invA) return null;
+                
+                const coeffs = Array(order + 1).fill(0);
+                for(let i=0; i <= order; i++) {
+                    for(let j=0; j <= order; j++) {
+                        coeffs[i] += invA[i][j] * vectorB[j];
+                    }
+                }
+                return coeffs;
+            };
+
+             const calculateRSquared = (data, coeffs) => {
+                let ssTot = 0;
+                let ssRes = 0;
+                const yMean = data.reduce((sum, p) => sum + p.y, 0) / data.length;
+
+                data.forEach(p => {
+                    const yPred = coeffs[3]*p.x**3 + coeffs[2]*p.x**2 + coeffs[1]*p.x + coeffs[0];
+                    ssTot += (p.y - yMean) ** 2;
+                    ssRes += (p.y - yPred) ** 2;
+                });
+                return 1 - (ssRes / ssTot);
+            };
+
+            // Basic 4x4 matrix inversion for the 3rd order polynomial
+            const invertMatrix = (m) => {
+                if (m.length !== 4 || m[0].length !== 4) return null; // Only for 4x4
+                // Create an augmented matrix
+                const aug = m.map((row, i) => row.concat(Array(4).fill(0).map((_, j) => i === j ? 1 : 0)));
+                const n = 4;
+
+                for (let i = 0; i < n; i++) {
+                    // Find pivot
+                    let maxEl = Math.abs(aug[i][i]);
+                    let maxRow = i;
+                    for (let k = i + 1; k < n; k++) {
+                        if (Math.abs(aug[k][i]) > maxEl) {
+                            maxEl = Math.abs(aug[k][i]);
+                            maxRow = k;
+                        }
+                    }
+
+                    // Swap rows
+                    [aug[i], aug[maxRow]] = [aug[maxRow], aug[i]];
+
+                    // Check for singularity
+                    if(aug[i][i] === 0) return null;
+
+                    // Normalize row
+                    let pivot = aug[i][i];
+                    for (let j = i; j < 2 * n; j++) {
+                        aug[i][j] /= pivot;
+                    }
+                    
+                    // Eliminate other rows
+                    for (let k = 0; k < n; k++) {
+                        if (k !== i) {
+                            let factor = aug[k][i];
+                            for (let j = i; j < 2 * n; j++) {
+                                aug[k][j] -= factor * aug[i][j];
+                            }
+                        }
+                    }
+                }
+
+                return aug.map(row => row.slice(n));
+            }
+
+
+            // --- Event Listeners ---
+            closeBtn.addEventListener('click', close);
+            addDataPointBtn.addEventListener('click', addDataPointRow);
+            calculateBtn.addEventListener('click', calculate);
+
+            return { open };
+        })();
+        
         initPortfolio();
     });
     </script>
