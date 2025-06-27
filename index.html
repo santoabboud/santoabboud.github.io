@@ -98,9 +98,13 @@
         }
         .category-card h3 { margin-bottom: 0.25rem; }
         .category-card p { margin: 0; color: #666; }
-
+        
+        /* --- New Project Preview with Cover Image --- */
         .project-preview {
-            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1rem;
             border: 1px solid var(--border-color);
             border-radius: 5px;
             margin-bottom: 1rem;
@@ -111,20 +115,26 @@
             border-color: var(--accent-color);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        .preview-text {
-            position: relative;
-            max-height: 6.8em; /* Adjusted for 4 lines (1.7em * 4) */
-            overflow: hidden;
-            color: #666;
-            margin-bottom: 0;
+        .preview-image {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
         }
-        .preview-text::after {
+        .preview-text-content {
+            flex: 1;
+            position: relative;
+            height: 6.8em; /* Adjusted for 4 lines (1.7em * 4) */
+            overflow: hidden;
+        }
+        .preview-text-content h3 { margin-top: 0; margin-bottom: 0.5rem; }
+        .preview-text-content p { color: #666; margin: 0; }
+        .preview-text-content::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 2.5em;
+            bottom: 0; right: 0;
+            width: 100%; height: 2.5em;
             background: linear-gradient(to bottom, transparent, var(--secondary-bg));
         }
 
@@ -141,7 +151,7 @@
         .breadcrumbs span:hover { text-decoration: underline; }
         
         .back-button {
-            display: none; /* Hidden by default, shown by JS */
+            display: inline-block;
             background: none; border: none;
             color: var(--accent-color); font-size: 1rem; font-weight: bold;
             cursor: pointer; padding: 0.5rem 0; margin-bottom: 1.5rem;
@@ -190,10 +200,9 @@
                     <h3>Night Vision</h3>
                     <p>Exploring and building devices for low-light imaging.</p>
                 </div>
-                </div>
+            </div>
 
             <div id="project-list" class="view" style="display: none;">
-                <button class="back-button">← Back to Categories</button>
                 </div>
 
             <div id="project-full-view" class="view" style="display: none;">
@@ -219,8 +228,11 @@
     
         <div class="project-data" data-category="spectroscopy">
             <div class="preview-content">
-                <h3>Ocean Optics USB2000 Firmware update</h3>
-                <p class="preview-text">This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level. The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO. It uses the Sony ILX511 linear CCD image sensor...</p>
+                <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/probing.png" alt="Cover image for USB2000 project">
+                <div class="preview-text-content">
+                    <h3>Ocean Optics USB2000 Firmware update</h3>
+                    <p>This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level. The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer...</p>
+                </div>
             </div>
             <div class="full-content blog-post-content">
                 <h3>Ocean Optics USB2000 Firmware update</h3>
@@ -257,18 +269,23 @@
                 <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/probing.png" alt="probing">
                 <h4>Flashing the EEPROM</h4>
                 <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
-                <pre><code>#include &lt;SPI.h&gt; ... </code></pre>
-                <p>After this, your USB2000 spectrometer should have been flashed... Now you can connect the spectrometer to your PC... The calibration procedure is laid out in Appendix A on pp. 35 - 39 of the <code>Ocean_Optics_USB2000_Operating_Instructions_Manual.pdf</code>, which can be found in this repository.</p>
+                <pre><code>// Full Arduino code here...
+</code></pre>
+                <p>After this, your USB2000 spectrometer should have been flashed with the correct firmware for it and can be used with Ocean Optics' software. Now you can connect the spectrometer to your PC and run the OOI USB Programmer tool by Ocean Optics. It should show up now and even have all the calibration data still on it (although it makes sense to at least verify the calibration after all the years - for a quick and dirty check, checking against the spectral peaks of a fluorescent lamp works. For a more refined calibration, you should use a dedicated Mercury Argon spectral lamp.)</p>
+                <p>The calibration procedure is laid out in Appendix A on pp. 35 - 39 of the <code>Ocean_Optics_USB2000_Operating_Instructions_Manual.pdf</code>, which can be found in this repository.</p>
                 <h5>Unlock Codes</h5>
-                <p>To unlock all features of Ocean Optics' softwares, there are unlock codes. <strong><em>!!! These should be used carefully...!!!</em></strong></p>
+                <p>To unlock all features of Ocean Optics' softwares, there are unlock codes. <strong><em>!!! These should be used carefully, as they can modify devices in non-reversible ways. !!!</em></strong> For the OOI USB Programmer the unlock code is "UNLOCKALL". For OceanView the unlock code is "oceanfactory". With these unlock codes, you can flash the calibration coefficients you calculated to the spectrometer.</p>
                 <p>Good luck and have fun!</p>
             </div>
         </div>
 
         <div class="project-data" data-category="microscopy">
              <div class="preview-content">
-                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <p class="preview-text">This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond...</p>
+                <img class="preview-image" src="https://via.placeholder.com/150x100.png?text=Frankenscope" alt="Cover image for Frankenscope">
+                <div class="preview-text-content">
+                    <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+                    <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser...</p>
+                </div>
             </div>
             <div class="full-content blog-post-content">
                 <h3>The Frankenscope: A Microscopic Multi-tool</h3>
@@ -280,12 +297,15 @@
 
         <div class="project-data" data-category="night-vision">
              <div class="preview-content">
-                <h3>DIY Digital Night Vision Monocular</h3>
-                <p class="preview-text">A project exploring the construction of a digital night vision device using a sensitive CMOS sensor and an infrared illuminator. The goal was to create a compact and affordable alternative to commercial units, focusing on modularity and open-source principles for the control software...</p>
+                <img class="preview-image" src="https://via.placeholder.com/150x100.png?text=NV+Device" alt="Cover image for night vision project">
+                <div class="preview-text-content">
+                    <h3>Mullard XX1332</h3>
+                    <p>The Mullard / Philips XX1332 image intensifier is one of the largest Gen 2 units ever produced. A short history and a modern conversion...</p>
+                </div>
             </div>
             <div class="full-content blog-post-content">
-                <h3>DIY Digital Night Vision Monocular</h3>
-                <p>This is the full content for the DIY Digital Night Vision project. Here I would describe the components used, such as the specific low-light CMOS sensor, the lens assembly, the IR LED array, and the power management system. I would also include details about the 3D printed enclosure and the software running on the microcontroller.</p>
+                <h3>Mullard XX1332</h3>
+                <p>This is the full content </p>
                 <img src="https://via.placeholder.com/800x400.png?text=Night+Vision+Device" alt="DIY Night Vision Device">
             </div>
         </div>
@@ -298,121 +318,126 @@
         const contentPanels = document.querySelectorAll('.main-content .content-panel');
         const projectsPanel = document.getElementById('projects');
         
-        // Project section elements
-        const breadcrumbs = projectsPanel.querySelector('.breadcrumbs');
-        const categoryList = projectsPanel.querySelector('#category-list');
-        const projectList = projectsPanel.querySelector('#project-list');
-        const projectFullView = projectsPanel.querySelector('#project-full-view');
-        const backToCategoriesBtn = projectList.querySelector('.back-button');
-
-        // Data storage
+        const breadcrumbsEl = projectsPanel.querySelector('.breadcrumbs');
+        const categoryListEl = projectsPanel.querySelector('#category-list');
+        const projectListEl = projectsPanel.querySelector('#project-list');
+        const projectFullViewEl = projectsPanel.querySelector('#project-full-view');
+        
         const allProjectData = document.querySelectorAll('#project-storage .project-data');
 
-        // --- Main Navigation Logic ---
+        function updateActiveNavLink(targetId) {
+            mainNavLinks.forEach(l => l.classList.remove('active'));
+            document.querySelector(`.main-nav .nav-link[data-target="${targetId}"]`).classList.add('active');
+        }
+
+        function showPanel(panelId) {
+            contentPanels.forEach(p => p.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+            updateActiveNavLink(panelId);
+        }
+        
+        function showProjectsView(view, context = {}) {
+            projectsPanel.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            
+            let currentViewEl;
+            switch(view) {
+                case 'categories':
+                    currentViewEl = categoryListEl;
+                    breadcrumbsEl.innerHTML = `<span>Projects</span>`;
+                    break;
+                case 'project-list':
+                    currentViewEl = projectListEl;
+                    breadcrumbsEl.innerHTML = `<span>Projects</span> &gt; ${context.categoryName}`;
+                    populateProjectList(context.category);
+                    break;
+                case 'full-project':
+                    currentViewEl = projectFullViewEl;
+                    breadcrumbsEl.innerHTML = `<span>Projects</span> &gt; <span data-category-id="${context.category}" data-category-name="${context.categoryName}">${context.categoryName}</span> &gt; ${context.projectName}`;
+                    populateFullProjectView(context);
+                    break;
+            }
+            if (currentViewEl) currentViewEl.style.display = 'block';
+        }
+
         mainNavLinks.forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
                 const targetId = link.getAttribute('data-target');
-
-                mainNavLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-
-                contentPanels.forEach(p => p.classList.remove('active'));
-                document.getElementById(targetId).classList.add('active');
-                
-                // Reset projects view to category list if Projects tab is clicked
+                showPanel(targetId);
                 if (targetId === 'projects') {
-                    showView('category-list');
+                    showProjectsView('categories');
                 }
-            });
-        });
-
-        // --- Project Navigation Logic ---
-        function showView(viewId, context) {
-            // Hide all views within the projects panel
-            projectsPanel.querySelectorAll('.view').forEach(v => v.style.display = 'none');
-            
-            // Show the target view
-            const targetView = projectsPanel.querySelector(`#${viewId}`);
-            if (targetView) {
-                targetView.style.display = 'block';
-            }
-
-            // Update breadcrumbs and content based on view
-            if (viewId === 'category-list') {
-                breadcrumbs.innerHTML = '<span>Projects</span>';
-            } else if (viewId === 'project-list') {
-                breadcrumbs.innerHTML = `<span>Projects</span> &gt; ${context.categoryName}`;
-                populateProjectList(context.category);
-                backToCategoriesBtn.style.display = 'inline-block';
-            } else if (viewId === 'project-full-view') {
-                breadcrumbs.innerHTML = `<span>Projects</span> &gt; <span>${context.categoryName}</span> &gt; ${context.projectName}`;
-            }
-        }
-
-        // Event listener for breadcrumb clicks
-        breadcrumbs.addEventListener('click', e => {
-            if (e.target.tagName !== 'SPAN') return;
-            const trail = e.target.textContent;
-
-            if (trail === 'Projects') {
-                showView('category-list');
-            } else {
-                // Find category name from breadcrumb text
-                const categoryName = e.target.textContent;
-                showView('project-list', { category: categoryName.toLowerCase(), categoryName: categoryName });
-            }
-        });
-
-        // Add listeners to category cards
-        categoryList.querySelectorAll('.category-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const category = card.getAttribute('data-category');
-                const categoryName = card.querySelector('h3').textContent;
-                showView('project-list', { category, categoryName });
             });
         });
         
-        // Back to categories button
-        backToCategoriesBtn.addEventListener('click', () => showView('category-list'));
+        breadcrumbsEl.addEventListener('click', e => {
+            if (e.target.tagName !== 'SPAN') return;
+            const text = e.target.textContent;
+            if (text === 'Projects') {
+                showProjectsView('categories');
+            } else {
+                const categoryId = e.target.getAttribute('data-category-id');
+                const categoryName = e.target.getAttribute('data-category-name');
+                showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
+            }
+        });
 
-        function populateProjectList(category) {
-            projectList.innerHTML = ''; // Clear previous list
-            projectList.appendChild(backToCategoriesBtn); // Re-add button
+        categoryListEl.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const categoryId = card.getAttribute('data-category');
+                const categoryName = card.querySelector('h3').textContent;
+                showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
+            });
+        });
+
+        function populateProjectList(categoryId) {
+            projectListEl.innerHTML = ''; // Clear previous list
             
-            allProjectData.forEach((project, index) => {
-                if (project.getAttribute('data-category') === category) {
-                    const previewHTML = project.querySelector('.preview-content').innerHTML;
+            allProjectData.forEach((projectNode, index) => {
+                if (projectNode.getAttribute('data-category') === categoryId) {
+                    const previewHTML = projectNode.querySelector('.preview-content').innerHTML;
                     const previewCard = document.createElement('div');
                     previewCard.className = 'project-preview';
                     previewCard.innerHTML = previewHTML;
-                    previewCard.setAttribute('data-project-index', index);
-                    projectList.appendChild(previewCard);
+                    previewCard.setAttribute('data-project-index', index); // Use index as a stable ID
+                    projectListEl.appendChild(previewCard);
                 }
             });
-            
-            // Add listeners to the newly created project previews
-            projectList.querySelectorAll('.project-preview').forEach(card => {
+
+            projectListEl.querySelectorAll('.project-preview').forEach(card => {
                 card.addEventListener('click', () => {
                     const projectIndex = card.getAttribute('data-project-index');
                     const projectData = allProjectData[projectIndex];
-                    const fullContentHTML = projectData.querySelector('.full-content').innerHTML;
-                    const projectName = projectData.querySelector('h3').textContent;
-                    const categoryName = breadcrumbs.querySelectorAll('span')[1].textContent;
+                    const projectName = projectData.querySelector('.preview-content h3').textContent;
+                    const categoryName = breadcrumbsEl.textContent.split('>')[1].trim();
 
-                    projectFullView.innerHTML = `<button class="back-button">← Back to ${categoryName}</button>${fullContentHTML}`;
-                    showView('project-full-view', { categoryName, projectName });
-
-                    // Add listener for the newly created "back to project list" button
-                    projectFullView.querySelector('.back-button').addEventListener('click', () => {
-                         showView('project-list', { category: category.toLowerCase(), categoryName: categoryName });
+                    showProjectsView('full-project', {
+                        projectIndex,
+                        projectName,
+                        category: categoryId,
+                        categoryName
                     });
                 });
             });
         }
         
-        // Set initial view
-        showView('category-list');
+        function populateFullProjectView(context) {
+            const projectData = allProjectData[context.projectIndex];
+            const fullContentHTML = projectData.querySelector('.full-content').innerHTML;
+
+            const backButton = document.createElement('button');
+            backButton.className = 'back-button';
+            backButton.textContent = `← Back to ${context.categoryName}`;
+            backButton.onclick = () => showProjectsView('project-list', { category: context.category, categoryName: context.categoryName });
+            
+            projectFullViewEl.innerHTML = ''; // Clear
+            projectFullViewEl.appendChild(backButton);
+            
+            const contentWrapper = document.createElement('div');
+            contentWrapper.innerHTML = fullContentHTML;
+            projectFullViewEl.appendChild(contentWrapper);
+        }
+
     });
     </script>
 </body>
