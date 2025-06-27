@@ -228,7 +228,7 @@
     
         <div class="project-data" data-category="spectroscopy">
             <div class="preview-content">
-                <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/probing.png" alt="Cover image for USB2000 project">
+                <img class="preview-image" src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="Cover image for USB2000 project">
                 <div class="preview-text-content">
                     <h3>Ocean Optics USB2000 Firmware update</h3>
                     <p>This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level. The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer...</p>
@@ -240,9 +240,9 @@
                 <h4>Introduction</h4>
                 <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser). The IO can be used to trigger spectral captures and to trigger external devices, such as flashlamps, lasers etc.. The optical design is very similar to it's predecessor, the Ocean Optics S2000, and has been used in later models as well. It uses the Sony ILX511 linear CCD image sensor and can be found in various configurations ranging from Deep UV over vis to NIR.</p>
                 <p>Here's a sketch of the optical layout of the USB4000 spectrometer, which is pretty much identical to the USB2000's.<br><em>Image credit: Fernando Sebastián Chiwo on ResearchGate.</em></p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/Layout_USB2K.png" alt="Layout_USB2K">
+                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K">
                 <p>...and the real thing:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/Layout.png" alt="Layout">
+                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout">
                 <p>While it is rare to find units that are configured to measure spectra beyond 880nm, I have modified a USB2000 to measure up to 1080nm with still acceptable sensitivity for laser building applications.</p>
                 <p>The USB2000 spectrometer has seen use in many different applications. Most times it is used with Ocean Optics' firmware installed and with Ocean Optics Software such as OceanView. Thermo Fisher Scientific however used the USB2000 with custom firmware in their Nanodrop Series Microvolume UV-vis Spectrophotometers for Biotech applications (Nanodrop 2000, uses small xenon flashlamp as broadband light source). Unfortunately, their firmware disables use with third-party or Ocean Optics software, and disables the possibility to directly flash Ocean Optics firmware with the OOI USB Programmer Software tool by Ocean Optics.</p>
                 <p><strong><em>To get around this issue it is possible to...</em></strong></p>
@@ -252,21 +252,21 @@
                 <h5>Opening up the USB2000:</h5>
                 <p>Use a razor blade or a suitable alternative to gently peel back the corners of the lid sticker. I recommend doing this step carefully, both to avoid injury and to retain the spectrometer's resale value and aesthetics ;) If the USB2000 is missing the lid sticker, skip this step.</p>
                 <p>Screw location shown on a unit without the lid sticker:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/NoSticker.png" alt="NoSticker">
+                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker">
                 <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/StickerLid.png" alt="StickerLid">
+                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid">
                 <p>Once the screws are removed, pull the the lid up by prying from the gap between the USB 2.0 Type B port and the lid. It should open up, revealing the circuit board.</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/20250118_182039.png" alt="20250118_182039">
+                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039">
                 <h5>Connecting to the EEPROM</h5>
                 <p>First locate the EEPROM, on which the firmware is stored. The model number is 24LC256. The EEPROM communicates via I<sup>2</sup>C. The location is marked in the pitures below:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/20250118_182135.png" alt="20250118_182135">
+                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135">
                 <p>close-up view:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/20250118_182156.png" alt="20250118_182156">
+                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156">
                 <p>Now use a mini probing grabber to connect to the following pins:</p>
                 <ul><li>VCC to a +3.3V or +5V supply</li><li>VSS to GND</li><li>SDA to Analog Pin 4</li><li>SCL to Analog Pin 5</li></ul>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/24LC256_pinout.png" alt="24LC256_pinout">
+                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout">
                 <p>It should look something like this:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/images/probing.png" alt="probing">
+                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing">
                 <h4>Flashing the EEPROM</h4>
                 <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
                 <pre><code>// Full Arduino code here...
@@ -299,13 +299,13 @@
              <div class="preview-content">
                 <img class="preview-image" src="https://via.placeholder.com/150x100.png?text=NV+Device" alt="Cover image for night vision project">
                 <div class="preview-text-content">
-                    <h3>Mullard XX1332</h3>
-                    <p>The Mullard / Philips XX1332 image intensifier is one of the largest Gen 2 units ever produced. A short history and a modern conversion...</p>
+                    <h3>DIY Digital Night Vision Monocular</h3>
+                    <p>A project exploring the construction of a digital night vision device using a sensitive CMOS sensor and an infrared illuminator. The goal was to create a compact and affordable alternative to commercial units...</p>
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                <h3>Mullard XX1332</h3>
-                <p>This is the full content </p>
+                <h3>DIY Digital Night Vision Monocular</h3>
+                <p>This is the full content for the DIY Digital Night Vision project. Here I would describe the components used, such as the specific low-light CMOS sensor, the lens assembly, the IR LED array, and the power management system. I would also include details about the 3D printed enclosure and the software running on the microcontroller.</p>
                 <img src="https://via.placeholder.com/800x400.png?text=Night+Vision+Device" alt="DIY Night Vision Device">
             </div>
         </div>
@@ -327,12 +327,14 @@
 
         function updateActiveNavLink(targetId) {
             mainNavLinks.forEach(l => l.classList.remove('active'));
-            document.querySelector(`.main-nav .nav-link[data-target="${targetId}"]`).classList.add('active');
+            const activeLink = document.querySelector(`.main-nav .nav-link[data-target="${targetId}"]`);
+            if (activeLink) activeLink.classList.add('active');
         }
 
         function showPanel(panelId) {
             contentPanels.forEach(p => p.classList.remove('active'));
-            document.getElementById(panelId).classList.add('active');
+            const targetPanel = document.getElementById(panelId);
+            if(targetPanel) targetPanel.classList.add('active');
             updateActiveNavLink(panelId);
         }
         
@@ -399,25 +401,21 @@
                     const previewCard = document.createElement('div');
                     previewCard.className = 'project-preview';
                     previewCard.innerHTML = previewHTML;
-                    previewCard.setAttribute('data-project-index', index); // Use index as a stable ID
+                    previewCard.setAttribute('data-project-index', index);
+                    
+                    previewCard.addEventListener('click', () => {
+                        const projectName = projectNode.querySelector('.preview-content h3').textContent;
+                        const categoryName = breadcrumbsEl.textContent.split('>')[1].trim();
+
+                        showProjectsView('full-project', {
+                            projectIndex: index,
+                            projectName,
+                            category: categoryId,
+                            categoryName
+                        });
+                    });
                     projectListEl.appendChild(previewCard);
                 }
-            });
-
-            projectListEl.querySelectorAll('.project-preview').forEach(card => {
-                card.addEventListener('click', () => {
-                    const projectIndex = card.getAttribute('data-project-index');
-                    const projectData = allProjectData[projectIndex];
-                    const projectName = projectData.querySelector('.preview-content h3').textContent;
-                    const categoryName = breadcrumbsEl.textContent.split('>')[1].trim();
-
-                    showProjectsView('full-project', {
-                        projectIndex,
-                        projectName,
-                        category: categoryId,
-                        categoryName
-                    });
-                });
             });
         }
         
@@ -430,7 +428,7 @@
             backButton.textContent = `← Back to ${context.categoryName}`;
             backButton.onclick = () => showProjectsView('project-list', { category: context.category, categoryName: context.categoryName });
             
-            projectFullViewEl.innerHTML = ''; // Clear
+            projectFullViewEl.innerHTML = '';
             projectFullViewEl.appendChild(backButton);
             
             const contentWrapper = document.createElement('div');
