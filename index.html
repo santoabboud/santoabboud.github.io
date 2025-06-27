@@ -40,6 +40,10 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+        .logo a {
+            color: inherit;
+            text-decoration: none;
+        }
         .logo h1 {
             margin: 0;
             font-size: 1.5rem;
@@ -162,15 +166,14 @@
         .blog-post-content h4 { font-size: 1.5rem; margin-top: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;}
         .blog-post-content h5 { font-size: 1.2rem; margin-top: 2rem; }
         
-        /* === THIS IS THE FIX FOR IMAGE WIDTH === */
         .blog-post-content img {
-            max-width: 100%; /* Ensures image is never wider than its container */
-            height: auto; /* Maintains aspect ratio */
+            max-width: 100%;
+            height: auto;
             border-radius: 5px;
-            margin: 1.5rem 0; /* Vertical spacing */
-            display: block; /* Ensures it's on its own line */
-            border: 1px solid var(--border-color); /* Adds a subtle frame */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Adds a subtle shadow */
+            margin: 1.5rem 0;
+            display: block;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .disclaimer { background-color: #fffbe6; border-left: 4px solid #ffc107; padding: 1rem; margin: 1.5rem 0; }
@@ -182,7 +185,9 @@
     <header class="main-header">
         <div class="header-container">
             <div class="logo">
-                <h1>Bilal Abboud</h1>
+                <a href="#" id="logo-link">
+                    <h1>Bilal Abboud</h1>
+                </a>
             </div>
             <nav class="main-nav">
                 <a href="#" class="nav-link active" data-target="projects">Projects</a>
@@ -245,7 +250,7 @@
                     <p>This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level. The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer...</p>
                 </div>
             </div>
-            <div class="full-content blog-post-content">
+            <div class="full-content">
                 <h3>Ocean Optics USB2000 Firmware update</h3>
                 <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
                 <h4>Introduction</h4>
@@ -298,7 +303,7 @@
                     <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser...</p>
                 </div>
             </div>
-            <div class="full-content blog-post-content">
+            <div class="full-content">
                 <h3>The Frankenscope: A Microscopic Multi-tool</h3>
                 <img src="https://via.placeholder.com/800x400.png?text=Main+Microscope+Image" alt="The Frankenscope">
                 <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon), an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source as well as a LabJack T4 for general control.</p>
@@ -314,7 +319,7 @@
                     <p>A project exploring the construction of a digital night vision device using a sensitive CMOS sensor and an infrared illuminator. The goal was to create a compact and affordable alternative to commercial units...</p>
                 </div>
             </div>
-            <div class="full-content blog-post-content">
+            <div class="full-content">
                 <h3>DIY Digital Night Vision Monocular</h3>
                 <p>This is the full content for the DIY Digital Night Vision project. Here I would describe the components used, such as the specific low-light CMOS sensor, the lens assembly, the IR LED array, and the power management system. I would also include details about the 3D printed enclosure and the software running on the microcontroller.</p>
                 <img src="https://via.placeholder.com/800x400.png?text=Night+Vision+Device" alt="DIY Night Vision Device">
@@ -325,6 +330,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const logoLink = document.getElementById('logo-link');
         const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
         const contentPanels = document.querySelectorAll('.main-content .content-panel');
         const projectsPanel = document.getElementById('projects');
@@ -371,6 +377,12 @@
             }
             if (currentViewEl) currentViewEl.style.display = 'block';
         }
+
+        logoLink.addEventListener('click', e => {
+            e.preventDefault();
+            showPanel('projects');
+            showProjectsView('categories');
+        });
 
         mainNavLinks.forEach(link => {
             link.addEventListener('click', e => {
@@ -445,6 +457,8 @@
             projectFullViewEl.appendChild(backButton);
             
             const contentWrapper = document.createElement('div');
+            // This is the fix: add the class that contains the image styles
+            contentWrapper.className = 'blog-post-content'; 
             contentWrapper.innerHTML = fullContentHTML;
             projectFullViewEl.appendChild(contentWrapper);
         }
