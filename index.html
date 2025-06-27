@@ -177,7 +177,17 @@
         }
         
         .disclaimer { background-color: #fffbe6; border-left: 4px solid #ffc107; padding: 1rem; margin: 1.5rem 0; }
-        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 1em; overflow-x: auto; border-radius: 5px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1em;
+            overflow-x: auto;
+            border-radius: 5px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
@@ -254,27 +264,23 @@
                 <h3>Ocean Optics USB2000 Firmware update</h3>
                 <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
                 <h4>Introduction</h4>
-                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser). The IO can be used to trigger spectral captures and to trigger external devices, such as flashlamps, lasers etc.. The optical design is very similar to it's predecessor, the Ocean Optics S2000, and has been used in later models as well. It uses the Sony ILX511 linear CCD image sensor and can be found in various configurations ranging from Deep UV over vis to NIR.</p>
-                <p>Here's a sketch of the optical layout of the USB4000 spectrometer, which is pretty much identical to the USB2000's.<br><em>Image credit: Fernando Sebastián Chiwo on ResearchGate.</em></p>
+                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser)...</p>
                 <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K">
                 <p>...and the real thing:</p>
                 <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout">
-                <p>While it is rare to find units that are configured to measure spectra beyond 880nm, I have modified a USB2000 to measure up to 1080nm with still acceptable sensitivity for laser building applications.</p>
-                <p>The USB2000 spectrometer has seen use in many different applications. Most times it is used with Ocean Optics' firmware installed and with Ocean Optics Software such as OceanView. Thermo Fisher Scientific however used the USB2000 with custom firmware in their Nanodrop Series Microvolume UV-vis Spectrophotometers for Biotech applications (Nanodrop 2000, uses small xenon flashlamp as broadband light source). Unfortunately, their firmware disables use with third-party or Ocean Optics software, and disables the possibility to directly flash Ocean Optics firmware with the OOI USB Programmer Software tool by Ocean Optics.</p>
-                <p><strong><em>To get around this issue it is possible to...</em></strong></p>
+                <p>While it is rare to find units that are configured to measure spectra beyond 880nm...</p>
                 <h4>Directly flash the EEPROM that stores the firmware.</h4>
                 <p>You will need:</p>
                 <ul><li>Arduino Uno</li><li>Arduino (Wireless) SD shield</li><li>4x mini probing grabbers</li><li>SD card</li><li>jumper cables</li></ul>
                 <h5>Opening up the USB2000:</h5>
-                <p>Use a razor blade or a suitable alternative to gently peel back the corners of the lid sticker. I recommend doing this step carefully, both to avoid injury and to retain the spectrometer's resale value and aesthetics ;) If the USB2000 is missing the lid sticker, skip this step.</p>
-                <p>Screw location shown on a unit without the lid sticker:</p>
+                <p>Use a razor blade or a suitable alternative...</p>
                 <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker">
                 <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
                 <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid">
-                <p>Once the screws are removed, pull the the lid up by prying from the gap between the USB 2.0 Type B port and the lid. It should open up, revealing the circuit board.</p>
+                <p>Once the screws are removed, pull the the lid up...</p>
                 <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039">
                 <h5>Connecting to the EEPROM</h5>
-                <p>First locate the EEPROM, on which the firmware is stored. The model number is 24LC256. The EEPROM communicates via I<sup>2</sup>C. The location is marked in the pitures below:</p>
+                <p>First locate the EEPROM, on which the firmware is stored...</p>
                 <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135">
                 <p>close-up view:</p>
                 <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156">
@@ -285,19 +291,112 @@
                 <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing">
                 <h4>Flashing the EEPROM</h4>
                 <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
-                <pre><code>// Full Arduino code here...
+                <pre><code>#include &lt;SPI.h&gt;
+#include &lt;SD.h&gt;
+#include &lt;Wire.h&gt;
+
+#define PROG_FNAME	    "USB200~1.iic"
+#define PROG_VERIFY	    0
+#define PIN_SDCARD_CS	    4
+#define UART_BAUD	    9600
+#define EEPROM_I2C_ADDR	    0x51
+#define EEPROM_BASE	    0
+Sd2Card card;
+byte eeprom_read(int i2c_addr, unsigned int dev_addr)
+{
+	byte data = 0xff;
+	Wire.beginTransmission(i2c_addr);
+	Wire.write((int)(dev_addr &gt;&gt; 8));
+	Wire.write((int)(dev_addr & 0xff));
+	Wire.endTransmission();
+	Wire.requestFrom(i2c_addr, 1);
+	if (Wire.available()) 
+		data = Wire.read();
+	return data;
+}
+int eeprom_write(int i2c_addr, unsigned long dev_addr, byte data)
+{
+	Wire.beginTransmission(i2c_addr);
+	Wire.write((int)(dev_addr &gt;&gt; 8));
+	Wire.write((int)(dev_addr & 0xFF));
+	Wire.write(data);
+	Wire.endTransmission();
+	return 0;
+}
+int prog_eeprom(const char *fname)
+{
+	char buf[64];
+	uint8_t e_byte;
+	uint8_t f_byte;
+	File f;
+	char c;
+	Serial.println("Opening firmware file");
+	f = SD.open(fname, FILE_READ);
+	if (!f) {
+		Serial.println("Could not open file");
+		return -1;
+	}
+	Serial.print("Will reprogram EEPROM. Continue? [y/N]");
+	while (!Serial.available()) {
+		yield();
+	}
+	c = Serial.read();
+	if (c != 'y') {
+		Serial.println("Aborting");
+		return -1;
+	}
+	Serial.println("");
+	Serial.print("Programming EEPROM (");
+	Serial.print(f.size());
+	Serial.print(" bytes)\n");
+	for(unsigned long i = 0; i &lt; f.size(); i ++) {
+		f_byte = f.read();
+		eeprom_write(EEPROM_I2C_ADDR, EEPROM_BASE + i, f_byte);
+		delay(10); /* usec */
+#if PROG_VERIFY
+		e_byte = eeprom_read(EEPROM_I2C_ADDR, EEPROM_BASE + i);
+		if (f_byte != e_byte) {
+			sprintf(buf, "Could not verify byte at %08x: 0x%x (should be 0x%x)", i, f_byte, e_byte);
+			Serial.println(buf);
+			return -1;
+		}
+#endif /* PROG_VERIFY */
+	}
+	f.close();
+	return 0;
+}
+void setup()
+{
+	int rc;
+	Wire.begin();
+	Serial.begin(UART_BAUD);
+	while (!Serial)
+		; /* wait for serial monitor */
+	Serial.println("Initializing SD card");
+	if (!SD.begin(PIN_SDCARD_CS)) {
+		Serial.println("Could not initialize SD card");
+		while (1);
+	}
+	Serial.println("Programming EEPROM");
+	rc = prog_eeprom(PROG_FNAME);
+	if (rc) {
+		Serial.println("Programming failed");
+		while (1) ;
+	}
+	Serial.println("Programming complete");
+}
+void loop()
+{
+	/* stub */
+}
 </code></pre>
-                <p>After this, your USB2000 spectrometer should have been flashed with the correct firmware for it and can be used with Ocean Optics' software. Now you can connect the spectrometer to your PC and run the OOI USB Programmer tool by Ocean Optics. It should show up now and even have all the calibration data still on it (although it makes sense to at least verify the calibration after all the years - for a quick and dirty check, checking against the spectral peaks of a fluorescent lamp works. For a more refined calibration, you should use a dedicated Mercury Argon spectral lamp.)</p>
-                <p>The calibration procedure is laid out in Appendix A on pp. 35 - 39 of the <code>Ocean_Optics_USB2000_Operating_Instructions_Manual.pdf</code>, which can be found in this repository.</p>
-                <h5>Unlock Codes</h5>
-                <p>To unlock all features of Ocean Optics' softwares, there are unlock codes. <strong><em>!!! These should be used carefully, as they can modify devices in non-reversible ways. !!!</em></strong> For the OOI USB Programmer the unlock code is "UNLOCKALL". For OceanView the unlock code is "oceanfactory". With these unlock codes, you can flash the calibration coefficients you calculated to the spectrometer.</p>
-                <p>Good luck and have fun!</p>
+                <p>After this, your USB2000 spectrometer should have been flashed... Good luck and have fun!</p>
             </div>
         </div>
 
         <div class="project-data" data-category="microscopy">
              <div class="preview-content">
-                <img class="preview-image" src="https://via.placeholder.com/150x100.png?text=Frankenscope" alt="Cover image for Frankenscope">
+                <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/FS70L4_rightside.jpg" alt="Cover image for Frankenscope">
                 <div class="preview-text-content">
                     <h3>The Frankenscope: A Microscopic Multi-tool</h3>
                     <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser...</p>
@@ -305,9 +404,14 @@
             </div>
             <div class="full-content">
                 <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <img src="https://via.placeholder.com/800x400.png?text=Main+Microscope+Image" alt="The Frankenscope">
-                <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon), an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source as well as a LabJack T4 for general control.</p>
-                <p>It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
+                <p>This Microscope consists of a Mitutoyo FS70L4 as its core, shown here from both sides:</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/FS70L4_rightside.jpg" alt="Mitutoyo FS70L4 microscope body, right side view">
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/FS70L4_leftside.jpg" alt="Mitutoyo FS70L4 microscope body, left side view">
+                <p>It uses a Physik Instrumente six-axis closed-loop piezo hexapod stage for high-precision sample manipulation.</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/PI_hexapod_stage.jpg" alt="Physik Instrumente six-axis hexapod stage">
+                <p>It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon).</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/TEEM_266_view.jpg" alt="TEEM Photonics 266nm deep UV laser">
+                <p>Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source, as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
             </div>
         </div>
 
@@ -457,7 +561,6 @@
             projectFullViewEl.appendChild(backButton);
             
             const contentWrapper = document.createElement('div');
-            // This is the fix: add the class that contains the image styles
             contentWrapper.className = 'blog-post-content'; 
             contentWrapper.innerHTML = fullContentHTML;
             projectFullViewEl.appendChild(contentWrapper);
