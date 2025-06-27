@@ -166,7 +166,7 @@
 
         <div id="about" class="content-panel">
             <h2 class="text-2xl font-bold mb-4">About Me</h2>
-            <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. This website showcases some of the personal projects I've worked on.</p>
+            <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. I currently study Laser Science & Photonics at the Berliner Hochschule für Technik. This website showcases some of the personal projects I've worked on.</p>
         </div>
 
         <div id="contact" class="content-panel">
@@ -175,6 +175,7 @@
                 <li style="margin-bottom: 1rem;"><strong>Email:</strong> <a href="mailto:berlinphoton@gmail.com" class="text-blue-600 hover:underline">berlinphoton@gmail.com</a></li>
                 <li style="margin-bottom: 1rem;"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">linkedin.com/in/bilal-abboud</a></li>
                 <li style="margin-bottom: 1rem;"><strong>GitHub:</strong> <a href="https://github.com/santoabboud" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">github.com/santoabboud</a></li>
+                <li style="margin-bottom: 1rem;"><strong>YouTube:</strong> <a href="https://youtube.com/@ebislab" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">youtube.com/@ebislab</a></li>
             </ul>
         </div>
     </main>
@@ -301,8 +302,48 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Ocean Optics USB2000 Firmware update</h3>
-                 <p>Full content for the USB2000 project...</p>
+                <h3>Ocean Optics USB2000 Firmware update</h3>
+                <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
+                <h4>Introduction</h4>
+                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser)...</p>
+                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>...and the real thing:</p>
+                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>While it is rare to find units that are configured to measure spectra beyond 880nm...</p>
+                <h4>Directly flash the EEPROM that stores the firmware.</h4>
+                <p>You will need:</p>
+                <ul><li>Arduino Uno</li><li>Arduino (Wireless) SD shield</li><li>4x mini probing grabbers</li><li>SD card</li><li>jumper cables</li></ul>
+                <h5>Opening up the USB2000:</h5>
+                <p>Use a razor blade or a suitable alternative...</p>
+                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
+                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Once the screws are removed, pull the the lid up...</p>
+                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <h5>Connecting to the EEPROM</h5>
+                <p>First locate the EEPROM, on which the firmware is stored...</p>
+                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>close-up view:</p>
+                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Now use a mini probing grabber to connect to the following pins:</p>
+                <ul><li>VCC to a +3.3V or +5V supply</li><li>VSS to GND</li><li>SDA to Analog Pin 4</li><li>SCL to Analog Pin 5</li></ul>
+                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It should look something like this:</p>
+                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <h4>Flashing the EEPROM</h4>
+                <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
+                <pre><code>#include &lt;SPI.h&gt;
+#include &lt;SD.h&gt;
+#include &lt;Wire.h&gt;
+#define PROG_FNAME "USB200~1.iic"
+#define PROG_VERIFY 0
+#define PIN_SDCARD_CS 4
+#define UART_BAUD 9600
+#define EEPROM_I2C_ADDR 0x51
+#define EEPROM_BASE 0
+// ... rest of the arduino code
+</code></pre>
+                <p>After this, your USB2000 spectrometer should have been flashed... Good luck and have fun!</p>
             </div>
         </div>
 
@@ -317,7 +358,14 @@
             </div>
             <div class="full-content blog-post-content">
                 <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <p>Full content for the Frankenscope project...</p>
+                <p>This Microscope consists of a Mitutoyo FS70L4 as its core, shown here from both sides:</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Mitutoyo FS70L4 microscope body, right side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_leftside.jpg" alt="Mitutoyo FS70L4 microscope body, left side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It uses a Physik Instrumente six-axis closed-loop piezo hexapod stage for high-precision sample manipulation.</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/PI_hexapod_stage.jpg" alt="Physik Instrumente six-axis hexapod stage" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon).</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/TEEM_266_view.jpg" alt="TEEM Photonics 266nm deep UV laser" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source, as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
             </div>
         </div>
         <div class="project-data" data-category="microscopy" data-id="iris-microscopy">
@@ -325,7 +373,7 @@
                 <img class="preview-image" src="https://placehold.co/150x100/333/fff?text=IRIS" alt="Cover image for IRIS Microscopy">
                 <div class="preview-text-content">
                     <h3>Infrared In-Situ (IRIS) Microscopy</h3>
-                    <p>An exploration of Infrared in-situ (IRIS) microscopy</p>
+                    <p>An exploration of interferometric reflectance imaging microscopy, a powerful technique for label-free sensing of nanoparticles and viruses...</p>
                 </div>
             </div>
             <div class="full-content blog-post-content">
@@ -421,7 +469,7 @@
                 <img class="preview-image" src="https://placehold.co/150x100/333/fff?text=Stone" alt="Cover image for stonemasonry project">
                 <div class="preview-text-content">
                     <h3>My First Try at Stonemasonry</h3>
-                    <p>Just a small sandstone project over a weekend</p>
+                    <p>An amateur's journey into the ancient craft of stonemasonry, from selecting the right tools to shaping the first block of stone...</p>
                 </div>
             </div>
             <div class="full-content blog-post-content">
@@ -434,7 +482,7 @@
                 <img class="preview-image" src="https://placehold.co/150x100/333/fff?text=Anvil" alt="Cover image for blacksmithing project">
                 <div class="preview-text-content">
                     <h3>Blacksmithing</h3>
-                    <p>My first time blacksmithing a few years ago on my 15th birthday to forge a bottle opener</p>
+                    <p>Forging metal with fire and hammer. This project covers the basics of setting up a small forge and creating simple, functional objects...</p>
                 </div>
             </div>
             <div class="full-content blog-post-content">
@@ -449,7 +497,7 @@
                 <img class="preview-image" src="https://placehold.co/150x100/333/fff?text=6D+Mono" alt="Cover image for Canon 6D Mono Conversion">
                 <div class="preview-text-content">
                     <h3>Canon 6D Mono Conversion</h3>
-                    <p>A technical guide on converting a Canon 6D DSLR sensor to a monochrome-only camera for astrophotography and more by removing the Bayer matrix...</p>
+                    <p>A technical guide on converting a Canon 6D DSLR to a monochrome-only camera for astrophotography by removing the Bayer matrix...</p>
                 </div>
             </div>
             <div class="full-content blog-post-content">
