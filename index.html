@@ -491,25 +491,40 @@
             
             // --- Private Methods ---
             
-            // [FIXED] This function now correctly looks up elements by name, matching the JSON structure.
+            /**
+             * [FIXED] Finds spectral data for a given element symbol.
+             * This function is now more robust. It finds the key in the loaded `atomicData`
+             * by performing a case-insensitive search for the element's name. This prevents
+             * failures due to minor spelling differences between the local elements array and
+             * the keys in the fetched JSON data (e.g., "Aluminium" vs. "Aluminum").
+             * @param {string} symbol The element symbol (e.g., "Fe").
+             * @returns {object|null} An object with the element's data or null if not found.
+             */
             const findDataForElement = (symbol) => {
                 const elementInfo = elements.find(el => el.symbol === symbol);
-                if (!elementInfo) return null; 
+                if (!elementInfo || !isDataLoaded) return null;
 
-                const elementName = elementInfo.name;
-                if (!isDataLoaded || !atomicData[elementName]) return null;
+                // Find the corresponding key in the loaded atomicData object, ignoring case.
+                const dataKey = Object.keys(atomicData).find(key => key.toLowerCase() === elementInfo.name.toLowerCase());
 
-                const elementIonStates = atomicData[elementName];
+                if (!dataKey) {
+                    return null; // No data found for this element's name.
+                }
+                
+                const elementIonStates = atomicData[dataKey];
+                if (!elementIonStates) return null;
+
                 let allLines = [];
                 for (const ionKey in elementIonStates) {
                     if (Array.isArray(elementIonStates[ionKey])) {
-                         allLines.push(...elementIonStates[ionKey].map(line => ({ ...line, ion: ionKey })));
+                        allLines.push(...elementIonStates[ionKey].map(line => ({ ...line, ion: ionKey })));
                     }
                 }
-                return allLines.length > 0 ? { symbol, name: elementName, lines: allLines } : null;
+                // Use the actual key from the data (dataKey) for the name to be consistent.
+                return allLines.length > 0 ? { symbol, name: dataKey, lines: allLines } : null;
             };
             
-            const createPeriodicTable = () => { 
+            const createPeriodicTable = () => {  
                 periodicTableContainer.innerHTML = '';
                 const fragment = document.createDocumentFragment();
                 const elementMap = new Map(elements.map(el => [`${el.row}-${el.col}`, el]));
@@ -523,7 +538,8 @@
                             cell.dataset.symbol = elementData.symbol;
                             cell.style.gridRowStart = row;
                             cell.style.gridColumnStart = col;
-                            // This check now works correctly because findDataForElement is fixed
+                            // This check now works correctly because findDataForElement is fixed.
+                            // It will correctly enable buttons for which data exists.
                             cell.disabled = !findDataForElement(elementData.symbol);
                             cell.addEventListener('click', () => handleElementClick(elementData.symbol));
                             fragment.appendChild(cell);
@@ -709,11 +725,16 @@
                 }
             };
             
-            // [FIXED] This function now correctly iterates over the known elements list.
             const handleFind = () => {
                 const target = parseFloat(wavelengthInput.value);
                 const tolerance = parseFloat(toleranceInput.value) || 0.1;
-                if (isNaN(target)) { alert("Please enter a valid target wavelength."); return; }
+                if (isNaN(target)) { 
+                    // A non-blocking notification is better than alert()
+                    const originalBorder = wavelengthInput.style.borderColor;
+                    wavelengthInput.style.borderColor = 'red';
+                    setTimeout(() => { wavelengthInput.style.borderColor = originalBorder; }, 2000);
+                    return; 
+                }
                 
                 const results = [];
                 elements.forEach(elementInfo => {
@@ -727,7 +748,7 @@
                     if (matchingLines.length > 0) {
                         results.push({
                             symbol: elementInfo.symbol,
-                            name: elementInfo.name,
+                            name: elementData.name, // Use the name from the found data for consistency
                             lines: matchingLines
                         });
                     }
@@ -784,7 +805,7 @@
                     });
                     comparisonListDiv.querySelectorAll('button').forEach(btn => {
                         btn.addEventListener('click', (e) => {
-                            const symbolToRemove = e.target.dataset.symbol;
+                            const symbolToRemove = e.currentTarget.dataset.symbol;
                             appState.selectedElements = appState.selectedElements.filter(s => s !== symbolToRemove);
                             updateUI();
                             drawSpectra();
