@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilal Abboud - Laser Scientist & Engineer</title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- D3.js for data visualization -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <style>
         /* --- Main Site Styles --- */
@@ -143,23 +140,18 @@
     </div>
 
     <main class="main-content">
-        <!-- Projects Panel -->
         <div id="projects" class="content-panel active">
             <div class="breadcrumbs">Projects</div>
-            <!-- View for Categories -->
             <div id="category-list" class="view">
                 <h2 class="text-2xl font-bold mb-4">Project Categories</h2>
                 <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3></div>
                 <div class="category-card" data-category="microscopy"><h3>Microscopy</h3></div>
                 <div class="category-card" data-category="night-vision"><h3>Night Vision</h3></div>
             </div>
-            <!-- View for list of projects in a category -->
             <div id="project-list" class="view" style="display: none;"></div>
-            <!-- View for a single, full project -->
             <div id="project-full-view" class="view" style="display: none;"></div>
         </div>
         
-        <!-- Tools Panel -->
         <div id="tools" class="content-panel">
             <h2 class="text-2xl font-bold mb-2">Tools</h2>
             <p class="text-gray-600 mb-6">A collection of web-based utilities for scientific and engineering tasks.</p>
@@ -175,13 +167,11 @@
             </div>
         </div>
 
-        <!-- About Panel -->
         <div id="about" class="content-panel">
             <h2 class="text-2xl font-bold mb-4">About Me</h2>
             <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. This website showcases some of the personal projects I've worked on.</p>
         </div>
 
-        <!-- Contact Panel -->
         <div id="contact" class="content-panel">
             <h2 class="text-2xl font-bold mb-4">Get In Touch</h2>
             <ul style="list-style: none; padding: 0;">
@@ -192,7 +182,6 @@
         </div>
     </main>
 
-    <!-- Atomic Spectra Viewer Modal -->
     <div id="viewer-modal" class="viewer-modal-overlay">
         <div class="modal-content-wrapper">
             <div class="viewer-modal-header">
@@ -201,7 +190,6 @@
             </div>
             <div class="viewer-modal-body">
                 <div class="flex flex-col lg:flex-row gap-6 h-full">
-                    <!-- Left Panel: Spectrum View -->
                     <div id="spectrum-panel" class="relative lg:flex-1 bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col" style="height: 40vh; min-height: 250px;">
                         <h2 class="text-xl font-semibold mb-2 text-center text-gray-300">Spectrum View: <span id="current-element-viewer" class="font-bold text-white">None</span></h2>
                         <div id="spectrum-display" class="flex-grow relative min-h-[150px]">
@@ -211,7 +199,6 @@
                         <div class="text-center mt-2 text-sm text-gray-400">Scroll to zoom, drag to pan.</div>
                         <div id="resize-handle" class="resize-handle"></div>
                     </div>
-                    <!-- Right Panel: Controls -->
                     <div class="lg:w-[450px] flex-shrink-0 space-y-4 overflow-y-auto pr-2">
                         <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
                             <h2 class="text-xl font-semibold mb-3 text-center">Load Data</h2>
@@ -249,7 +236,6 @@
         </div>
     </div>
 
-    <!-- Line Finder Results Modal -->
     <div id="finder-modal" class="finder-modal">
         <div class="finder-modal-content">
             <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold">Finder Results</h2><span class="modal-close" id="finder-modal-close-btn">&times;</span></div>
@@ -257,7 +243,6 @@
         </div>
     </div>
 
-    <!-- Hidden storage for project data -->
     <div id="project-storage" style="display: none;">
         <div class="project-data" data-category="spectroscopy" data-id="usb2000-firmware">
             <div class="preview-content">
@@ -503,7 +488,7 @@
             const ctx = spectrumCanvas.getContext('2d');
 
             const elements = [
-                { symbol: 'H', name: 'Hydrogen', number: 1, row: 1, col: 1, category: 'nonmetal' },{ symbol: 'He', name: 'Helium', number: 2, row: 1, col: 18, category: 'noble-gas' },{ symbol: 'Li', name: 'Lithium', number: 3, row: 2, col: 1, category: 'alkali' },{ symbol: 'Be', name: 'Beryllium', number: 4, row: 2, col: 2, category: 'alkaline-earth' },{ symbol: 'B', name: 'Boron', number: 5, row: 2, col: 13, category: 'metalloid' },{ symbol: 'C', name: 'Carbon', number: 6, row: 2, col: 14, category: 'nonmetal' },{ symbol: 'N', name: 'Nitrogen', number: 7, row: 2, col: 15, category: 'nonmetal' },{ symbol: 'O', name: 'Oxygen', number: 8, row: 2, col: 16, category: 'nonmetal' },{ symbol: 'F', name: 'Fluorine', number: 9, row: 2, col: 17, category: 'nonmetal' },{ symbol: 'Ne', name: 'Neon', number: 10, row: 2, col: 18, category: 'noble-gas' },{ symbol: 'Na', name: 'Sodium', number: 11, row: 3, col: 1, category: 'alkali' },{ symbol: 'Mg', name: 'Magnesium', number: 12, row: 3, col: 2, category: 'alkaline-earth' },{ symbol: 'Al', name: 'Aluminium', number: 13, row: 3, col: 13, category: 'post-transition' },{ symbol: 'Si', name: 'Silicon', number: 14, row: 3, col: 14, category: 'metalloid' },{ symbol: 'P', name: 'Phosphorus', number: 15, row: 3, col: 15, category: 'nonmetal' },{ symbol: 'S', name: 'Sulfur', number: 16, row: 3, col: 16, category: 'nonmetal' },{ symbol: 'Cl', name: 'Chlorine', number: 17, row: 3, col: 17, category: 'nonmetal' },{ symbol: 'Ar', name: 'Argon', number: 18, row: 3, col: 18, category: 'noble-gas' },{ symbol: 'K', name: 'Potassium', number: 19, row: 4, col: 1, category: 'alkali' },{ symbol: 'Ca', name: 'Calcium', number: 20, row: 4, col: 2, category: 'alkaline-earth' },{ symbol: 'Sc', name: 'Scandium', number: 21, row: 4, col: 3, category: 'transition' },{ symbol: 'Ti', name: 'Titanium', number: 22, row: 4, col: 4, category: 'transition' },{ symbol: 'V', name: 'Vanadium', number: 23, row: 4, col: 5, category: 'transition' },{ symbol: 'Cr', name: 'Chromium', number: 24, row: 4, col: 6, category: 'transition' },{ symbol: 'Mn', name: 'Manganese', number: 25, row: 4, col: 7, category: 'transition' },{ symbol: 'Fe', name: 'Iron', number: 26, row: 4, col: 8, category: 'transition' },{ symbol: 'Co', name: 'Cobalt', number: 27, row: 4, col: 9, category: 'transition' },{ symbol: 'Ni', name: 'Nickel', number: 28, row: 4, col: 10, category: 'transition' },{ symbol: 'Cu', name: 'Copper', number: 29, row: 4, col: 11, category: 'transition' },{ symbol: 'Zn', name: 'Zinc', number: 30, row: 4, col: 12, category: 'post-transition' },{ symbol: 'Ga', name: 'Gallium', number: 31, row: 4, col: 13, category: 'post-transition' },{ symbol: 'Ge', name: 'Germanium', number: 32, row: 4, col: 14, category: 'metalloid' },{ symbol: 'As', name: 'Arsenic', number: 33, row: 4, col: 15, category: 'metalloid' },{ symbol: 'Se', name: 'Selenium', number: 34, row: 4, col: 16, category: 'nonmetal' },{ symbol: 'Br', name: 'Bromine', number: 35, row: 4, col: 17, category: 'nonmetal' },{ symbol: 'Kr', name: 'Krypton', number: 36, row: 4, col: 18, category: 'noble-gas' },{ symbol: 'Rb', name: 'Rubidium', number: 37, row: 5, col: 1, category: 'alkali' },{ symbol: 'Sr', name: 'Strontium', number: 38, row: 5, col: 2, category: 'alkaline-earth' },{ symbol: 'Y', name: 'Yttrium', number: 39, row: 5, col: 3, category: 'transition' },{ symbol: 'Zr', name: 'Zirconium', number: 40, row: 5, col: 4, category: 'transition' },{ symbol: 'Nb', name: 'Niobium', number: 41, row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', number: 42, row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', number: 43, row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', number: 44, row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', number: 45, row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', number: 46, row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', number: 47, row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', number: 48, row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', number: 49, row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', number: 50, row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', number: 51, row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', number: 52, row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', number: 53, row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', number: 54, row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', number: 55, row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', number: 56, row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', number: 57, row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', number: 58, row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', number: 59, row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', number: 60, row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', number: 61, row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', number: 62, row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', number: 63, row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', number: 64, row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', number: 65, row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', number: 66, row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', number: 67, row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', number: 68, row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', number: 69, row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', number: 70, row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', number: 71, row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', number: 72, row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', number: 73, row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', number: 74, row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', number: 75, row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', number: 76, row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', number: 77, row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', number: 78, row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', number: 79, row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', number: 80, row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', number: 81, row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', 'name': 'Lead', number: 82, row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', number: 83, row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', number: 84, row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', number: 85, row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', number: 86, row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', number: 87, row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', number: 88, row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', number: 89, row: 10, col: 3, category: 'actinide' },
+                { symbol: 'H', name: 'Hydrogen', number: 1, row: 1, col: 1, category: 'nonmetal' },{ symbol: 'He', name: 'Helium', number: 2, row: 1, col: 18, category: 'noble-gas' },{ symbol: 'Li', name: 'Lithium', number: 3, row: 2, col: 1, category: 'alkali' },{ symbol: 'Be', name: 'Beryllium', number: 4, row: 2, col: 2, category: 'alkaline-earth' },{ symbol: 'B', name: 'Boron', number: 5, row: 2, col: 13, category: 'metalloid' },{ symbol: 'C', name: 'Carbon', number: 6, row: 2, col: 14, category: 'nonmetal' },{ symbol: 'N', name: 'Nitrogen', number: 7, row: 2, col: 15, category: 'nonmetal' },{ symbol: 'O', name: 'Oxygen', number: 8, row: 2, col: 16, category: 'nonmetal' },{ symbol: 'F', name: 'Fluorine', number: 9, row: 2, col: 17, category: 'nonmetal' },{ symbol: 'Ne', name: 'Neon', number: 10, row: 2, col: 18, category: 'noble-gas' },{ symbol: 'Na', name: 'Sodium', number: 11, row: 3, col: 1, category: 'alkali' },{ symbol: 'Mg', name: 'Magnesium', number: 12, row: 3, col: 2, category: 'alkaline-earth' },{ symbol: 'Al', name: 'Aluminium', number: 13, row: 3, col: 13, category: 'post-transition' },{ symbol: 'Si', name: 'Silicon', number: 14, row: 3, col: 14, category: 'metalloid' },{ symbol: 'P', name: 'Phosphorus', number: 15, row: 3, col: 15, category: 'nonmetal' },{ symbol: 'S', name: 'Sulfur', number: 16, row: 3, col: 16, category: 'nonmetal' },{ symbol: 'Cl', name: 'Chlorine', number: 17, row: 3, col: 17, category: 'nonmetal' },{ symbol: 'Ar', name: 'Argon', number: 18, row: 3, col: 18, category: 'noble-gas' },{ symbol: 'K', name: 'Potassium', number: 19, row: 4, col: 1, category: 'alkali' },{ symbol: 'Ca', name: 'Calcium', number: 20, row: 4, col: 2, category: 'alkaline-earth' },{ symbol: 'Sc', name: 'Scandium', number: 21, row: 4, col: 3, category: 'transition' },{ symbol: 'Ti', name: 'Titanium', number: 22, row: 4, col: 4, category: 'transition' },{ symbol: 'V', name: 'Vanadium', number: 23, row: 4, col: 5, category: 'transition' },{ symbol: 'Cr', name: 'Chromium', number: 24, row: 4, col: 6, category: 'transition' },{ symbol: 'Mn', name: 'Manganese', number: 25, row: 4, col: 7, category: 'transition' },{ symbol: 'Fe', name: 'Iron', number: 26, row: 4, col: 8, category: 'transition' },{ symbol: 'Co', name: 'Cobalt', number: 27, row: 4, col: 9, category: 'transition' },{ symbol: 'Ni', name: 'Nickel', number: 28, row: 4, col: 10, category: 'transition' },{ symbol: 'Cu', name: 'Copper', number: 29, row: 4, col: 11, category: 'transition' },{ symbol: 'Zn', name: 'Zinc', number: 30, row: 4, col: 12, category: 'post-transition' },{ symbol: 'Ga', name: 'Gallium', number: 31, row: 4, col: 13, category: 'post-transition' },{ symbol: 'Ge', name: 'Germanium', number: 32, row: 4, col: 14, category: 'metalloid' },{ symbol: 'As', name: 'Arsenic', number: 33, row: 4, col: 15, category: 'metalloid' },{ symbol: 'Se', name: 'Selenium', number: 34, row: 4, col: 16, category: 'nonmetal' },{ symbol: 'Br', name: 'Bromine', number: 35, row: 4, col: 17, category: 'nonmetal' },{ symbol: 'Kr', name: 'Krypton', number: 36, row: 4, col: 18, category: 'noble-gas' },{ symbol: 'Rb', name: 'Rubidium', number: 37, row: 5, col: 1, category: 'alkali' },{ symbol: 'Sr', name: 'Strontium', number: 38, row: 5, col: 2, category: 'alkaline-earth' },{ symbol: 'Y', name: 'Yttrium', number: 39, row: 5, col: 3, category: 'transition' },{ symbol: 'Zr', name: 'Zirconium', number: 40, row: 5, col: 4, category: 'transition' },{ symbol: 'Nb', name: 'Niobium', number: 41, row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', number: 42, row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', number: 43, row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', number: 44, row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', number: 45, row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', number: 46, row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', number: 47, row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', number: 48, row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', number: 49, row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', number: 50, row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', number: 51, row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', number: 52, row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', number: 53, row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', number: 54, row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', number: 55, row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', number: 56, row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', number: 57, row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', number: 58, row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', number: 59, row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', number: 60, row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', number: 61, row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', number: 62, row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', number: 63, row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', number: 64, row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', number: 65, row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', number: 66, row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', number: 67, row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', number: 68, row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', number: 69, row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', number: 70, row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', number: 71, row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', number: 72, row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', number: 73, row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', number: 74, row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', number: 75, row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', number: 76, row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', number: 77, row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', number: 78, row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', number: 79, row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', number: 80, row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', number: 81, row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', name: 'Lead', number: 82, row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', number: 83, row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', number: 84, row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', number: 85, row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', number: 86, row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', number: 87, row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', number: 88, row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', number: 89, row: 10, col: 3, category: 'actinide' },
                 { symbol: 'Th', name: 'Thorium', number: 90, row: 10, col: 4, category: 'actinide' }, { symbol: 'Pa', name: 'Protactinium', number: 91, row: 10, col: 5, category: 'actinide' }, { symbol: 'U', name: 'Uranium', number: 92, row: 10, col: 6, category: 'actinide' }, { symbol: 'Np', name: 'Neptunium', number: 93, row: 10, col: 7, category: 'actinide' }, { symbol: 'Pu', name: 'Plutonium', number: 94, row: 10, col: 8, category: 'actinide' }
             ];
              const categories = { 'alkali': { name: 'Alkali Metal' },'alkaline-earth': { name: 'Alkaline Earth' },'lanthanide': { name: 'Lanthanide' },'actinide': { name: 'Actinide' },'transition': { name: 'Transition Metal' },'post-transition': { name: 'Post-Transition Metal' },'metalloid': { name: 'Metalloid' },'nonmetal': { name: 'Nonmetal' },'noble-gas': { name: 'Noble Gas' } };
@@ -561,21 +546,214 @@
                 periodicTableContainer.appendChild(fragment);
             };
 
-            const createCategoryLegend = () => { /* ... unchanged ... */ };
-            const resizeCanvas = () => { /* ... unchanged ... */ };
-            const drawSpectra = () => { /* ... unchanged ... */ };
-            const handlePan = (e) => { /* ... unchanged ... */ };
-            const handleZoom = (e) => { /* ... unchanged ... */ };
-            const showWavelengthTooltip = (e) => { /* ... unchanged ... */ };
-            const handleFind = () => { /* ... unchanged ... */ };
-            const displayFinderResults = (results, target, tolerance) => { /* ... unchanged ... */ };
-            const wavelengthToRgb = (wavelength) => { /* ... unchanged ... */ };
+            const createCategoryLegend = () => {
+                categoryLegendContainer.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                for (const [key, value] of Object.entries(categories)) {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'flex items-center';
+                    legendItem.innerHTML = `<div class="w-3 h-3 rounded-sm mr-1.5 ${key}"></div><span>${value.name}</span>`;
+                    fragment.appendChild(legendItem);
+                }
+                categoryLegendContainer.appendChild(fragment);
+            };
+
+            const resizeCanvas = () => {
+                const { width, height } = spectrumCanvas.getBoundingClientRect();
+                if (spectrumCanvas.width !== width || spectrumCanvas.height !== height) {
+                    spectrumCanvas.width = width;
+                    spectrumCanvas.height = height;
+                }
+            };
+            
+            const wavelengthToRgb = (wavelength) => {
+                let r, g, b;
+                if (wavelength >= 380 && wavelength <= 439) { r = -(wavelength - 440) / (440 - 380); g = 0.0; b = 1.0; } 
+                else if (wavelength >= 440 && wavelength <= 489) { r = 0.0; g = (wavelength - 440) / (490 - 440); b = 1.0; } 
+                else if (wavelength >= 490 && wavelength <= 509) { r = 0.0; g = 1.0; b = -(wavelength - 510) / (510 - 490); } 
+                else if (wavelength >= 510 && wavelength <= 579) { r = (wavelength - 510) / (580 - 510); g = 1.0; b = 0.0; } 
+                else if (wavelength >= 580 && wavelength <= 644) { r = 1.0; g = -(wavelength - 645) / (645 - 580); b = 0.0; } 
+                else if (wavelength >= 645 && wavelength <= 780) { r = 1.0; g = 0.0; b = 0.0; } 
+                else { return `rgba(255, 255, 255, 0.7)`; }
+                let factor;
+                if (wavelength >= 380 && wavelength <= 419) { factor = 0.3 + 0.7 * (wavelength - 380) / (420 - 380); } 
+                else if (wavelength >= 420 && wavelength <= 700) { factor = 1.0; } 
+                else if (wavelength >= 701 && wavelength <= 780) { factor = 0.3 + 0.7 * (780 - wavelength) / (780 - 700); } 
+                else { factor = 0; }
+                const gamma = 0.8;
+                const R = Math.pow(r * factor, gamma) * 255;
+                const G = Math.pow(g * factor, gamma) * 255;
+                const B = Math.pow(b * factor, gamma) * 255;
+                return `rgb(${Math.round(R)}, ${Math.round(G)}, ${Math.round(B)})`;
+            };
+
+            const drawSpectra = () => {
+                resizeCanvas();
+                const { width, height } = ctx.canvas;
+                ctx.clearRect(0, 0, width, height);
+                visiblePeaks = [];
+
+                if (appState.selectedElements.length === 0) {
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '16px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Select an element to view its spectrum.', width / 2, height / 2);
+                    return;
+                }
+
+                let maxIntensity = 0;
+                appState.selectedElements.forEach(symbol => {
+                    const data = findDataForElement(symbol);
+                    if (data && data.lines) {
+                        data.lines.forEach(line => {
+                            const intensity = parseFloat(String(line.rel_intensity).replace(/"/g, '')) || 0;
+                            if (intensity > maxIntensity) maxIntensity = intensity;
+                        });
+                    }
+                });
+                if (maxIntensity === 0) maxIntensity = 1;
+
+                const axisY = height - 25;
+                ctx.strokeStyle = '#4b5563';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, axisY);
+                ctx.lineTo(width, axisY);
+                ctx.stroke();
+
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'center';
+                const numTicks = Math.max(2, Math.floor(width / 100));
+                for (let i = 0; i <= numTicks; i++) {
+                    const x = (width / numTicks) * i;
+                    const wavelength = viewState.minWavelength + (viewState.maxWavelength - viewState.minWavelength) * (i / numTicks);
+                    ctx.fillText(Math.round(wavelength), x, height - 5);
+                }
+                
+                const compareColors = ['#3b82f6', '#14b8a6', '#ef4444'];
+                appState.selectedElements.forEach((symbol, index) => {
+                    const data = findDataForElement(symbol);
+                    if (!data || !data.lines) return;
+
+                    data.lines.forEach(line => {
+                        const wavelength = parseFloat(line.obs_wl_air_nm);
+                        if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) return;
+                        
+                        const intensity = parseFloat(String(line.rel_intensity).replace(/"/g, '')) || 0;
+                        const normalizedHeight = (intensity / maxIntensity) * (axisY - 10);
+                        const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * width;
+                        const y = axisY - normalizedHeight;
+
+                        ctx.beginPath();
+                        ctx.strokeStyle = appState.isCompareMode ? compareColors[index % compareColors.length] : wavelengthToRgb(wavelength);
+                        ctx.lineWidth = 2;
+                        ctx.moveTo(x, axisY);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        visiblePeaks.push({ x, y, wavelength, intensity, symbol });
+                    });
+                });
+            };
+
+            const handlePan = (e) => {
+                if (!viewState.isDragging) return;
+                const deltaX = e.clientX - viewState.lastX;
+                viewState.lastX = e.clientX;
+                const range = viewState.maxWavelength - viewState.minWavelength;
+                const deltaWavelength = (deltaX / spectrumCanvas.width) * range;
+                viewState.minWavelength -= deltaWavelength;
+                viewState.maxWavelength -= deltaWavelength;
+                drawSpectra();
+            };
+
+            const handleZoom = (e) => {
+                e.preventDefault();
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const currentWavelength = viewState.minWavelength + (x / rect.width) * (viewState.maxWavelength - viewState.minWavelength);
+                const zoomFactor = e.deltaY < 0 ? 0.8 : 1.25;
+                const newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
+                viewState.minWavelength = currentWavelength - (x / rect.width) * newRange;
+                viewState.maxWavelength = viewState.minWavelength + newRange;
+                if (viewState.maxWavelength - viewState.minWavelength < 1) { viewState.maxWavelength = viewState.minWavelength + 1; }
+                if (viewState.maxWavelength - viewState.minWavelength > 20000) { 
+                    const mid = (viewState.maxWavelength + viewState.minWavelength) / 2;
+                    viewState.minWavelength = mid - 10000;
+                    viewState.maxWavelength = mid + 10000;
+                }
+                drawSpectra();
+            };
+
+            const showWavelengthTooltip = (e) => {
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const closestPeak = visiblePeaks.reduce((closest, peak) => {
+                    const distance = Math.abs(peak.x - x);
+                    return distance < closest.distance ? { ...peak, distance } : closest;
+                }, { distance: Infinity });
+
+                if (closestPeak.distance < 10) {
+                    wavelengthTooltip.style.opacity = '1';
+                    wavelengthTooltip.style.left = `${x + 15}px`;
+                    wavelengthTooltip.style.top = `${y}px`;
+                    wavelengthTooltip.innerHTML = `<strong>${closestPeak.symbol}:</strong> ${closestPeak.wavelength.toFixed(3)} nm<br><strong>Int:</strong> ${closestPeak.intensity}`;
+                } else {
+                    wavelengthTooltip.style.opacity = '0';
+                }
+            };
+            
+            const handleFind = () => {
+                const target = parseFloat(wavelengthInput.value);
+                const tolerance = parseFloat(toleranceInput.value) || 0.1;
+                if (isNaN(target)) { alert("Please enter a valid target wavelength."); return; }
+                
+                const results = [];
+                for (const symbol in atomicData) {
+                    if (Object.hasOwnProperty.call(atomicData, symbol)) {
+                        const element = findDataForElement(symbol);
+                        if (!element) continue;
+                        const matchingLines = element.lines.filter(line => Math.abs(parseFloat(line.obs_wl_air_nm) - target) <= tolerance);
+                        if (matchingLines.length > 0) {
+                            results.push({
+                                symbol: symbol,
+                                name: elements.find(el => el.symbol === symbol)?.name || 'Unknown',
+                                lines: matchingLines
+                            });
+                        }
+                    }
+                }
+                displayFinderResults(results, target, tolerance);
+            };
+
+            const displayFinderResults = (results, target, tolerance) => {
+                finderModal.style.display = 'flex';
+                finderModalResults.innerHTML = '';
+                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> element(s) with lines at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
+                if (results.length === 0) {
+                    finderModalResults.innerHTML += '<p>No matching elements found in the loaded data.</p>';
+                    return;
+                }
+                results.forEach(result => {
+                    let content = `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.name} (${result.symbol})</h3>`;
+                    result.lines.forEach(line => {
+                         content += `<div class="text-sm text-gray-300 ml-2">→ <strong>${parseFloat(line.obs_wl_air_nm).toFixed(3)} nm</strong> (Rel. Int: ${line.rel_intensity})</div>`;
+                    });
+                    content += `</div>`;
+                    finderModalResults.innerHTML += content;
+                });
+            };
             
             const handleElementClick = (symbol) => { 
                  if (appState.isCompareMode) {
                     const index = appState.selectedElements.indexOf(symbol);
-                    if (index > -1) appState.selectedElements.splice(index, 1);
-                    else if (appState.selectedElements.length < appState.maxCompare) appState.selectedElements.push(symbol);
+                    if (index > -1) {
+                        appState.selectedElements.splice(index, 1);
+                    } else if (appState.selectedElements.length < appState.maxCompare) {
+                        appState.selectedElements.push(symbol);
+                    }
                 } else {
                     appState.selectedElements = (appState.selectedElements[0] === symbol) ? [] : [symbol];
                 }
@@ -612,7 +790,8 @@
                 atomicData = data;
                 isDataLoaded = true;
                 uploadStatus.textContent = '✅ Data loaded successfully.';
-                uploadStatus.classList.replace('text-gray-400', 'text-green-400');
+                uploadStatus.classList.remove('text-gray-400', 'text-red-400');
+                uploadStatus.classList.add('text-green-400');
                 createPeriodicTable();
                 if(categoryLegendContainer.children.length === 0) createCategoryLegend();
             };
@@ -620,7 +799,8 @@
             const loadDataFromRepo = async () => {
                  const repoUrl = 'https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/nist_atomic_data.json';
                  uploadStatus.textContent = 'Loading data from repository...';
-                 uploadStatus.classList.replace('text-red-400', 'text-green-400');
+                 uploadStatus.classList.remove('text-red-400', 'text-green-400');
+                 uploadStatus.classList.add('text-gray-400');
                  try {
                      const response = await fetch(repoUrl);
                      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -629,7 +809,7 @@
                  } catch (error) {
                      console.error("Error fetching data from repository:", error);
                      uploadStatus.textContent = '❌ Failed to load repo data. Upload a file.';
-                     uploadStatus.classList.replace('text-gray-400', 'text-red-400');
+                     uploadStatus.classList.add('text-red-400');
                  }
             };
             
@@ -644,7 +824,7 @@
                     } catch (error) {
                         console.error("Error parsing JSON file:", error);
                         uploadStatus.textContent = `❌ Error loading file. Is it a valid JSON?`;
-                        uploadStatus.classList.replace('text-gray-400', 'text-red-400');
+                         uploadStatus.classList.add('text-red-400');
                     }
                 };
                 reader.readAsText(file);
@@ -668,26 +848,26 @@
             spectrumCanvas.addEventListener('mousedown', (e) => { viewState.isDragging = true; viewState.lastX = e.clientX; spectrumCanvas.style.cursor = 'grabbing'; });
             document.addEventListener('mouseup', () => { viewState.isDragging = false; spectrumCanvas.style.cursor = 'grab'; });
             spectrumCanvas.addEventListener('mouseleave', () => { wavelengthTooltip.style.opacity = '0'; });
-            spectrumCanvas.addEventListener('mousemove', (e) => { if(viewState.isDragging) handlePan(e); showWavelengthTooltip(e); });
+            spectrumCanvas.addEventListener('mousemove', (e) => { handlePan(e); showWavelengthTooltip(e); });
             spectrumCanvas.addEventListener('wheel', handleZoom, { passive: false });
-            resizeHandle.addEventListener('mousedown', () => { isResizing = true; document.body.style.userSelect = 'none'; document.body.style.pointerEvents = 'none'; });
+            resizeHandle.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'ns-resize'; document.body.style.userSelect = 'none'; });
             document.addEventListener('mousemove', (e) => {
                 if (!isResizing) return;
-                const modalBodyRect = document.querySelector('.viewer-modal-body').getBoundingClientRect();
-                const newHeight = e.clientY - modalBodyRect.top - spectrumPanel.getBoundingClientRect().top + modalBodyRect.top;
-                if (newHeight > 150 && newHeight < (modalBodyRect.height - 100)) {
+                const modalBodyRect = viewerModal.querySelector('.modal-content-wrapper').getBoundingClientRect();
+                const currentTop = spectrumPanel.getBoundingClientRect().top;
+                const newHeight = e.clientY - currentTop;
+                if (newHeight > 150 && newHeight < (modalBodyRect.height - 150)) {
                     spectrumPanel.style.height = `${newHeight}px`;
                     drawSpectra();
                 }
             });
-            document.addEventListener('mouseup', () => { isResizing = false; document.body.style.userSelect = ''; document.body.style.pointerEvents = ''; });
+            document.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = ''; document.body.style.userSelect = '';});
 
             // --- Public Method ---
             return {
                 open: () => {
                     viewerModal.style.display = 'flex';
-                    resizeCanvas();
-                    drawSpectra();
+                    drawSpectra(); // Initial draw
                     if (!isDataLoaded) {
                         loadDataFromRepo();
                     }
