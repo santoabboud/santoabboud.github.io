@@ -5,339 +5,308 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilal Abboud - Laser Scientist & Engineer</title>
     <style>
-        /* Basic Styling */
+        /* --- Basic & Typography --- */
+        :root {
+            --primary-bg: #f4f4f4;
+            --secondary-bg: #ffffff;
+            --sidebar-bg: #333;
+            --sidebar-width: 240px;
+            --text-color: #333;
+            --text-light: #f1f1f1;
+            --accent-color: #007bff;
+            --border-color: #ddd;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
+            line-height: 1.7;
             margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            overflow: auto;
-            padding: 0 2rem;
+
+        h1, h2, h3, h4, h5 {
+            margin-top: 0;
         }
-        header {
-            background: #333;
-            color: #fff;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        header h1 { margin: 0; font-size: 2.5rem; }
-        header p { margin: 0; font-size: 1.2rem; }
-        nav {
-            background: #444;
-            color: #fff;
-            padding: 0.5rem 0;
-            text-align: center;
-            position: sticky;
+
+        /* --- Main Layout: Sidebar & Content --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
             top: 0;
-            z-index: 100;
-        }
-        nav a { color: #fff; text-decoration: none; padding: 0.5rem 1rem; }
-        nav a:hover { background: #555; }
-        section { padding: 2rem 0; }
-        /* The #hero section styling is no longer needed but kept for potential future use */
-        #about, #blog, #contact {
-            background: #fff;
-            margin-top: 2rem; /* Added margin to the top for spacing */
-            margin-bottom: 1rem;
-            padding: 2rem;
-            border-radius: 5px;
-        }
-        h2.section-title {
+            left: 0;
+            background-color: var(--sidebar-bg);
+            padding: 2rem 0;
+            color: var(--text-light);
             text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
         }
-        .blog-post {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 2rem;
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            padding: 2rem 3rem;
         }
-        .blog-post:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .blog-post h3 { margin-top: 0; font-size: 1.8rem; }
-        .blog-post h4 { font-size: 1.5rem; margin-top: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;}
-        .blog-post h5 { font-size: 1.2rem; margin-top: 2rem; }
-        .blog-post-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin: 1rem 0;
+        
+        /* --- Sidebar Content --- */
+        .sidebar-header {
+            padding: 0 1.5rem 2rem 1.5rem;
+            border-bottom: 1px solid #555;
+        }
+        .sidebar-header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .sidebar-nav {
+            margin-top: 2rem;
+        }
+        .sidebar-nav a {
             display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 1.1rem;
+            transition: background-color 0.2s ease-in-out;
         }
-        #contact ul { list-style: none; padding: 0; text-align: center; }
-        #contact li { margin-bottom: 1rem; }
-        footer { text-align: center; padding: 2rem 0; background: #333; color: #fff; }
-        .disclaimer {
-            background-color: #fffbe6;
-            border-left: 4px solid #ffc107;
-            padding: 1rem;
-            margin: 1.5rem 0;
+        .sidebar-nav a:hover {
+            background-color: #444;
         }
-        pre {
-            background-color: #2d2d2d;
-            color: #f8f8f2;
-            padding: 1em;
-            overflow-x: auto;
+        .sidebar-nav a.active {
+            background-color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        /* --- Content Panels --- */
+        .content-panel {
+            display: none; /* Hidden by default */
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .content-panel.active {
+            display: block; /* Shown by JS */
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* --- Projects Section Specifics --- */
+        .project-preview {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
             border-radius: 5px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            font-size: 0.9em;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+        .project-preview:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .preview-text {
+            position: relative;
+            max-height: 5.1em; /* line-height * 3 */
+            overflow: hidden;
+            color: #666;
+            margin-bottom: 0;
+        }
+        /* The fade-out effect */
+        .preview-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2.5em;
+            background: linear-gradient(to bottom, transparent, var(--secondary-bg));
+        }
+
+        #project-full-view { display: none; }
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- General Blog Post Styling --- */
+        .blog-post-content h4 { font-size: 1.5rem; margin-top: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;}
+        .blog-post-content h5 { font-size: 1.2rem; margin-top: 2rem; }
+        .blog-post-content img { max-width: 100%; height: auto; border-radius: 5px; margin: 1rem 0; display: block; }
+        .disclaimer { background-color: #fffbe6; border-left: 4px solid #ffc107; padding: 1rem; margin: 1.5rem 0; }
+        pre { background-color: #2d2d2d; color: #f8f8f2; padding: 1em; overflow-x: auto; border-radius: 5px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; }
+
+        /* --- Responsive Design for smaller screens --- */
+        @media (max-width: 768px) {
+            body { display: block; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
             <h1>Bilal Abboud</h1>
             <p>Laser Scientist & Engineer</p>
         </div>
-    </header>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-target="projects">Projects</a>
+            <a href="#" class="nav-link" data-target="about">About Me</a>
+            <a href="#" class="nav-link" data-target="contact">Contact</a>
+        </nav>
+    </aside>
 
-    <nav>
-        <div class="container">
-            <a href="#about">About Me</a>
-            <a href="#blog">Blog</a>
-            <a href="#contact">Contact</a>
-        </div>
-    </nav>
+    <main class="main-content">
 
-    <div class="container">
-        <section id="about">
-            <h2 class="section-title">About Me</h2>
-            <p>
-                Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. This website showcases some of the personal projects I've worked on.
-            </p>
-        </section>
-
-        <section id="blog">
-            <h2 class="section-title">Blog</h2>
-
-            <div class="blog-post">
-                <h3>Ocean Optics USB2000 Firmware update</h3>
-                <div class="disclaimer">
-                    <p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p>
+        <div id="projects" class="content-panel active">
+            <div id="project-list">
+                <h2>Projects</h2>
+                
+                <div class="project-preview" data-project-id="project-ocean-optics">
+                    <h3>Ocean Optics USB2000 Firmware update</h3>
+                    <p class="preview-text">This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level. The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO...</p>
+                </div>
+                
+                <div class="project-preview" data-project-id="project-frankenscope">
+                    <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+                    <p class="preview-text">This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond...</p>
+                </div>
+                
+                <div class="project-preview" data-project-id="project-spectroscopy">
+                    <h3>Ultrafast Spectroscopy of Novel Materials</h3>
+                    <p class="preview-text">Here's a look into a recent project investigating the carrier dynamics of a new class of semiconductor materials using femtosecond pump-probe spectroscopy. This technique allows us to observe incredibly fast processes that occur in materials after they've been excited...</p>
                 </div>
 
-                <h4>Introduction</h4>
-                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser). The IO can be used to trigger spectral captures and to trigger external devices, such as flashlamps, lasers etc.. The optical design is very similar to it's predecessor, the Ocean Optics S2000, and has been used in later models as well. It uses the Sony ILX511 linear CCD image sensor and can be found in various configurations ranging from Deep UV over vis to NIR.</p>
-                <p>Here's a sketch of the optical layout of the USB4000 spectrometer, which is pretty much identical to the USB2000's.<br><em>Image credit: Fernando Sebastián Chiwo on ResearchGate.</em></p>
-                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K" class="blog-post-image">
-                <p>...and the real thing:</p>
-                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout" class="blog-post-image">
-                <p>While it is rare to find units that are configured to measure spectra beyond 880nm, I have modified a USB2000 to measure up to 1080nm with still acceptable sensitivity for laser building applications.</p>
-                <p>The USB2000 spectrometer has seen use in many different applications. Most times it is used with Ocean Optics' firmware installed and with Ocean Optics Software such as OceanView. Thermo Fisher Scientific however used the USB2000 with custom firmware in their Nanodrop Series Microvolume UV-vis Spectrophotometers for Biotech applications (Nanodrop 2000, uses small xenon flashlamp as broadband light source). Unfortunately, their firmware disables use with third-party or Ocean Optics software, and disables the possibility to directly flash Ocean Optics firmware with the OOI USB Programmer Software tool by Ocean Optics.</p>
-                <p><strong><em>To get around this issue it is possible to...</em></strong></p>
-                
-                <h4>Directly flash the EEPROM that stores the firmware.</h4>
-                <p>You will need:</p>
-                <ul>
-                    <li>Arduino Uno</li>
-                    <li>Arduino (Wireless) SD shield</li>
-                    <li>4x mini probing grabbers</li>
-                    <li>SD card</li>
-                    <li>jumper cables</li>
-                </ul>
-
-                <h5>Opening up the USB2000:</h5>
-                <p>Use a razor blade or a suitable alternative to gently peel back the corners of the lid sticker. I recommend doing this step carefully, both to avoid injury and to retain the spectrometer's resale value and aesthetics ;) If the USB2000 is missing the lid sticker, skip this step.</p>
-                <p>Screw location shown on a unit without the lid sticker:</p>
-                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker" class="blog-post-image">
-                <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
-                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid" class="blog-post-image">
-                <p>Once the screws are removed, pull the the lid up by prying from the gap between the USB 2.0 Type B port and the lid. It should open up, revealing the circuit board.</p>
-                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039" class="blog-post-image">
-                
-                <h5>Connecting to the EEPROM</h5>
-                <p>First locate the EEPROM, on which the firmware is stored. The model number is 24LC256. The EEPROM communicates via I<sup>2</sup>C. The location is marked in the pitures below:</p>
-                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135" class="blog-post-image">
-                <p>close-up view:</p>
-                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156" class="blog-post-image">
-                <p>Now use a mini probing grabber to connect to the following pins:</p>
-                <ul>
-                    <li>VCC to a +3.3V or +5V supply</li>
-                    <li>VSS to GND</li>
-                    <li>SDA to Analog Pin 4</li>
-                    <li>SCL to Analog Pin 5</li>
-                </ul>
-                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout" class="blog-post-image">
-                <p>It should look something like this:</p>
-                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing" class="blog-post-image">
-
-                <h4>Flashing the EEPROM</h4>
-                <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
-                <pre><code>#include &lt;SPI.h&gt;
-#include &lt;SD.h&gt;
-#include &lt;Wire.h&gt;
-
-#define PROG_FNAME	    "USB200~1.iic"
-#define PROG_VERIFY	    0
-
-#define PIN_SDCARD_CS	    4
-
-#define UART_BAUD	    9600
-
-#define EEPROM_I2C_ADDR	    0x51
-#define EEPROM_BASE	    0
-
-Sd2Card card;
-
-byte eeprom_read(int i2c_addr, unsigned int dev_addr)
-{
-	byte data = 0xff;
-
-	Wire.beginTransmission(i2c_addr);
-	Wire.write((int)(dev_addr &gt;&gt; 8));
-	Wire.write((int)(dev_addr & 0xff));
-	Wire.endTransmission();
-	Wire.requestFrom(i2c_addr, 1);
-
-	if (Wire.available()) 
-		data = Wire.read();
-
-	return data;
-}
-
-int eeprom_write(int i2c_addr, unsigned long dev_addr, byte data)
-{
-	Wire.beginTransmission(i2c_addr);
-	Wire.write((int)(dev_addr &gt;&gt; 8));
-	Wire.write((int)(dev_addr & 0xFF));
-	Wire.write(data);
-	Wire.endTransmission();
-
-	return 0;
-}
-
-int prog_eeprom(const char *fname)
-{
-	char buf[64];
-	uint8_t e_byte;
-	uint8_t f_byte;
-	File f;
-	char c;
-
-	Serial.println("Opening firmware file");
-
-	f = SD.open(fname, FILE_READ);
-	if (!f) {
-		Serial.println("Could not open file");
-		return -1;
-	}
-
-	Serial.print("Will reprogram EEPROM. Continue? [y/N]");
-	while (!Serial.available()) {
-		yield();
-	}
-	c = Serial.read();
-	if (c != 'y') {
-		Serial.println("Aborting");
-		return -1;
-	}
-
-	Serial.println("");
-	Serial.print("Programming EEPROM (");
-	Serial.print(f.size());
-	Serial.print(" bytes)\n");
-
-	for(unsigned long i = 0; i &lt; f.size(); i ++) {
-		f_byte = f.read();
-		eeprom_write(EEPROM_I2C_ADDR, EEPROM_BASE + i, f_byte);
-		delay(10); /* usec */
-#if PROG_VERIFY
-		e_byte = eeprom_read(EEPROM_I2C_ADDR, EEPROM_BASE + i);
-		if (f_byte != e_byte) {
-			sprintf(buf, "Could not verify byte at %08x: 0x%x (should be 0x%x)", i, f_byte, e_byte);
-			Serial.println(buf);
-			return -1;
-		}
-#endif /* PROG_VERIFY */
-	}
-	f.close();
-
-	return 0;
-}
-
-void setup()
-{
-	int rc;
-
-	Wire.begin();
-
-	Serial.begin(UART_BAUD);
-	while (!Serial)
-		; /* wait for serial monitor */
-
-	Serial.println("Initializing SD card");
-
-	if (!SD.begin(PIN_SDCARD_CS)) {
-		Serial.println("Could not initialize SD card");
-		while (1);
-	}
-
-	Serial.println("Programming EEPROM");
-	rc = prog_eeprom(PROG_FNAME);
-	if (rc) {
-		Serial.println("Programming failed");
-		while (1) ;
-	}
-	Serial.println("Programming complete");
-}
-
-void loop()
-{
-	/* stub */
-}
-</code></pre>
-                <p>After this, your USB2000 spectrometer should have been flashed with the correct firmware for it and can be used with Ocean Optics' software.</p>
-                <p>Now you can connect the spectrometer to your PC and run the OOI USB Programmer tool by Ocean Optics. It should show up now and even have all the calibration data still on it (although it makes sense to at least verify the calibration after all the years - for a quick and dirty check, checking against the spectral peaks of a fluorescent lamp works. For a more refined calibration, you should use a dedicated Mercury Argon spectral lamp.)</p>
-                <p>The calibration procedure is laid out in Appendix A on pp. 35 - 39 of the <code>Ocean_Optics_USB2000_Operating_Instructions_Manual.pdf</code>, which can be found in this repository.</p>
-
-                <h5>Unlock Codes</h5>
-                <p>To unlock all features of Ocean Optics' softwares, there are unlock codes.</p>
-                <p><strong><em>!!! These should be used carefully, as they can modify devices in non-reversible ways. !!!</em></strong></p>
-                <p>For the OOI USB Programmer the unlock code is "UNLOCKALL".<br>For OceanView the unlock code is "oceanfactory".</p>
-                <p>With these unlock codes, you can flash the calibration coefficients you calculated to the spectrometer.</p>
-                <p>Good luck and have fun!</p>
+                </div>
+            
+            <div id="project-full-view">
+                <button class="back-button">← Back to Projects</button>
+                <div id="project-content-container">
+                    </div>
             </div>
+        </div>
+        
+        <div id="about" class="content-panel">
+            <h2>About Me</h2>
+            <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. This website showcases some of the personal projects I've worked on.</p>
+        </div>
 
-            <div class="blog-post">
-                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <img src="https://via.placeholder.com/800x400.png?text=Main+Microscope+Image" alt="The Frankenscope" class="blog-post-image">
-                <p>
-                    This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon), an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source as well as a LabJack T4 for general control.
-                </p>
-                <p>
-                    It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)
-                </p>
-            </div>
-
-            <div class="blog-post">
-                <h3>Ultrafast Spectroscopy of Novel Materials</h3>
-                <img src="https://via.placeholder.com/800x400.png?text=Spectroscopy+Setup" alt="Spectroscopy Setup" class="blog-post-image">
-                <p>
-                    Here's a look into a recent project investigating the carrier dynamics of a new class of semiconductor materials using femtosecond pump-probe spectroscopy. This technique allows us to observe incredibly fast processes that occur in materials after they've been excited by a laser pulse. The work here led to some fascinating insights and was eventually published in a peer-reviewed journal.
-                </p>
-            </div>
-
-        </section>
-
-        <section id="contact">
-            <h2 class="section-title">Get In Touch</h2>
-            <ul>
-                <li>Email: <a href="mailto:berlinphoton@gmail.com">berlinphoton@gmail.com</a></li>
-                <li>LinkedIn: <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank">linkedin.com/in/bilal-abboud</a></li>
-                <li>GitHub: <a href="https://github.com/santoabboud" target="_blank">github.com/santoabboud</a></li>
+        <div id="contact" class="content-panel">
+            <h2>Get In Touch</h2>
+            <ul style="list-style: none; padding: 0; text-align: left;">
+                <li style="margin-bottom: 1rem;"><strong>Email:</strong> <a href="mailto:berlinphoton@gmail.com">berlinphoton@gmail.com</a></li>
+                <li style="margin-bottom: 1rem;"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank">linkedin.com/in/bilal-abboud</a></li>
+                <li style="margin-bottom: 1rem;"><strong>GitHub:</strong> <a href="https://github.com/santoabboud" target="_blank">github.com/santoabboud</a></li>
             </ul>
-        </section>
-    </div>
+        </div>
+    </main>
+    
+    <div id="project-storage" style="display: none;">
+    
+        <div id="project-ocean-optics" class="blog-post-content">
+            <h3>Ocean Optics USB2000 Firmware update</h3>
+            <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
+            <h4>Introduction</h4>
+            <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer...</p>
+            <p>Good luck and have fun!</p>
+        </div>
 
-    <footer>
-        <p>© 2025 Bilal Abboud</p>
-    </footer>
+        <div id="project-frankenscope" class="blog-post-content">
+            <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+            <img src="https://via.placeholder.com/800x400.png?text=Main+Microscope+Image" alt="The Frankenscope">
+            <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage...</p>
+            <p>See Bunnie Huang's work for more info about that :-)</p>
+        </div>
 
+        <div id="project-spectroscopy" class="blog-post-content">
+            <h3>Ultrafast Spectroscopy of Novel Materials</h3>
+            <img src="https://via.placeholder.com/800x400.png?text=Spectroscopy+Setup" alt="Spectroscopy Setup">
+            <p>Here's a look into a recent project investigating the carrier dynamics of a new class of semiconductor materials...</p>
+             <p>...was eventually published in a peer-reviewed journal.</p>
+        </div>
+
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            
+            const projectPreviews = document.querySelectorAll('.project-preview');
+            const projectList = document.getElementById('project-list');
+            const projectFullView = document.getElementById('project-full-view');
+            const projectContentContainer = document.getElementById('project-content-container');
+            const backButton = document.querySelector('.back-button');
+
+            // --- Sidebar Navigation Logic ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Deactivate all links and panels
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    contentPanels.forEach(p => p.classList.remove('active'));
+
+                    // Activate the clicked link and corresponding panel
+                    this.classList.add('active');
+                    const targetPanel = document.getElementById(this.dataset.target);
+                    targetPanel.classList.add('active');
+                    
+                    // If switching to projects view, ensure the list is shown
+                    if (this.dataset.target === 'projects') {
+                        showProjectList();
+                    }
+                });
+            });
+
+            // --- Project View Logic ---
+            projectPreviews.forEach(preview => {
+                preview.addEventListener('click', function() {
+                    const projectId = this.dataset.projectId;
+                    const fullContent = document.getElementById(projectId).innerHTML;
+                    
+                    projectContentContainer.innerHTML = fullContent;
+                    showFullProjectView();
+                });
+            });
+            
+            backButton.addEventListener('click', showProjectList);
+
+            function showProjectList() {
+                projectFullView.style.display = 'none';
+                projectList.style.display = 'block';
+            }
+
+            function showFullProjectView() {
+                projectList.style.display = 'none';
+                projectFullView.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
