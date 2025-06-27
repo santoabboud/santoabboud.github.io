@@ -14,7 +14,7 @@
             color: #333;
         }
         .container {
-            max-width: 960px;
+            max-width: 800px; /* Slightly narrower for better blog readability */
             margin: auto;
             overflow: auto;
             padding: 0 2rem;
@@ -38,6 +38,9 @@
             color: #fff;
             padding: 0.5rem 0;
             text-align: center;
+            position: sticky; /* Makes navigation bar stick to the top */
+            top: 0;
+            z-index: 100;
         }
         nav a {
             color: #fff;
@@ -63,7 +66,7 @@
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        #about, #projects, #contact {
+        #about, #blog, #contact {
             background: #fff;
             margin-bottom: 1rem;
             padding: 2rem;
@@ -74,37 +77,25 @@
             margin-bottom: 2rem;
             font-size: 2rem;
         }
-        .project {
-            margin-bottom: 2rem;
+        .blog-post {
+            margin-bottom: 3rem;
             border-bottom: 1px solid #ddd;
             padding-bottom: 2rem;
         }
-        .project:last-child {
+        .blog-post:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0;
         }
-        .project-image {
+        .blog-post h3 {
+             margin-top: 0; /* Adjust title spacing */
+             font-size: 1.8rem;
+        }
+        .blog-post-image {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-        .project-video {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-            background: #000;
-            margin-bottom: 1rem;
-        }
-        .project-video iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            margin: 1rem 0; /* Add margin for spacing around images */
         }
         #contact ul {
             list-style: none;
@@ -127,21 +118,21 @@
     <header>
         <div class="container">
             <h1>Bilal Abboud</h1>
-            <p>Laser Scientist &amp; Engineer</p>
+            <p>Laser Scientist & Engineer</p>
         </div>
     </header>
 
     <nav>
         <div class="container">
             <a href="#about">About Me</a>
-            <a href="#projects">Projects</a>
+            <a href="#blog">Blog</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
 
     <section id="hero">
         <div class="container">
-            <h2>Welcome to My Portfolio</h2>
+            <h2>Welcome to My Digital Notebook</h2>
             <p>Exploring the frontiers of light and its applications.</p>
         </div>
     </section>
@@ -154,42 +145,42 @@
             </p>
         </section>
 
-        <section id="projects">
-            <h2 class="section-title">Projects</h2>
+        <section id="blog">
+            <h2 class="section-title">Blog</h2>
 
-            <div class="project">
-                <h3>The Frankenscope: Microscopic Multi-tool</h3>
-                <img src="https://via.placeholder.com/800x400.png?text=Project+Image" alt="Project 1 Image" class="project-image">
+            <div class="blog-post">
+                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+                <img src="https://via.placeholder.com/800x400.png?text=Main+Microscope+Image" alt="The Frankenscope" class="blog-post-image">
                 <p>
-                    <strong>Description:</strong> This Microscope consists of a Mitutoyo FS70L4 as it's core and a Physik Instrumente six-axis closed loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon), an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelenght short arc xenon light source as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)
+                    This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage. It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon), an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source as well as a LabJack T4 for general control.
                 </p>
-                <div class="project-video">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
+                <p>
+                    It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)
+                </p>
             </div>
 
-            <div class="project">
-                <h3>Project Title 2: Ultrafast Spectroscopy of Novel Materials</h3>
-                <img src="https://via.placeholder.com/800x400.png?text=Project+Image" alt="Project 2 Image" class="project-image">
+            <div class="blog-post">
+                <h3>Ultrafast Spectroscopy of Novel Materials</h3>
+                <img src="https://via.placeholder.com/800x400.png?text=Spectroscopy+Setup" alt="Spectroscopy Setup" class="blog-post-image">
                 <p>
-                    <strong>Description:</strong> Describe your second project here. Emphasize the scientific or engineering contributions you made. For instance: Investigated the carrier dynamics of a new class of semiconductor materials using femtosecond pump-probe spectroscopy, leading to a publication in a peer-reviewed journal.
+                    Here's a look into a recent project investigating the carrier dynamics of a new class of semiconductor materials using femtosecond pump-probe spectroscopy. This technique allows us to observe incredibly fast processes that occur in materials after they've been excited by a laser pulse. The work here led to some fascinating insights and was eventually published in a peer-reviewed journal.
                 </p>
-                </div>
+            </div>
 
-            </section>
+        </section>
 
         <section id="contact">
             <h2 class="section-title">Get In Touch</h2>
             <ul>
                 <li>Email: <a href="mailto:berlinphoton@gmail.com">berlinphoton@gmail.com</a></li>
-                <li>LinkedIn: <a href="https://www.linkedin.com/in/yourprofile/" target="_blank">linkedin.com/in/yourprofile</a></li>
+                <li>LinkedIn: <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank">linkedin.com/in/bilal-abboud</a></li>
                 <li>GitHub: <a href="https://github.com/santoabboud" target="_blank">github.com/santoabboud</a></li>
             </ul>
         </section>
     </div>
 
     <footer>
-        <p>&copy; 2025 Bilal Abboud</p>
+        <p>© 2025 Bilal Abboud</p>
     </footer>
 
 </body>
