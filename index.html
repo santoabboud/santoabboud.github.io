@@ -149,9 +149,9 @@
             <!-- View for Categories -->
             <div id="category-list" class="view">
                 <h2 class="text-2xl font-bold mb-4">Project Categories</h2>
-                <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3><p>Analysis and modification of spectroscopic instruments.</p></div>
-                <div class="category-card" data-category="microscopy"><h3>Microscopy</h3><p>Custom-built microscopic tools and imaging systems.</p></div>
-                <div class="category-card" data-category="night-vision"><h3>Night Vision</h3><p>Exploring and building devices for low-light imaging.</p></div>
+                <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3></div>
+                <div class="category-card" data-category="microscopy"><h3>Microscopy</h3></div>
+                <div class="category-card" data-category="night-vision"><h3>Night Vision</h3></div>
             </div>
             <!-- View for list of projects in a category -->
             <div id="project-list" class="view" style="display: none;"></div>
@@ -472,10 +472,6 @@
             let nistData = {};
             let isNistInitialized = false;
 
-            const nistViewer = {
-                // All NIST viewer related functions and variables will go here
-            };
-
             launchNistViewerBtn.addEventListener('click', () => {
                 viewerModal.style.display = 'flex';
                 // Pass the global nistData object and a function to update it
@@ -598,6 +594,7 @@
             
             const handleDataLoaded = (data) => {
                 setAtomicData(data); // Update the persistent data object
+                atomicData = data; // also update the local copy for this instance
                 uploadStatus.textContent = '✅ Data loaded successfully.';
                 uploadStatus.classList.replace('text-gray-400', 'text-green-400');
                 buildUi();
@@ -605,6 +602,8 @@
 
             const loadDataFromRepo = async () => {
                  const repoUrl = 'https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/nist_atomic_data.json';
+                 uploadStatus.textContent = 'Loading data from repository...';
+                 uploadStatus.classList.replace('text-red-400', 'text-gray-400');
                  try {
                      const response = await fetch(repoUrl);
                      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -745,12 +744,123 @@
                 });
             };
             
-            const handlePan = (e) => { /* ... unchanged ... */ };
-            const handleZoom = (e) => { /* ... unchanged ... */ };
-            const showWavelengthTooltip = (e) => { /* ... unchanged ... */ };
-            const handleFind = () => { /* ... unchanged ... */ };
-            const displayFinderResults = (results, target, tolerance) => { /* ... unchanged ... */ };
-            const wavelengthToRgb = (wavelength) => { /* ... unchanged ... */ };
+            const handlePan = (e) => {
+                if (!viewState.isDragging) return;
+                const dx = e.clientX - viewState.lastX;
+                viewState.lastX = e.clientX;
+                const range = viewState.maxWavelength - viewState.minWavelength;
+                const panAmount = (dx / spectrumCanvas.clientWidth) * range;
+                viewState.minWavelength -= panAmount;
+                viewState.maxWavelength -= panAmount;
+                drawSpectra();
+            };
+            
+            const handleZoom = (e) => { 
+                e.preventDefault();
+                const zoomIntensity = 0.1;
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const wavelengthAtCursor = viewState.minWavelength + (mouseX / spectrumCanvas.clientWidth) * (viewState.maxWavelength - viewState.minWavelength);
+                const direction = e.deltaY < 0 ? 1 : -1;
+                const zoomFactor = 1 - direction * zoomIntensity;
+                let newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
+                if (newRange < 1) newRange = 1;
+                if (newRange > 2000) newRange = 2000;
+                const ratio = mouseX / spectrumCanvas.clientWidth;
+                viewState.minWavelength = wavelengthAtCursor - newRange * ratio;
+                viewState.maxWavelength = wavelengthAtCursor + newRange * (1 - ratio);
+                drawSpectra();
+            };
+
+            const showWavelengthTooltip = (e) => {
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                let closestPeak = null;
+                let minDistance = Infinity;
+                const snapThreshold = 10;
+                for (const peak of visiblePeaks) {
+                    const distance = Math.abs(peak.x - mouseX);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestPeak = peak;
+                    }
+                }
+                if (closestPeak && minDistance < snapThreshold) {
+                    wavelengthTooltip.textContent = `${closestPeak.wavelength.toFixed(4)} nm`;
+                    const tooltipRect = wavelengthTooltip.getBoundingClientRect();
+                    let left = closestPeak.x + 15;
+                    if (left + tooltipRect.width > spectrumCanvas.clientWidth) {
+                        left = closestPeak.x - tooltipRect.width - 15;
+                    }
+                    wavelengthTooltip.style.left = `${left}px`;
+                    wavelengthTooltip.style.top = `${e.clientY - rect.top}px`;
+                    wavelengthTooltip.style.opacity = '1';
+                } else {
+                    wavelengthTooltip.style.opacity = '0';
+                }
+            };
+            
+            const handleFind = () => {
+                if(Object.keys(atomicData).length === 0) {
+                    uploadStatus.textContent = 'Please load the JSON data file first!';
+                    uploadStatus.classList.add('text-red-400');
+                    return;
+                }
+                const targetWavelength = parseFloat(wavelengthInput.value);
+                const tolerance = parseFloat(toleranceInput.value);
+                if (isNaN(targetWavelength) || isNaN(tolerance)) return;
+                
+                const results = [];
+                for (const symbol in atomicData) {
+                    for (const ionKey in atomicData[symbol]) {
+                        atomicData[symbol][ionKey].forEach(line => {
+                            const wl = parseFloat(line.wavelength);
+                            if (Math.abs(wl - targetWavelength) <= tolerance) {
+                                results.push({ element: ionKey, wavelength: wl, intensity: line.intensity_obs || 'N/A' });
+                            }
+                        });
+                    }
+                }
+                displayFinderResults(results, targetWavelength, tolerance);
+            };
+            
+            const displayFinderResults = (results, target, tolerance) => {
+                finderModalResults.innerHTML = '';
+                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4 text-center">Found ${results.length} match(es) for ${target} ± ${tolerance} nm.</p>`;
+                if (results.length > 0) {
+                    results.sort((a, b) => Math.abs(a.wavelength - target) - Math.abs(b.wavelength - target));
+                    results.forEach(res => {
+                        const item = document.createElement('div');
+                        item.className = 'finder-result-item p-3 rounded-lg cursor-pointer transition-colors';
+                        item.innerHTML = `<div class="flex justify-between items-center"><span class="font-semibold text-lg">${res.element}</span><span class="text-teal-400 font-mono">${res.wavelength.toFixed(4)} nm</span></div><div class="text-sm text-gray-400">Intensity: ${res.intensity}</div>`;
+                        item.onclick = () => {
+                            const symbol = res.element.split(' ')[0];
+                            if (!elements.find(el => el.symbol === symbol)) return;
+                            if (appState.isCompareMode) {
+                                if (appState.selectedElements.length < appState.maxCompare && !appState.selectedElements.includes(symbol)) {
+                                    appState.selectedElements.push(symbol);
+                                }
+                            } else {
+                                appState.selectedElements = [symbol];
+                            }
+                            finderModal.style.display = 'none';
+                            updateUI();
+                            drawSpectra();
+                        };
+                        finderModalResults.appendChild(item);
+                    });
+                } else {
+                    finderModalResults.innerHTML += '<p class="text-center text-gray-500 mt-4">No matching spectral lines found.</p>';
+                }
+                finderModal.style.display = 'flex';
+            };
+            
+            const wavelengthToRgb = (wavelength) => {
+                if (wavelength >= 380 && wavelength <= 750) return d3.interpolateSpectral(1 - ((wavelength - 380) / (750 - 380)));
+                if (wavelength < 380) return `rgb(${Math.round((0.6 + 0.4 * (wavelength - 200) / 180) * 148)}, 0, ${Math.round((0.6 + 0.4 * (wavelength - 200) / 180) * 211)})`;
+                if (wavelength > 750) return `rgb(${Math.round((1.0 - 0.7 * (wavelength - 750) / 250) * 255)}, 0, 0)`;
+                return '#ffffff';
+            };
 
             // --- Setup Listeners (only once) ---
             if (!document.getElementById('nist-viewer-listeners-attached')) {
