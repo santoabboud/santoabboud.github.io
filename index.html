@@ -213,7 +213,7 @@
         .blog-post-content h4 { font-size: 1.8rem; margin-top: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; color: #FFFFFF; }
         .blog-post-content h5 { font-size: 1.4rem; margin-top: 2.5rem; color: #FFFFFF; }
         .blog-post-content img { max-width: 100%; height: auto; border-radius: 16px; margin: 2rem 0; display: block; border: 1px solid var(--border-color); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-        .disclaimer { background-color: var(--wip-bg); border-left: 4px solid var(--wip-border); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; color: var(--wip-text); }
+        .disclaimer { background-color: rgba(40, 35, 20, 0.9); border-left: 4px solid var(--wip-border); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; color: var(--wip-text); }
         pre { background-color: #111111; color: #f8f8f2; padding: 1.5em; overflow-x: auto; border-radius: 12px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; white-space: pre-wrap; word-wrap: break-word; border: 1px solid var(--border-color); }
         h2.font-bold { color: #FFFFFF; }
 
@@ -265,7 +265,7 @@
              background-color: var(--accent-color); color: var(--primary-bg);
              padding: 0.75rem 1.5rem; border-radius: 999px; cursor: pointer; transition: all 0.2s;
              font-weight: 600; text-align: center; border: none;
-         }
+        }
         .main-action-btn:hover { background-color: #FFFFFF; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
         .main-action-btn:disabled { background-color: #4b5563; color: #9ca3af; cursor: not-allowed; }
 
@@ -305,8 +305,10 @@
                 <h2 class="text-3xl font-bold mb-6 text-white">Project Categories</h2>
                 <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3></div>
                 <div class="category-card" data-category="microscopy"><h3>Microscopy</h3></div>
+                <div class="category-card" data-category="lasers"><h3>Lasers</h3></div>
                 <div class="category-card" data-category="night-vision"><h3>Night Vision</h3></div>
                 <div class="category-card" data-category="cameras"><h3>Cameras</h3></div>
+                <div class="category-card" data-category="battery-work"><h3>Battery work</h3></div>
                 <div class="category-card" data-category="art"><h3>Art</h3></div>
             </div>
             <div id="project-list" class="view" style="display: none;"></div>
@@ -541,6 +543,20 @@
             </div>
         </div>
 
+        <div class="project-data" data-category="lasers" data-id="266nm-laser">
+            <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=266nm" alt="Cover image for 266nm microchip laser">
+                <div class="preview-text-content">
+                    <h3>266nm microchip laser</h3>
+                    <p>A project on a compact, deep UV, sub-nanosecond microchip laser. Analysis, teardown, and potential applications...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>266nm microchip laser</h3>
+                <p>Full content for the 266nm microchip laser project...</p>
+            </div>
+        </div>
+
         <div class="project-data" data-category="night-vision" data-id="mullard-xx1332">
              <div class="preview-content">
                 <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=XX1332" alt="Cover image for Mullard XX1332 project">
@@ -550,9 +566,9 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
-                 <p>This project documents the exciting challenge of building a usable night vision device around a classic, large-format Mullard/Philips XX1332 Gen 2 image intensifier tube...</p>
-                 <img src="https://placehold.co/800x400/333/fff?text=XX1332+Intensifier" alt="Mullard XX1332 Intensifier Tube">
+                <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
+                <p>This project documents the exciting challenge of building a usable night vision device around a classic, large-format Mullard/Philips XX1332 Gen 2 image intensifier tube...</p>
+                <img src="https://placehold.co/800x400/333/fff?text=XX1332+Intensifier" alt="Mullard XX1332 Intensifier Tube">
             </div>
         </div>
         <div class="project-data" data-category="night-vision" data-id="stanford-iccd-teardown">
@@ -564,8 +580,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
-                 <p>Full content for the Stanford Photonics camera teardown project...</p>
+                <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
+                <p>Full content for the Stanford Photonics camera teardown project...</p>
             </div>
         </div>
         <div class="project-data" data-category="night-vision" data-id="gen3-psu">
@@ -577,8 +593,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
-                 <p>Full content for the Gen 3 power supply project...</p>
+                <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
+                <p>Full content for the Gen 3 power supply project...</p>
             </div>
         </div>
         <div class="project-data" data-category="night-vision" data-id="pvs14-build">
@@ -590,8 +606,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Simple PVS-14 Build Guide</h3>
-                 <p>Full content for the PVS-14 build guide project...</p>
+                <h3>Simple PVS-14 Build Guide</h3>
+                <p>Full content for the PVS-14 build guide project...</p>
             </div>
         </div>
         <div class="project-data" data-category="night-vision" data-id="scmos-servicing">
@@ -603,8 +619,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Servicing Cooled sCMOS Cameras</h3>
-                 <p>Full content for the sCMOS camera servicing project...</p>
+                <h3>Servicing Cooled sCMOS Cameras</h3>
+                <p>Full content for the sCMOS camera servicing project...</p>
             </div>
         </div>
 
@@ -617,8 +633,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Twisted Foxtail Silver Bracelet</h3>
-                 <p>Full content for the silver bracelet project...</p>
+                <h3>Twisted Foxtail Silver Bracelet</h3>
+                <p>Full content for the silver bracelet project...</p>
             </div>
         </div>
         <div class="project-data" data-category="art" data-id="stonemasonry">
@@ -630,8 +646,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>My First Try at Stonemasonry</h3>
-                 <p>Full content for the stonemasonry project...</p>
+                <h3>My First Try at Stonemasonry</h3>
+                <p>Full content for the stonemasonry project...</p>
             </div>
         </div>
         <div class="project-data" data-category="art" data-id="blacksmithing">
@@ -643,8 +659,8 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Blacksmithing</h3>
-                 <p>Full content for the blacksmithing project...</p>
+                <h3>Blacksmithing</h3>
+                <p>Full content for the blacksmithing project...</p>
             </div>
         </div>
 
@@ -657,8 +673,22 @@
                 </div>
             </div>
             <div class="full-content blog-post-content">
-                 <h3>Canon 6D Mono Conversion</h3>
-                 <p>Full content for the Canon 6D mono conversion project...</p>
+                <h3>Canon 6D Mono Conversion</h3>
+                <p>Full content for the Canon 6D mono conversion project...</p>
+            </div>
+        </div>
+
+        <div class="project-data" data-category="battery-work" data-id="battery-cycler">
+            <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Battery" alt="Cover image for battery cycler project">
+                <div class="preview-text-content">
+                    <h3>Automated Environmental Chamber Cycler</h3>
+                    <p>Building an automated test setup for cycling batteries inside an environmental chamber to study performance under different conditions...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Automated Environmental Chamber Cycler</h3>
+                <p>Full content for the automated battery cycler project...</p>
             </div>
         </div>
     </div>
@@ -1127,7 +1157,7 @@
                     viewerModal.style.display = 'flex';
                     createPeriodicTable();
                     if (!isDataLoaded) { loadDataFromRepo(); }
-                    drawSpecta();
+                    drawSpectra();
                 }
             };
         })();
