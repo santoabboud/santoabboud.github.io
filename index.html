@@ -1,513 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilal Abboud - Laser Scientist & Engineer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-bg: #000000;
-            --secondary-bg: rgba(26, 26, 26, 0.85);
-            --header-bg: rgba(10, 10, 10, 0.7);
-            --text-color: #EAEAEA;
-            --text-light: #A0A0A0;
-            --accent-color: #00BFFF;
-            --border-color: #333333;
-            --wip-bg: rgba(255, 199, 0, 0.1);
-            --wip-text: #FFC700;
-            --wip-border: #FFC700;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilal Abboud - Laser Scientist & Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #000000;
+            --secondary-bg: rgba(26, 26, 26, 0.85);
+            --header-bg: rgba(10, 10, 10, 0.7);
+            --text-color: #EAEAEA;
+            --text-light: #A0A0A0;
+            --accent-color: #00BFFF;
+            --border-color: #333333;
+            --wip-bg: rgba(255, 199, 0, 0.1);
+            --wip-text: #FFC700;
+            --wip-border: #FFC700;
+        }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            background-image: url('https://github.com/santoabboud/santoabboud.github.io/blob/main/assets/img/sand.png?raw=true');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            background-image: url('https://github.com/santoabboud/santoabboud.github.io/blob/main/assets/img/sand.png?raw=true');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
 
-        .main-header {
-            background-color: var(--header-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 0 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-        }
+        .main-header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            height: 80px;
-        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 80px;
+        }
 
-        .logo a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .logo a:hover { color: var(--accent-color); }
-        .logo h1 {
-            margin: 0;
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
+        .logo a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .logo a:hover { color: var(--accent-color); }
+        .logo h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
 
-        .main-nav {
-            display: flex;
-            align-items: center;
-            background-color: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 999px;
-            padding: 0.5rem;
-        }
-        .main-nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            display: inline-block;
-            transition: all 0.3s ease;
-            border-radius: 999px;
-            font-weight: 500;
-        }
+        .main-nav {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 0.5rem;
+        }
+        .main-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border-radius: 999px;
+            font-weight: 500;
+        }
 
-        .main-nav a:hover {
-            color: var(--text-color);
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+        .main-nav a:hover {
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-        .main-nav a.active {
-            background-color: var(--accent-color);
-            color: var(--primary-bg);
-            font-weight: 600;
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
-        }
+        .main-nav a.active {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+        }
 
-        .wip-banner {
-            background-color: var(--wip-bg);
-            color: var(--wip-text);
-            text-align: center;
-            padding: 0.75rem 1rem;
-            font-size: 0.95rem;
-            border-bottom: 1px solid var(--wip-border);
-        }
+        .wip-banner {
+            background-color: var(--wip-bg);
+            color: var(--wip-text);
+            text-align: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--wip-border);
+        }
 
-        .main-content {
-            max-width: 1100px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
+        .main-content {
+            max-width: 1100px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
 
-        .content-panel {
-            display: none;
-            background-color: var(--secondary-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 2.5rem 3rem;
-            border-radius: 24px;
-            animation: fadeIn 0.5s;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-        .content-panel.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .content-panel {
+            display: none;
+            background-color: var(--secondary-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 2.5rem 3rem;
+            border-radius: 24px;
+            animation: fadeIn 0.5s;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .content-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .category-card, .tool-card {
-            background: rgba(30, 30, 30, 0.7);
-            padding: 1.5rem 2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
+        .category-card, .tool-card {
+            background: rgba(30, 30, 30, 0.7);
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
 
-        .category-card:hover, .tool-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.15);
-            transform: translateY(-4px);
-        }
-        .category-card h3, .tool-card h3 {
-            margin-bottom: 0.25rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        .tool-card p {
-            margin: 0;
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-        .project-preview {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            background-color: rgba(30, 30, 30, 0.7);
-        }
-        .project-preview:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.1);
-            transform: translateY(-3px);
-        }
-        .preview-image {
-            width: 180px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            flex-shrink: 0;
-            border: 1px solid var(--border-color);
-        }
-        .preview-text-content { flex: 1; position: relative; }
-        .preview-text-content h3 {
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .preview-text-content p { color: var(--text-light); margin: 0; }
+        .category-card:hover, .tool-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.15);
+            transform: translateY(-4px);
+        }
+        .category-card h3, .tool-card h3 {
+            margin-bottom: 0.25rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .tool-card p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        .project-preview, .gallery-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            background-color: rgba(30, 30, 30, 0.7);
+        }
+        .project-preview:hover, .gallery-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        .preview-image {
+            width: 180px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .preview-text-content { flex: 1; position: relative; }
+        .preview-text-content h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .preview-text-content p { color: var(--text-light); margin: 0; }
 
-        .breadcrumbs {
-            margin-bottom: 2rem;
-            font-size: 1rem;
-            color: var(--text-light);
-        }
-        .breadcrumbs span { cursor: pointer; color: var(--accent-color); }
-        .breadcrumbs span:hover { text-decoration: underline; }
+        .breadcrumbs {
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        .breadcrumbs span { cursor: pointer; color: var(--accent-color); }
+        .breadcrumbs span:hover { text-decoration: underline; }
 
-        .back-button {
-            display: inline-block;
-            background: none;
-            border: none;
-            color: var(--accent-color);
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 0.5rem 0;
-            margin-bottom: 1.5rem;
-            transition: color 0.2s;
-        }
-        .back-button:hover { color: #FFFFFF; text-decoration: underline; }
+        .back-button {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+        .back-button:hover { color: #FFFFFF; text-decoration: underline; }
 
-        /* Full project view styles */
-        .blog-post-content h3 { margin-top: 0; font-size: 2.2rem; color: #FFFFFF; }
-        .blog-post-content h4 { font-size: 1.8rem; margin-top: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; color: #FFFFFF; }
-        .blog-post-content h5 { font-size: 1.4rem; margin-top: 2.5rem; color: #FFFFFF; }
-        .blog-post-content img { max-width: 100%; height: auto; border-radius: 16px; margin: 2rem 0; display: block; border: 1px solid var(--border-color); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-        .disclaimer { background-color: rgba(40, 35, 20, 0.9); border-left: 4px solid var(--wip-border); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; color: var(--wip-text); }
-        pre { background-color: #111111; color: #f8f8f2; padding: 1.5em; overflow-x: auto; border-radius: 12px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; white-space: pre-wrap; word-wrap: break-word; border: 1px solid var(--border-color); }
-        h2.font-bold { color: #FFFFFF; }
+        /* Full project view styles */
+        .blog-post-content h3 { margin-top: 0; font-size: 2.2rem; color: #FFFFFF; }
+        .blog-post-content h4 { font-size: 1.8rem; margin-top: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; color: #FFFFFF; }
+        .blog-post-content h5 { font-size: 1.4rem; margin-top: 2.5rem; color: #FFFFFF; }
+        .blog-post-content img { max-width: 100%; height: auto; border-radius: 16px; margin: 2rem 0; display: block; border: 1px solid var(--border-color); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .disclaimer { background-color: rgba(40, 35, 20, 0.9); border-left: 4px solid var(--wip-border); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; color: var(--wip-text); }
+        pre { background-color: #111111; color: #f8f8f2; padding: 1.5em; overflow-x: auto; border-radius: 12px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9em; white-space: pre-wrap; word-wrap: break-word; border: 1px solid var(--border-color); }
+        h2.font-bold { color: #FFFFFF; }
 
-        /* Generic Modal Styles */
-        .modal-overlay {
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-            align-items: center; justify-content: center; animation: fadeInModal 0.3s;
-        }
-        .modal-content-wrapper {
-            background-color: #111827; padding: 1rem; border: 1px solid #374151;
-            width: 95vw; max-width: 1400px; height: 90vh; border-radius: 1rem;
-            color: #d1d5db; display: flex; flex-direction: column;
-            box-shadow: 0 0 40px rgba(0, 191, 255, 0.2);
-        }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 1rem; border-bottom: 1px solid #374151; flex-shrink: 0;
-        }
-        .modal-header h2 { font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
-        .modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
-        .modal-close:hover { color: white; }
-        .modal-body { flex-grow: 1; overflow: hidden; padding-top: 1rem; }
-        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* Gallery specific styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
 
-        /* NIST Viewer Specific Styles */
-        #viewer-modal .periodic-table-grid { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 5px; }
-        #viewer-modal .element-cell {
-            transition: all 0.2s ease-in-out; aspect-ratio: 1 / 1; display: flex;
-            align-items: center; justify-content: center; cursor: pointer; border-radius: 8px;
-            font-weight: 600; font-size: clamp(0.5rem, 1.2vw, 0.8rem); border: 1px solid rgba(255,255,255,0.1);
-        }
-        #viewer-modal .element-cell:not(:disabled):hover { transform: scale(1.1); z-index: 10; border-color: var(--accent-color); box-shadow: 0 0 15px rgba(0, 191, 255, 0.4); }
-        #viewer-modal .element-cell.selected { box-shadow: 0 0 0 3px var(--accent-color); transform: scale(1.1); z-index: 11; border-color: var(--accent-color); }
-        #viewer-modal .element-cell:disabled { cursor: not-allowed; opacity: 0.3; background-color: #2a2a2a; }
-        #viewer-modal .alkali { background-color: #ef4444; } #viewer-modal .alkaline-earth { background-color: #f97316; } #viewer-modal .lanthanide { background-color: #8b5cf6; } #viewer-modal .actinide { background-color: #d946ef; } #viewer-modal .transition { background-color: #3b82f6; } #viewer-modal .post-transition { background-color: #22d3ee; } #viewer-modal .metalloid { background-color: #10b981; } #viewer-modal .nonmetal { background-color: #84cc16; } #viewer-modal .noble-gas { background-color: #6366f1; }
-        #viewer-modal .element-cell { color: white; }
-        #viewer-modal .comparison-item button, #calibration-modal .remove-datarow-btn { background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 1.75rem; height: 1.75rem; font-weight: bold; cursor: pointer; line-height: 1.75rem; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        #viewer-modal .comparison-item button:hover, #calibration-modal .remove-datarow-btn:hover { background-color: #dc2626; }
-        #viewer-modal #compare-toggle:checked ~ .block { background-color: var(--accent-color); }
-        #viewer-modal #compare-toggle:checked ~ .dot { transform: translateX(1.5rem); }
+        .gallery-card {
+            background: rgba(30, 30, 30, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* Calibration Tool Specific Styles */
-        #calibration-modal .data-input-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem; }
-        #calibration-modal .results-grid { display: grid; grid-template-columns: auto 1fr; gap-x: 1rem; gap-y: 0.75rem; align-items: center; }
-        #calibration-modal .results-grid .label { font-weight: 600; text-align: right; color: #9ca3af; }
-        #calibration-modal .results-grid .value { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: var(--accent-color); background-color: #2d3748; padding: 0.25rem 0.75rem; border-radius: 6px; }
-        .main-action-btn {
-             background-color: var(--accent-color); color: var(--primary-bg);
-             padding: 0.75rem 1.5rem; border-radius: 999px; cursor: pointer; transition: all 0.2s;
-             font-weight: 600; text-align: center; border: none;
-        }
-        .main-action-btn:hover { background-color: #FFFFFF; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
-        .main-action-btn:disabled { background-color: #4b5563; color: #9ca3af; cursor: not-allowed; }
+        .gallery-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.15);
+            transform: translateY(-4px);
+        }
 
-        /* Generic Finder Modal (used by both tools) */
-        .finder-modal { display: none; position: fixed; z-index: 2050; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-        .finder-modal-content {
-             background-color: #1f2937; margin: auto; padding: 2.5rem; border: 1px solid #374151;
-             width: 90%; max-width: 600px; border-radius: 16px; color: #d1d5db;
-             box-shadow: 0 0 30px rgba(0, 191, 255, 0.15);
-        }
-    </style>
+        .gallery-card img {
+            width: 100%;
+            height: 200px; /* Fixed height for gallery images */
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .gallery-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-card-content h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .gallery-card-content p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        /* Generic Modal Styles */
+        .modal-overlay {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; animation: fadeInModal 0.3s;
+        }
+        .modal-content-wrapper {
+            background-color: #111827; padding: 1rem; border: 1px solid #374151;
+            width: 95vw; max-width: 1400px; height: 90vh; border-radius: 1rem;
+            color: #d1d5db; display: flex; flex-direction: column;
+            box-shadow: 0 0 40px rgba(0, 191, 255, 0.2);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 1rem; border-bottom: 1px solid #374151; flex-shrink: 0;
+        }
+        .modal-header h2 { font-size: 1.5rem; font-weight: 700; color: #FFFFFF; }
+        .modal-close { font-size: 2rem; font-weight: bold; cursor: pointer; color: #9ca3af; line-height: 1; transition: color 0.2s; }
+        .modal-close:hover { color: white; }
+        .modal-body { flex-grow: 1; overflow: hidden; padding-top: 1rem; }
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* NIST Viewer Specific Styles */
+        #viewer-modal .periodic-table-grid { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 5px; }
+        #viewer-modal .element-cell {
+            transition: all 0.2s ease-in-out; aspect-ratio: 1 / 1; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; border-radius: 8px;
+            font-weight: 600; font-size: clamp(0.5rem, 1.2vw, 0.8rem); border: 1px solid rgba(255,255,255,0.1);
+        }
+        #viewer-modal .element-cell:not(:disabled):hover { transform: scale(1.1); z-index: 10; border-color: var(--accent-color); box-shadow: 0 0 15px rgba(0, 191, 255, 0.4); }
+        #viewer-modal .element-cell.selected { box-shadow: 0 0 0 3px var(--accent-color); transform: scale(1.1); z-index: 11; border-color: var(--accent-color); }
+        #viewer-modal .element-cell:disabled { cursor: not-allowed; opacity: 0.3; background-color: #2a2a2a; }
+        #viewer-modal .alkali { background-color: #ef4444; } #viewer-modal .alkaline-earth { background-color: #f97316; } #viewer-modal .lanthanide { background-color: #8b5cf6; } #viewer-modal .actinide { background-color: #d946ef; } #viewer-modal .transition { background-color: #3b82f6; } #viewer-modal .post-transition { background-color: #22d3ee; } #viewer-modal .metalloid { background-color: #10b981; } #viewer-modal .nonmetal { background-color: #84cc16; } #viewer-modal .noble-gas { background-color: #6366f1; }
+        #viewer-modal .element-cell { color: white; }
+        #viewer-modal .comparison-item button, #calibration-modal .remove-datarow-btn { background-color: #ef4444; color: white; border: none; border-radius: 50%; width: 1.75rem; height: 1.75rem; font-weight: bold; cursor: pointer; line-height: 1.75rem; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        #viewer-modal .comparison-item button:hover, #calibration-modal .remove-datarow-btn:hover { background-color: #dc2626; }
+        #viewer-modal #compare-toggle:checked ~ .block { background-color: var(--accent-color); }
+        #viewer-modal #compare-toggle:checked ~ .dot { transform: translateX(1.5rem); }
+
+        /* Calibration Tool Specific Styles */
+        #calibration-modal .data-input-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem; }
+        #calibration-modal .results-grid { display: grid; grid-template-columns: auto 1fr; gap-x: 1rem; gap-y: 0.75rem; align-items: center; }
+        #calibration-modal .results-grid .label { font-weight: 600; text-align: right; color: #9ca3af; }
+        #calibration-modal .results-grid .value { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: var(--accent-color); background-color: #2d3748; padding: 0.25rem 0.75rem; border-radius: 6px; }
+        .main-action-btn {
+             background-color: var(--accent-color); color: var(--primary-bg);
+             padding: 0.75rem 1.5rem; border-radius: 999px; cursor: pointer; transition: all 0.2s;
+             font-weight: 600; text-align: center; border: none;
+        }
+        .main-action-btn:hover { background-color: #FFFFFF; box-shadow: 0 0 15px rgba(0, 191, 255, 0.5); }
+        .main-action-btn:disabled { background-color: #4b5563; color: #9ca3af; cursor: not-allowed; }
+
+        /* Generic Finder Modal (used by both tools) */
+        .finder-modal { display: none; position: fixed; z-index: 2050; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+        .finder-modal-content {
+             background-color: #1f2937; margin: auto; padding: 2.5rem; border: 1px solid #374151;
+             width: 90%; max-width: 600px; border-radius: 16px; color: #d1d5db;
+             box-shadow: 0 0 30px rgba(0, 191, 255, 0.15);
+        }
+    </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <a href="#" id="logo-link"><h1>Bilal Abboud</h1></a>
-            </div>
-            <nav class="main-nav">
-                <a href="#" class="nav-link active" data-target="projects">Projects</a>
-                <a href="#" class="nav-link" data-target="tools">Tools</a>
-                <a href="#" class="nav-link" data-target="about">About Me</a>
-                <a href="#" class="nav-link" data-target="contact">Contact</a>
-            </nav>
-        </div>
-    </header>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="#" id="logo-link"><h1>Bilal Abboud</h1></a>
+            </div>
+            <nav class="main-nav">
+                <a href="#" class="nav-link active" data-target="projects">Projects</a>
+                <a href="#" class="nav-link" data-target="tools">Tools</a>
+                <a href="#" class="nav-link" data-target="gallery">Gallery</a>
+                <a href="#" class="nav-link" data-target="about">About Me</a>
+                <a href="#" class="nav-link" data-target="contact">Contact</a>
+            </nav>
+        </div>
+    </header>
 
-    <div class="wip-banner">
-        <strong>Note:</strong> This website is a work in progress. More content and projects will be added soon!
-    </div>
+    <div class="wip-banner">
+        <strong>Note:</strong> This website is a work in progress. More content and projects will be added soon!
+    </div>
 
-    <main class="main-content">
-        <div id="projects" class="content-panel active">
-            <div class="breadcrumbs">Projects</div>
-            <div id="category-list" class="view">
-                <h2 class="text-3xl font-bold mb-6 text-white">Project Categories</h2>
-                <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3></div>
-                <div class="category-card" data-category="microscopy"><h3>Microscopy</h3></div>
-                <div class="category-card" data-category="lasers"><h3>Lasers</h3></div>
-                <div class="category-card" data-category="night-vision"><h3>Night Vision</h3></div>
-                <div class="category-card" data-category="cameras"><h3>Cameras</h3></div>
-                <div class="category-card" data-category="battery-work"><h3>Battery work</h3></div>
-                <div class="category-card" data-category="art"><h3>Art</h3></div>
-            </div>
-            <div id="project-list" class="view" style="display: none;"></div>
-            <div id="project-full-view" class="view" style="display: none;"></div>
-        </div>
+    <main class="main-content">
+        <div id="projects" class="content-panel active">
+            <div class="breadcrumbs">Projects</div>
+            <div id="category-list" class="view">
+                <h2 class="text-3xl font-bold mb-6 text-white">Project Categories</h2>
+                <div class="category-card" data-category="spectroscopy"><h3>Spectroscopy</h3></div>
+                <div class="category-card" data-category="microscopy"><h3>Microscopy</h3></div>
+                <div class="category-card" data-category="lasers"><h3>Lasers</h3></div>
+                <div class="category-card" data-category="night-vision"><h3>Night Vision</h3></div>
+                <div class="category-card" data-category="cameras"><h3>Cameras</h3></div>
+                <div class="category-card" data-category="battery-work"><h3>Battery work</h3></div>
+                <div class="category-card" data-category="art"><h3>Art</h3></div>
+            </div>
+            <div id="project-list" class="view" style="display: none;"></div>
+            <div id="project-full-view" class="view" style="display: none;"></div>
+        </div>
 
-        <div id="tools" class="content-panel">
-            <h2 class="text-3xl font-bold mb-2 text-white">Tools</h2>
-            <p class="text-gray-400 mb-8">A collection of web-based utilities for scientific and engineering tasks.</p>
-            <div id="tool-list">
-                <div class="tool-card" id="launch-nist-viewer">
-                    <h3>Atomic Spectra Viewer</h3>
-                    <p>An interactive tool to browse and compare emission spectra from the NIST Atomic Spectra Database.</p>
-                </div>
-                <div class="tool-card" id="launch-calibration-tool">
-                    <h3>Spectrometer Calibration Calculator</h3>
-                    <p>A tool to calculate calibration coefficients from spectral lamp data.</p>
-                </div>
-            </div>
-        </div>
+        <div id="tools" class="content-panel">
+            <h2 class="text-3xl font-bold mb-2 text-white">Tools</h2>
+            <p class="text-gray-400 mb-8">A collection of web-based utilities for scientific and engineering tasks.</p>
+            <div id="tool-list">
+                <div class="tool-card" id="launch-nist-viewer">
+                    <h3>Atomic Spectra Viewer</h3>
+                    <p>An interactive tool to browse and compare emission spectra from the NIST Atomic Spectra Database.</p>
+                </div>
+                <div class="tool-card" id="launch-calibration-tool">
+                    <h3>Spectrometer Calibration Calculator</h3>
+                    <p>A tool to calculate calibration coefficients from spectral lamp data.</p>
+                </div>
+            </div>
+        </div>
 
-        <div id="about" class="content-panel">
-            <h2 class="text-3xl font-bold mb-4 text-white">About Me</h2>
-            <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. I currently study Laser Science & Photonics at the Berliner Hochschule für Technik. This website showcases some of the personal projects I've worked on.</p>
-        </div>
-
-        <div id="contact" class="content-panel">
-            <h2 class="text-3xl font-bold mb-4 text-white">Get In Touch</h2>
-            <ul style="list-style: none; padding: 0;">
-                <li style="margin-bottom: 1.5rem;"><strong>Email:</strong> <a href="mailto:berlinphoton@gmail.com" class="text-blue-400 hover:underline">berlinphoton@gmail.com</a></li>
-                <li style="margin-bottom: 1.5rem;"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">linkedin.com/in/bilal-abboud</a></li>
-                <li style="margin-bottom: 1.5rem;"><strong>GitHub:</strong> <a href="https://github.com/santoabboud" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">github.com/santoabboud</a></li>
-                <li style="margin-bottom: 1.5rem;"><strong>YouTube:</strong> <a href="https://youtube.com/@ebislab" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">www.youtube.com/@ebislab</a></li>
-            </ul>
-        </div>
-    </main>
-
-    <div id="viewer-modal" class="modal-overlay">
-        <div class="modal-content-wrapper">
-            <div class="modal-header">
-                <h2>Atomic Spectra Viewer</h2>
-                <span id="viewer-modal-close" class="modal-close">×</span>
-            </div>
-            <div class="modal-body">
-                <div class="flex flex-col lg:flex-row gap-6 h-full">
-                    <div class="relative lg:flex-1 bg-gray-900/50 p-4 rounded-xl shadow-lg flex flex-col border border-gray-700" style="min-height: 250px;">
-                        <h2 class="text-xl font-semibold mb-2 text-center text-gray-300">Spectrum View: <span id="current-element-viewer" class="font-bold text-white">None</span></h2>
-                        <div class="flex-grow relative min-h-[150px]">
-                            <canvas id="spectrum-canvas" class="w-full h-full bg-black rounded-lg cursor-grab active:cursor-grabbing"></canvas>
-                            <div id="wavelength-tooltip" class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 pointer-events-none opacity-0 transition-opacity"></div>
-                        </div>
-                        <div class="text-center mt-2 text-sm text-gray-400">Scroll to zoom, drag to pan.</div>
+        <div id="gallery" class="content-panel">
+            <h2 class="text-3xl font-bold mb-6 text-white">Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Laser+Setup+1" alt="Laser setup image">
+                    <div class="gallery-card-content">
+                        <h3>Precision Laser Alignment</h3>
+                        <p>A high-power laser system undergoing precise optical alignment in a cleanroom environment.</p>
                     </div>
-                    <div class="lg:w-[480px] flex-shrink-0 space-y-4 overflow-y-auto pr-2">
-                         <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
-                            <h2 class="text-xl font-semibold mb-3 text-center">Load Data</h2>
-                            <div class="flex flex-col items-center">
-                                <label for="json-upload" class="main-action-btn w-full">Upload Fallback JSON</label>
-                                <input type="file" id="json-upload" class="hidden" accept=".json">
-                                <p id="upload-status" class="text-sm text-gray-400 mt-2 text-center transition-colors">Loading data from repository...</p>
-                            </div>
-                        </div>
-                        <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
-                            <h2 class="text-xl font-semibold mb-3 text-center">Select Element(s)</h2>
-                            <div id="periodic-table" class="periodic-table-grid"></div>
-                            <div id="category-legend" class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-xs"></div>
-                        </div>
-                        <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
-                            <h2 class="text-xl font-semibold mb-4 text-center">Tools</h2>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="compare-toggle" class="flex items-center cursor-pointer"><div class="relative"><input type="checkbox" id="compare-toggle" class="sr-only"><div class="block bg-gray-600 w-14 h-8 rounded-full transition-colors"></div><div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform"></div></div><div class="ml-3 text-gray-200 font-medium">Compare Mode (Max 3)</div></label>
-                                    <div id="comparison-list" class="mt-3 space-y-2"></div>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold mb-2 text-center text-lg">Line Finder</h3>
-                                    <div class="flex flex-col sm:flex-row gap-3">
-                                        <input type="number" id="wavelength-input" placeholder="Wavelength (nm)" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500">
-                                        <input type="number" id="tolerance-input" placeholder="Tolerance (±nm)" value="0.1" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                    <button id="find-btn" class="mt-3 w-full main-action-btn">Find Elements</button>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Spectroscopy+Data" alt="Spectroscopy data plot">
+                    <div class="gallery-card-content">
+                        <h3>Advanced Spectroscopy Data</h3>
+                        <p>Visual representation of atomic emission spectra, highlighting key wavelength peaks and intensities.</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Microscope+View" alt="Microscope view image">
+                    <div class="gallery-card-content">
+                        <h3>Microscopic Sample Analysis</h3>
+                        <p>Close-up view of a semiconductor sample under high magnification, revealing intricate details.</p>
+                    </div>
+                </div>
+                 <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Lab+Equipment" alt="Lab equipment image">
+                    <div class="gallery-card-content">
+                        <h3>Custom Lab Instrumentation</h3>
+                        <p>A custom-built piece of laboratory equipment designed for specialized laser experiments.</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Optical+Fiber" alt="Optical fiber image">
+                    <div class="gallery-card-content">
+                        <h3>Fiber Optic Coupling</h3>
+                        <p>Demonstration of high-efficiency coupling of laser light into an optical fiber.</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <img src="https://via.placeholder.com/400x200/00BFFF/FFFFFF?text=Cleanroom" alt="Cleanroom environment">
+                    <div class="gallery-card-content">
+                        <h3>Cleanroom Operations</h3>
+                        <p>Working within a controlled cleanroom environment to prevent contamination during sensitive experiments.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="calibration-modal" class="modal-overlay">
-        <div class="modal-content-wrapper">
-             <div class="modal-header">
-                <h2>Spectrometer Calibration Calculator</h2>
-                <span id="calibration-modal-close" class="modal-close">×</span>
-            </div>
-            <div class="modal-body">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-                    <div class="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-xl border border-gray-700">
-                        <div>
-                            <h3 class="text-xl font-semibold mb-3">Data Points</h3>
-                            <div class="data-input-grid text-sm font-bold text-gray-400">
-                                <span>Wavelength (nm)</span>
-                                <span>Pixel #</span>
-                                <span></span>
-                            </div>
-                            <div id="data-points-container" class="space-y-2 max-h-72 overflow-y-auto pr-2">
-                                </div>
-                        </div>
-                        <div class="flex gap-4 mt-auto pt-4">
-                            <button id="add-datapoint-btn" class="w-full main-action-btn">Add Data Point</button>
-                            <button id="calculate-btn" class="w-full main-action-btn" disabled>Calculate</button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-xl border border-gray-700">
-                        <div id="results-container" class="hidden">
-                            <h3 class="text-xl font-semibold">Results</h3>
-                            <div class="results-grid mt-3">
-                                <div class="label">R²:</div> <div id="r-squared-result" class="value"></div>
-                                <div class="label">λ =</div>  <div id="equation-result" class="value col-span-1 text-sm"></div>
-                                <div class="label">C₃:</div> <div id="c3-result" class="value"></div>
-                                <div class="label">C₂:</div> <div id="c2-result" class="value"></div>
-                                <div class="label">C₁:</div> <div id="c1-result" class="value"></div>
-                                <div class="label">C₀:</div> <div id="c0-result" class="value"></div>
-                            </div>
-                        </div>
-                        <div id="calibration-graph-container" class="flex-grow min-h-[200px] relative mt-4">
-                            <canvas id="calibration-canvas"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div id="about" class="content-panel">
+            <h2 class="text-3xl font-bold mb-4 text-white">About Me</h2>
+            <p>Hello! I'm Bilal Abboud, a young laser scientist and engineer from Berlin. I currently study Laser Science & Photonics at the Berliner Hochschule für Technik. This website showcases some of the personal projects I've worked on.</p>
+        </div>
 
-    <div id="finder-modal" class="finder-modal">
-        <div class="finder-modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">Finder Results</h2>
-                <span class="modal-close" id="finder-modal-close-btn">×</span>
-            </div>
-            <div id="finder-modal-results" class="max-h-96 overflow-y-auto pr-2"></div>
-        </div>
-    </div>
+        <div id="contact" class="content-panel">
+            <h2 class="text-3xl font-bold mb-4 text-white">Get In Touch</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 1.5rem;"><strong>Email:</strong> <a href="mailto:berlinphoton@gmail.com" class="text-blue-400 hover:underline">berlinphoton@gmail.com</a></li>
+                <li style="margin-bottom: 1.5rem;"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/bilal-abboud/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">linkedin.com/in/bilal-abboud</a></li>
+                <li style="margin-bottom: 1.5rem;"><strong>GitHub:</strong> <a href="https://github.com/santoabboud" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">github.com/santoabboud</a></li>
+                <li style="margin-bottom: 1.5rem;"><strong>YouTube:</strong> <a href="https://youtube.com/@ebislab" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">www.youtube.com/@ebislab</a></li>
+            </ul>
+        </div>
+    </main>
 
-    <div id="project-storage" style="display: none;">
-        <div class="project-data" data-category="spectroscopy" data-id="usb2000-firmware">
-            <div class="preview-content">
-                <img class="preview-image" src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="Cover image for USB2000 project" onerror="this.onerror=null;this.src='https://placehold.co/180x120/333/fff?text=Image';">
-                <div class="preview-text-content">
-                    <h3>Ocean Optics USB2000 Firmware update</h3>
-                    <p>This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Ocean Optics USB2000 Firmware update</h3>
-                <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
-                <h4>Introduction</h4>
-                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser)...</p>
-                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>...and the real thing:</p>
-                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>While it is rare to find units that are configured to measure spectra beyond 880nm...</p>
-                <h4>Directly flash the EEPROM that stores the firmware.</h4>
-                <p>You will need:</p>
-                <ul><li>Arduino Uno</li><li>Arduino (Wireless) SD shield</li><li>4x mini probing grabbers</li><li>SD card</li><li>jumper cables</li></ul>
-                <h5>Opening up the USB2000:</h5>
-                <p>Use a razor blade or a suitable alternative...</p>
-                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
-                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Once the screws are removed, pull the the lid up...</p>
-                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <h5>Connecting to the EEPROM</h5>
-                <p>First locate the EEPROM, on which the firmware is stored...</p>
-                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>close-up view:</p>
-                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Now use a mini probing grabber to connect to the following pins:</p>
-                <ul><li>VCC to a +3.3V or +5V supply</li><li>VSS to GND</li><li>SDA to Analog Pin 4</li><li>SCL to Analog Pin 5</li></ul>
-                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It should look something like this:</p>
-                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <h4>Flashing the EEPROM</h4>
-                <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
-                <pre><code>#include <SPI.h>
+    <div id="viewer-modal" class="modal-overlay">
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <h2>Atomic Spectra Viewer</h2>
+                <span id="viewer-modal-close" class="modal-close">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col lg:flex-row gap-6 h-full">
+                    <div class="relative lg:flex-1 bg-gray-900/50 p-4 rounded-xl shadow-lg flex flex-col border border-gray-700" style="min-height: 250px;">
+                        <h2 class="text-xl font-semibold mb-2 text-center text-gray-300">Spectrum View: <span id="current-element-viewer" class="font-bold text-white">None</span></h2>
+                        <div class="flex-grow relative min-h-[150px]">
+                            <canvas id="spectrum-canvas" class="w-full h-full bg-black rounded-lg cursor-grab active:cursor-grabbing"></canvas>
+                            <div id="wavelength-tooltip" class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 pointer-events-none opacity-0 transition-opacity"></div>
+                        </div>
+                        <div class="text-center mt-2 text-sm text-gray-400">Scroll to zoom, drag to pan.</div>
+                    </div>
+                    <div class="lg:w-[480px] flex-shrink-0 space-y-4 overflow-y-auto pr-2">
+                         <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
+                            <h2 class="text-xl font-semibold mb-3 text-center">Load Data</h2>
+                            <div class="flex flex-col items-center">
+                                <label for="json-upload" class="main-action-btn w-full">Upload Fallback JSON</label>
+                                <input type="file" id="json-upload" class="hidden" accept=".json">
+                                <p id="upload-status" class="text-sm text-gray-400 mt-2 text-center transition-colors">Loading data from repository...</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
+                            <h2 class="text-xl font-semibold mb-3 text-center">Select Element(s)</h2>
+                            <div id="periodic-table" class="periodic-table-grid"></div>
+                            <div id="category-legend" class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-xs"></div>
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-xl shadow-lg border border-gray-700">
+                            <h2 class="text-xl font-semibold mb-4 text-center">Tools</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="compare-toggle" class="flex items-center cursor-pointer"><div class="relative"><input type="checkbox" id="compare-toggle" class="sr-only"><div class="block bg-gray-600 w-14 h-8 rounded-full transition-colors"></div><div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform"></div></div><div class="ml-3 text-gray-200 font-medium">Compare Mode (Max 3)</div></label>
+                                    <div id="comparison-list" class="mt-3 space-y-2"></div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold mb-2 text-center text-lg">Line Finder</h3>
+                                    <div class="flex flex-col sm:flex-row gap-3">
+                                        <input type="number" id="wavelength-input" placeholder="Wavelength (nm)" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500">
+                                        <input type="number" id="tolerance-input" placeholder="Tolerance (±nm)" value="0.1" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+                                    <button id="find-btn" class="mt-3 w-full main-action-btn">Find Elements</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div id="calibration-modal" class="modal-overlay">
+        <div class="modal-content-wrapper">
+             <div class="modal-header">
+                <h2>Spectrometer Calibration Calculator</h2>
+                <span id="calibration-modal-close" class="modal-close">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <div class="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Data Points</h3>
+                            <div class="data-input-grid text-sm font-bold text-gray-400">
+                                <span>Wavelength (nm)</span>
+                                <span>Pixel #</span>
+                                <span></span>
+                            </div>
+                            <div id="data-points-container" class="space-y-2 max-h-72 overflow-y-auto pr-2">
+                                </div>
+                        </div>
+                        <div class="flex gap-4 mt-auto pt-4">
+                            <button id="add-datapoint-btn" class="w-full main-action-btn">Add Data Point</button>
+                            <button id="calculate-btn" class="w-full main-action-btn" disabled>Calculate</button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                        <div id="results-container" class="hidden">
+                            <h3 class="text-xl font-semibold">Results</h3>
+                            <div class="results-grid mt-3">
+                                <div class="label">R²:</div> <div id="r-squared-result" class="value"></div>
+                                <div class="label">λ =</div>  <div id="equation-result" class="value col-span-1 text-sm"></div>
+                                <div class="label">C₃:</div> <div id="c3-result" class="value"></div>
+                                <div class="label">C₂:</div> <div id="c2-result" class="value"></div>
+                                <div class="label">C₁:</div> <div id="c1-result" class="value"></div>
+                                <div class="label">C₀:</div> <div id="c0-result" class="value"></div>
+                            </div>
+                        </div>
+                        <div id="calibration-graph-container" class="flex-grow min-h-[200px] relative mt-4">
+                            <canvas id="calibration-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div id="finder-modal" class="finder-modal">
+        <div class="finder-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Finder Results</h2>
+                <span class="modal-close" id="finder-modal-close-btn">×</span>
+            </div>
+            <div id="finder-modal-results" class="max-h-96 overflow-y-auto pr-2"></div>
+        </div>
+    </div>
+
+    <div id="project-storage" style="display: none;">
+        <div class="project-data" data-category="spectroscopy" data-id="usb2000-firmware">
+            <div class="preview-content">
+                <img class="preview-image" src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="Cover image for USB2000 project" onerror="this.onerror=null;this.src='https://placehold.co/180x120/333/fff?text=Image';">
+                <div class="preview-text-content">
+                    <h3>Ocean Optics USB2000 Firmware update</h3>
+                    <p>This is a compilation of info about Ocean Optics USB2000 spectrometers and a guide to flashing them with firmware on the board level...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Ocean Optics USB2000 Firmware update</h3>
+                <div class="disclaimer"><p><strong>Disclaimer:</strong> I am not responsible for any damages caused by using this procedure. You can use it at your own risk.</p></div>
+                <h4>Introduction</h4>
+                <p>The Ocean Optics USB2000 is a compact crossed Czerny-Turner type spectrometer with SMA905 fiber optic input and a 10-pin IO (connector is Samtec IPS1-105-01-S-D-RA, avail. from Mouser)...</p>
+                <img src="https://github.com/user-attachments/assets/0aeec642-dd8b-4bae-9265-e9d3c2807801" alt="Layout_USB2K" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>...and the real thing:</p>
+                <img src="https://github.com/user-attachments/assets/cae66f44-db83-419b-b6c7-e5cece646956" alt="Layout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>While it is rare to find units that are configured to measure spectra beyond 880nm...</p>
+                <h4>Directly flash the EEPROM that stores the firmware.</h4>
+                <p>You will need:</p>
+                <ul><li>Arduino Uno</li><li>Arduino (Wireless) SD shield</li><li>4x mini probing grabbers</li><li>SD card</li><li>jumper cables</li></ul>
+                <h5>Opening up the USB2000:</h5>
+                <p>Use a razor blade or a suitable alternative...</p>
+                <img src="https://github.com/user-attachments/assets/3b1642ff-d517-4365-a463-14678c337c1f" alt="NoSticker" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p><strong>If you have located all four corner screws, unscrew them.</strong></p>
+                <img src="https://github.com/user-attachments/assets/3eaafccb-7831-45f8-96a5-7ccb042882c5" alt="StickerLid" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Once the screws are removed, pull the the lid up...</p>
+                <img src="https://github.com/user-attachments/assets/05b8056c-d707-40d2-ad41-744653f47a93" alt="20250118_182039" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <h5>Connecting to the EEPROM</h5>
+                <p>First locate the EEPROM, on which the firmware is stored...</p>
+                <img src="https://github.com/user-attachments/assets/c345c3fb-77dd-4e8d-9fa6-5eef5105bf1d" alt="20250118_182135" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>close-up view:</p>
+                <img src="https://github.com/user-attachments/assets/20154351-0ffe-4b8b-8571-499dc61cc347" alt="20250118_182156" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Now use a mini probing grabber to connect to the following pins:</p>
+                <ul><li>VCC to a +3.3V or +5V supply</li><li>VSS to GND</li><li>SDA to Analog Pin 4</li><li>SCL to Analog Pin 5</li></ul>
+                <img src="https://github.com/user-attachments/assets/a3878a98-8b6f-4a4a-af3b-ceceab6394df" alt="24LC256_pinout" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It should look something like this:</p>
+                <img src="https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56" alt="probing" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Load the firmware file <code>usb2000v2510.iic</code> onto the SD card. Now put the SD card into the Arduino SD shield. Use the Arduino to run the following code:</p>
+                <pre><code>#include <SPI.h>
 #include <SPI.h>
 #include <SD.h>
 #include <Wire.h>
 
-#define PROG_FNAME	    "USB200~1.iic"
-#define PROG_VERIFY	    0
+#define PROG_FNAME	    "USB200~1.iic"
+#define PROG_VERIFY	    0
 
-#define PIN_SDCARD_CS	    4
+#define PIN_SDCARD_CS	    4
 
-#define UART_BAUD	    9600
+#define UART_BAUD	    9600
 
-#define EEPROM_I2C_ADDR	    0x51
-#define EEPROM_BASE	    0
+#define EEPROM_I2C_ADDR	    0x51
+#define EEPROM_BASE	    0
 
 Sd2Card card;
 
@@ -521,7 +620,7 @@ byte eeprom_read(int i2c_addr, unsigned int dev_addr)
 	Wire.endTransmission();
 	Wire.requestFrom(i2c_addr, 1);
 
-	if (Wire.available()) 
+	if (Wire.available()) 
 		data = Wire.read();
 
 	return data;
@@ -618,891 +717,894 @@ void loop()
 	/* stub */
 }
 </code></pre>
-                <p>After this, your USB2000 spectrometer should have been flashed... Good luck and have fun!</p>
-            </div>
-        </div>
+                <p>After this, your USB2000 spectrometer should have been flashed... Good luck and have fun!</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="microscopy" data-id="frankenscope">
-             <div class="preview-content">
-                <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Cover image for Frankenscope" onerror="this.onerror=null;this.src='https://placehold.co/180x120/333/fff?text=Image';">
-                <div class="preview-text-content">
-                    <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                    <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
-                <p>This Microscope consists of a Mitutoyo FS70L4 as its core, shown here from both sides:</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Mitutoyo FS70L4 microscope body, right side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_leftside.jpg" alt="Mitutoyo FS70L4 microscope body, left side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It uses a Physik Instrumente six-axis closed-loop piezo hexapod stage for high-precision sample manipulation that was kindly provided by Prof. Dr. Georg Sommerer at the Berliner Hochschule für Technik (laserscience.berlin).</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/PI_hexapod_stage.jpg" alt="Physik Instrumente six-axis hexapod stage" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon).</p>
-                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/TEEM_266_view.jpg" alt="TEEM Photonics 266nm deep UV laser" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
-                <p>Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source, as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="microscopy" data-id="iris-microscopy">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=IRIS" alt="Cover image for IRIS Microscopy">
-                <div class="preview-text-content">
-                    <h3>Infrared In-Situ (IRIS) Microscopy</h3>
-                    <p>An exploration of interferometric reflectance imaging microscopy, a powerful technique for label-free sensing of nanoparticles and viruses...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Infrared In-Situ (IRIS) Microscopy</h3>
-                <p>Full content for the IRIS microscopy project...</p>
-            </div>
-        </div>
+        <div class="project-data" data-category="microscopy" data-id="frankenscope">
+             <div class="preview-content">
+                <img class="preview-image" src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Cover image for Frankenscope" onerror="this.onerror=null;this.src='https://placehold.co/180x120/333/fff?text=Image';">
+                <div class="preview-text-content">
+                    <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+                    <p>This Microscope consists of a Mitutoyo FS70L4 as its core and a Physik Instrumente six-axis closed-loop piezo hexapod stage...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>The Frankenscope: A Microscopic Multi-tool</h3>
+                <p>This Microscope consists of a Mitutoyo FS70L4 as its core, shown here from both sides:</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_rightside.jpg" alt="Mitutoyo FS70L4 microscope body, right side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/FS70L4_leftside.jpg" alt="Mitutoyo FS70L4 microscope body, left side view" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It uses a Physik Instrumente six-axis closed-loop piezo hexapod stage for high-precision sample manipulation that was kindly provided by Prof. Dr. Georg Sommerer at the Berliner Hochschule für Technik (laserscience.berlin).</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/PI_hexapod_stage.jpg" alt="Physik Instrumente six-axis hexapod stage" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>It is currently equipped with a passively q-switched 1064nm DPSS laser or an optional TEEM Photonics 266nm sub-nanosecond pulsewidth deep UV laser for the most delicate work (teardown documentation coming soon).</p>
+                <img src="https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/TEEM_266_view.jpg" alt="TEEM Photonics 266nm deep UV laser" onerror="this.onerror=null;this.src='https://placehold.co/800x400/333/fff?text=Image';">
+                <p>Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman Analysis, a TILL Photonics Polychrome IV tunable wavelength short arc xenon light source, as well as a LabJack T4 for general control. It is also capable of conducting Infrared in-situ microscopy or IRIS in short. See Bunnie Huang's work for more info about that :-)</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="microscopy" data-id="iris-microscopy">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=IRIS" alt="Cover image for IRIS Microscopy">
+                <div class="preview-text-content">
+                    <h3>Infrared In-Situ (IRIS) Microscopy</h3>
+                    <p>An exploration of interferometric reflectance imaging microscopy, a powerful technique for label-free sensing of nanoparticles and viruses...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Infrared In-Situ (IRIS) Microscopy</h3>
+                <p>Full content for the IRIS microscopy project...</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="lasers" data-id="266nm-laser">
-            <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=266nm" alt="Cover image for 266nm microchip laser">
-                <div class="preview-text-content">
-                    <h3>266nm microchip laser</h3>
-                    <p>A project on a compact, deep UV, sub-nanosecond microchip laser. Analysis, teardown, and potential applications...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>266nm microchip laser</h3>
-                <p>Full content for the 266nm microchip laser project...</p>
-            </div>
-        </div>
+        <div class="project-data" data-category="lasers" data-id="266nm-laser">
+            <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=266nm" alt="Cover image for 266nm microchip laser">
+                <div class="preview-text-content">
+                    <h3>266nm microchip laser</h3>
+                    <p>A project on a compact, deep UV, sub-nanosecond microchip laser. Analysis, teardown, and potential applications...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>266nm microchip laser</h3>
+                <p>Full content for the 266nm microchip laser project...</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="night-vision" data-id="mullard-xx1332">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=XX1332" alt="Cover image for Mullard XX1332 project">
-                <div class="preview-text-content">
-                    <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
-                    <p>Details the process of adapting a large-format Gen 2 image intensifier tube for use in a custom night vision device, including the power supply and optics...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
-                <p>This project documents the exciting challenge of building a usable night vision device around a classic, large-format Mullard/Philips XX1332 Gen 2 image intensifier tube...</p>
-                <img src="https://placehold.co/800x400/333/fff?text=XX1332+Intensifier" alt="Mullard XX1332 Intensifier Tube">
-            </div>
-        </div>
-        <div class="project-data" data-category="night-vision" data-id="stanford-iccd-teardown">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=ICCD" alt="Cover image for Stanford Photonics ICCD Teardown">
-                <div class="preview-text-content">
-                    <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
-                    <p>A detailed teardown and analysis of the high-end, gateable Stanford Photonics Intensified CCD camera system...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
-                <p>Full content for the Stanford Photonics camera teardown project...</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="night-vision" data-id="gen3-psu">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Gen3+PSU" alt="Cover image for Gen 3 Power Supply">
-                <div class="preview-text-content">
-                    <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
-                    <p>Design and construction of a power supply for Hamamatsu Chevron MCP tubes with adjustable gain, ABC, and fast autogating...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
-                <p>Full content for the Gen 3 power supply project...</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="night-vision" data-id="pvs14-build">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=PVS-14" alt="Cover image for PVS-14 Build Guide">
-                <div class="preview-text-content">
-                    <h3>Simple PVS-14 Build Guide</h3>
-                    <p>A straightforward, step-by-step guide for assembling a PVS-14 monocular from a kit and a sourced image intensifier tube...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Simple PVS-14 Build Guide</h3>
-                <p>Full content for the PVS-14 build guide project...</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="night-vision" data-id="scmos-servicing">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=sCMOS" alt="Cover image for sCMOS Camera Servicing">
-                <div class="preview-text-content">
-                    <h3>Servicing Cooled sCMOS Cameras</h3>
-                    <p>A guide on common maintenance procedures for TEC-cooled scientific CMOS cameras, including vacuum chamber repumping and sensor cleaning...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Servicing Cooled sCMOS Cameras</h3>
-                <p>Full content for the sCMOS camera servicing project...</p>
-            </div>
-        </div>
+        <div class="project-data" data-category="night-vision" data-id="mullard-xx1332">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=XX1332" alt="Cover image for Mullard XX1332 project">
+                <div class="preview-text-content">
+                    <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
+                    <p>Details the process of adapting a large-format Gen 2 image intensifier tube for use in a custom night vision device, including the power supply and optics...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Mullard / Philips XX1332 - giant Gen 2 intensifier adaptation</h3>
+                <p>This project documents the exciting challenge of building a usable night vision device around a classic, large-format Mullard/Philips XX1332 Gen 2 image intensifier tube...</p>
+                <img src="https://placehold.co/800x400/333/fff?text=XX1332+Intensifier" alt="Mullard XX1332 Intensifier Tube">
+            </div>
+        </div>
+        <div class="project-data" data-category="night-vision" data-id="stanford-iccd-teardown">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=ICCD" alt="Cover image for Stanford Photonics ICCD Teardown">
+                <div class="preview-text-content">
+                    <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
+                    <p>A detailed teardown and analysis of the high-end, gateable Stanford Photonics Intensified CCD camera system...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Stanford Photonics XR-Mega-10Z ICCD Teardown</h3>
+                <p>Full content for the Stanford Photonics camera teardown project...</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="night-vision" data-id="gen3-psu">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Gen3+PSU" alt="Cover image for Gen 3 Power Supply">
+                <div class="preview-text-content">
+                    <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
+                    <p>Design and construction of a power supply for Hamamatsu Chevron MCP tubes with adjustable gain, ABC, and fast autogating...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Advanced Power Supply for Gen 3 Image Intensifiers</h3>
+                <p>Full content for the Gen 3 power supply project...</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="night-vision" data-id="pvs14-build">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=PVS-14" alt="Cover image for PVS-14 Build Guide">
+                <div class="preview-text-content">
+                    <h3>Simple PVS-14 Build Guide</h3>
+                    <p>A straightforward, step-by-step guide for assembling a PVS-14 monocular from a kit and a sourced image intensifier tube...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Simple PVS-14 Build Guide</h3>
+                <p>Full content for the PVS-14 build guide project...</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="night-vision" data-id="scmos-servicing">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=sCMOS" alt="Cover image for sCMOS Camera Servicing">
+                <div class="preview-text-content">
+                    <h3>Servicing Cooled sCMOS Cameras</h3>
+                    <p>A guide on common maintenance procedures for TEC-cooled scientific CMOS cameras, including vacuum chamber repumping and sensor cleaning...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Servicing Cooled sCMOS Cameras</h3>
+                <p>Full content for the sCMOS camera servicing project...</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="art" data-id="silver-bracelet">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Bracelet" alt="Cover image for silver bracelet project">
-                <div class="preview-text-content">
-                    <h3>Twisted Foxtail Silver Bracelet</h3>
-                    <p>Crafting a sterling silver bracelet using traditional wire-weaving techniques to create a twisted foxtail chain...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Twisted Foxtail Silver Bracelet</h3>
-                <p>Full content for the silver bracelet project...</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="art" data-id="stonemasonry">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Stone" alt="Cover image for stonemasonry project">
-                <div class="preview-text-content">
-                    <h3>Trying Stonemasonry</h3>
-                    <p>Just some sandstone and a weekend's worth of time</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Trying Stonemasonry</h3>
-                <p>Full content for the stonemasonry project...</p>
-            </div>
-        </div>
-        <div class="project-data" data-category="art" data-id="blacksmithing">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Anvil" alt="Cover image for blacksmithing project">
-                <div class="preview-text-content">
-                    <h3>Blacksmithing</h3>
-                    <p>My first time blacksmithing a few years ago to create a simple bottle opener.</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Blacksmithing</h3>
-                <p>Full content for the blacksmithing project...</p>
-            </div>
-        </div>
+        <div class="project-data" data-category="art" data-id="silver-bracelet">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Bracelet" alt="Cover image for silver bracelet project">
+                <div class="preview-text-content">
+                    <h3>Twisted Foxtail Silver Bracelet</h3>
+                    <p>Crafting a sterling silver bracelet using traditional wire-weaving techniques to create a twisted foxtail chain...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Twisted Foxtail Silver Bracelet</h3>
+                <p>Full content for the silver bracelet project...</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="art" data-id="stonemasonry">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Stone" alt="Cover image for stonemasonry project">
+                <div class="preview-text-content">
+                    <h3>Trying Stonemasonry</h3>
+                    <p>Just some sandstone and a weekend's worth of time</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Trying Stonemasonry</h3>
+                <p>Full content for the stonemasonry project...</p>
+            </div>
+        </div>
+        <div class="project-data" data-category="art" data-id="blacksmithing">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Anvil" alt="Cover image for blacksmithing project">
+                <div class="preview-text-content">
+                    <h3>Blacksmithing</h3>
+                    <p>My first time blacksmithing a few years ago to create a simple bottle opener.</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Blacksmithing</h3>
+                <p>Full content for the blacksmithing project...</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="cameras" data-id="canon-6d-mono">
-             <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=6D+Mono" alt="Cover image for Canon 6D Mono Conversion">
-                <div class="preview-text-content">
-                    <h3>Canon 6D Mono Conversion</h3>
-                    <p>A technical guide on converting a Canon 6D DSLR to a monochrome-only camera for astrophotography by removing the Bayer matrix...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Canon 6D Mono Conversion</h3>
-                <p>Full content for the Canon 6D mono conversion project...</p>
-            </div>
-        </div>
+        <div class="project-data" data-category="cameras" data-id="canon-6d-mono">
+             <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=6D+Mono" alt="Cover image for Canon 6D Mono Conversion">
+                <div class="preview-text-content">
+                    <h3>Canon 6D Mono Conversion</h3>
+                    <p>A technical guide on converting a Canon 6D DSLR to a monochrome-only camera for astrophotography by removing the Bayer matrix...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Canon 6D Mono Conversion</h3>
+                <p>Full content for the Canon 6D mono conversion project...</p>
+            </div>
+        </div>
 
-        <div class="project-data" data-category="battery-work" data-id="battery-cycler">
-            <div class="preview-content">
-                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Battery" alt="Cover image for battery cycler project">
-                <div class="preview-text-content">
-                    <h3>Automated Environmental Chamber Cycler</h3>
-                    <p>Building an automated test setup for cycling batteries inside an environmental chamber to study performance of space batteries under different conditions...</p>
-                </div>
-            </div>
-            <div class="full-content blog-post-content">
-                <h3>Automated Environmental Chamber Cycler</h3>
-                <p>Full content for the automated battery cycler project...</p>
-            </div>
-        </div>
-    </div>
+        <div class="project-data" data-category="battery-work" data-id="battery-cycler">
+            <div class="preview-content">
+                <img class="preview-image" src="https://placehold.co/180x120/333/fff?text=Battery" alt="Cover image for battery cycler project">
+                <div class="preview-text-content">
+                    <h3>Automated Environmental Chamber Cycler</h3>
+                    <p>Building an automated test setup for cycling batteries inside an environmental chamber to study performance of space batteries under different conditions...</p>
+                </div>
+            </div>
+            <div class="full-content blog-post-content">
+                <h3>Automated Environmental Chamber Cycler</h3>
+                <p>Full content for the automated battery cycler project...</p>
+            </div>
+    </div>
 
-    <script>
-    // All original JavaScript is preserved here, no changes needed.
-    document.addEventListener('DOMContentLoaded', () => {
+    <script>
+    // All original JavaScript is preserved here, no changes needed.
+    document.addEventListener('DOMContentLoaded', () => {
 
-        // --- Main Site Navigation Script ---
-        const initPortfolio = () => {
-            const logoLink = document.getElementById('logo-link');
-            const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
-            const contentPanels = document.querySelectorAll('.main-content .content-panel');
-            const projectsPanel = document.getElementById('projects');
-            const breadcrumbsEl = projectsPanel.querySelector('.breadcrumbs');
-            const categoryListEl = projectsPanel.querySelector('#category-list');
-            const projectListEl = projectsPanel.querySelector('#project-list');
-            const projectFullViewEl = projectsPanel.querySelector('#project-full-view');
-            const launchNistViewerBtn = document.getElementById('launch-nist-viewer');
-            const launchCalibrationToolBtn = document.getElementById('launch-calibration-tool');
+        // --- Main Site Navigation Script ---
+        const initPortfolio = () => {
+            const logoLink = document.getElementById('logo-link');
+            const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
+            const contentPanels = document.querySelectorAll('.main-content .content-panel');
+            const projectsPanel = document.getElementById('projects');
+            const breadcrumbsEl = projectsPanel.querySelector('.breadcrumbs');
+            const categoryListEl = projectsPanel.querySelector('#category-list');
+            const projectListEl = projectsPanel.querySelector('#project-list');
+            const projectFullViewEl = projectsPanel.querySelector('#project-full-view');
+            const launchNistViewerBtn = document.getElementById('launch-nist-viewer');
+            const launchCalibrationToolBtn = document.getElementById('launch-calibration-tool');
 
-            const updateActiveNavLink = (targetId) => {
-                mainNavLinks.forEach(l => l.classList.remove('active'));
-                const activeLink = document.querySelector(`.main-nav .nav-link[data-target="${targetId}"]`);
-                if (activeLink) activeLink.classList.add('active');
-            };
+            const updateActiveNavLink = (targetId) => {
+                mainNavLinks.forEach(l => l.classList.remove('active'));
+                const activeLink = document.querySelector(`.main-nav .nav-link[data-target="${targetId}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            };
 
-            const showPanel = (panelId) => {
-                contentPanels.forEach(p => p.classList.remove('active'));
-                const targetPanel = document.getElementById(panelId);
-                if (targetPanel) targetPanel.classList.add('active');
-                updateActiveNavLink(panelId);
-            };
+            const showPanel = (panelId) => {
+                contentPanels.forEach(p => p.classList.remove('active'));
+                const targetPanel = document.getElementById(panelId);
+                if (targetPanel) targetPanel.classList.add('active');
+                updateActiveNavLink(panelId);
+            };
 
-            const showProjectsView = (view, context = {}) => {
-                projectsPanel.querySelectorAll('.view').forEach(v => v.style.display = 'none');
-                let currentViewEl;
+            const showProjectsView = (view, context = {}) => {
+                projectsPanel.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+                let currentViewEl;
 
-                switch(view) {
-                    case 'categories':
-                        currentViewEl = categoryListEl;
-                        breadcrumbsEl.innerHTML = `<span>Projects</span>`;
-                        break;
-                    case 'project-list':
-                        currentViewEl = projectListEl;
-                        breadcrumbsEl.innerHTML = `<span data-view="categories">Projects</span> > ${context.categoryName}`;
-                        populateProjectList(context.category);
-                        break;
-                    case 'full-project':
-                        currentViewEl = projectFullViewEl;
-                        breadcrumbsEl.innerHTML = `<span data-view="categories">Projects</span> > <span data-view="project-list" data-category-id="${context.category}" data-category-name="${context.categoryName}">${context.categoryName}</span> > ${context.projectName}`;
-                        populateFullProjectView(context.projectId);
-                        break;
-                }
-                if (currentViewEl) currentViewEl.style.display = 'block';
-            };
+                switch(view) {
+                    case 'categories':
+                        currentViewEl = categoryListEl;
+                        breadcrumbsEl.innerHTML = `<span>Projects</span>`;
+                        break;
+                    case 'project-list':
+                        currentViewEl = projectListEl;
+                        breadcrumbsEl.innerHTML = `<span data-view="categories">Projects</span> > ${context.categoryName}`;
+                        populateProjectList(context.category);
+                        break;
+                    case 'full-project':
+                        currentViewEl = projectFullViewEl;
+                        breadcrumbsEl.innerHTML = `<span data-view="categories">Projects</span> > <span data-view="project-list" data-category-id="${context.category}" data-category-name="${context.categoryName}">${context.categoryName}</span> > ${context.projectName}`;
+                        populateFullProjectView(context.projectId);
+                        break;
+                }
+                if (currentViewEl) currentViewEl.style.display = 'block';
+            };
 
-            const populateProjectList = (categoryId) => {
-                projectListEl.innerHTML = '';
-                const backButton = document.createElement('button');
-                backButton.textContent = '‹ Back to Categories';
-                backButton.className = 'back-button';
-                backButton.onclick = () => showProjectsView('categories');
-                projectListEl.appendChild(backButton);
+            const populateProjectList = (categoryId) => {
+                projectListEl.innerHTML = '';
+                const backButton = document.createElement('button');
+                backButton.textContent = '‹ Back to Categories';
+                backButton.className = 'back-button';
+                backButton.onclick = () => showProjectsView('categories');
+                projectListEl.appendChild(backButton);
 
-                const projectsInCategory = document.querySelectorAll(`#project-storage .project-data[data-category="${categoryId}"]`);
-                projectsInCategory.forEach(projectData => {
-                    const projectId = projectData.dataset.id;
-                    const categoryName = document.querySelector(`.category-card[data-category="${categoryId}"] h3`).textContent;
-                    const projectName = projectData.querySelector('h3').textContent;
-                    const previewContent = projectData.querySelector('.preview-content').cloneNode(true);
-                    const previewContainer = document.createElement('div');
-                    previewContainer.className = 'project-preview';
-                    previewContainer.appendChild(previewContent);
-                    previewContainer.onclick = () => showProjectsView('full-project', { projectId, category: categoryId, categoryName, projectName });
-                    projectListEl.appendChild(previewContainer);
-                });
-            };
+                const projectsInCategory = document.querySelectorAll(`#project-storage .project-data[data-category="${categoryId}"]`);
+                projectsInCategory.forEach(projectData => {
+                    const projectId = projectData.dataset.id;
+                    const categoryName = document.querySelector(`.category-card[data-category="${categoryId}"] h3`).textContent;
+                    const projectName = projectData.querySelector('h3').textContent;
+                    const previewContent = projectData.querySelector('.preview-content').cloneNode(true);
+                    const previewContainer = document.createElement('div');
+                    previewContainer.className = 'project-preview';
+                    previewContainer.appendChild(previewContent);
+                    previewContainer.onclick = () => showProjectsView('full-project', { projectId, category: categoryId, categoryName, projectName });
+                    projectListEl.appendChild(previewContainer);
+                });
+            };
 
-            const populateFullProjectView = (projectId) => {
-                projectFullViewEl.innerHTML = '';
-                const projectData = document.querySelector(`#project-storage .project-data[data-id="${projectId}"]`);
-                if (!projectData) return;
-                const categoryId = projectData.dataset.category;
-                const categoryName = document.querySelector(`.category-card[data-category="${categoryId}"] h3`).textContent;
-                const backButton = document.createElement('button');
-                backButton.textContent = `‹ Back to ${categoryName}`;
-                backButton.className = 'back-button';
-                backButton.onclick = () => showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
-                projectFullViewEl.appendChild(backButton);
-                const fullContent = projectData.querySelector('.full-content').cloneNode(true);
-                projectFullViewEl.appendChild(fullContent);
-                window.scrollTo(0, 0);
-            };
+            const populateFullProjectView = (projectId) => {
+                projectFullViewEl.innerHTML = '';
+                const projectData = document.querySelector(`#project-storage .project-data[data-id="${projectId}"]`);
+                if (!projectData) return;
+                const categoryId = projectData.dataset.category;
+                const categoryName = document.querySelector(`.category-card[data-category="${categoryId}"] h3`).textContent;
+                const backButton = document.createElement('button');
+                backButton.textContent = `‹ Back to ${categoryName}`;
+                backButton.className = 'back-button';
+                backButton.onclick = () => showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
+                projectFullViewEl.appendChild(backButton);
+                const fullContent = projectData.querySelector('.full-content').cloneNode(true);
+                projectFullViewEl.appendChild(fullContent);
+                window.scrollTo(0, 0);
+            };
 
-            logoLink.addEventListener('click', e => { e.preventDefault(); showPanel('projects'); showProjectsView('categories'); });
+            logoLink.addEventListener('click', e => { e.preventDefault(); showPanel('projects'); showProjectsView('categories'); });
 
-            mainNavLinks.forEach(link => {
-                link.addEventListener('click', e => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('data-target');
-                    showPanel(targetId);
-                    if (targetId === 'projects') showProjectsView('categories');
-                });
-            });
-
-            breadcrumbsEl.addEventListener('click', e => {
-                if (e.target.tagName !== 'SPAN' || !e.target.dataset.view) return;
-                const { view, categoryId, categoryName } = e.target.dataset;
-                showProjectsView(view, { category: categoryId, categoryName });
-            });
-
-            categoryListEl.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const categoryId = card.getAttribute('data-category');
-                    const categoryName = card.querySelector('h3').textContent;
-                    showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
-                });
-            });
-
-            launchNistViewerBtn.addEventListener('click', () => { NistViewerModule.open(); });
-            launchCalibrationToolBtn.addEventListener('click', () => { CalibrationToolModule.open(); });
-        };
-
-        // --- NIST Viewer Application Module (IIFE)---
-        const NistViewerModule = (() => {
-            let atomicData = {};
-            let isDataLoaded = false;
-            let appState = { isCompareMode: false, selectedElements: [], maxCompare: 3 };
-            let viewState = { minWavelength: 200, maxWavelength: 1000, isDragging: false, lastX: 0 };
-            let visiblePeaks = [];
-
-            const viewerModal = document.getElementById('viewer-modal');
-            const periodicTableContainer = document.getElementById('periodic-table');
-            const categoryLegendContainer = document.getElementById('category-legend');
-            const uploadStatus = document.getElementById('upload-status');
-            const spectrumCanvas = document.getElementById('spectrum-canvas');
-            const wavelengthTooltip = document.getElementById('wavelength-tooltip');
-            const currentElementSpan = document.getElementById('current-element-viewer');
-            const jsonUploadInput = document.getElementById('json-upload');
-            const compareToggle = document.getElementById('compare-toggle');
-            const comparisonListDiv = document.getElementById('comparison-list');
-            const findBtn = document.getElementById('find-btn');
-            const wavelengthInput = document.getElementById('wavelength-input');
-            const toleranceInput = document.getElementById('tolerance-input');
-            const finderModal = document.getElementById('finder-modal');
-            const finderModalResults = document.getElementById('finder-modal-results');
-            const finderModalCloseBtn = document.getElementById('finder-modal-close-btn');
-            const viewerModalClose = document.getElementById('viewer-modal-close');
-            const ctx = spectrumCanvas.getContext('2d');
-
-            const elements = [ { symbol: 'H', name: 'Hydrogen', row: 1, col: 1, category: 'nonmetal' }, { symbol: 'He', name: 'Helium', row: 1, col: 18, category: 'noble-gas' }, { symbol: 'Li', name: 'Lithium', row: 2, col: 1, category: 'alkali' }, { symbol: 'Be', name: 'Beryllium', row: 2, col: 2, category: 'alkaline-earth' }, { symbol: 'B', name: 'Boron', row: 2, col: 13, category: 'metalloid' }, { symbol: 'C', name: 'Carbon', row: 2, col: 14, category: 'nonmetal' }, { symbol: 'N', name: 'Nitrogen', row: 2, col: 15, category: 'nonmetal' }, { symbol: 'O', name: 'Oxygen', row: 2, col: 16, category: 'nonmetal' }, { symbol: 'F', name: 'Fluorine', row: 2, col: 17, category: 'nonmetal' }, { symbol: 'Ne', name: 'Neon', row: 2, col: 18, category: 'noble-gas' }, { symbol: 'Na', name: 'Sodium', row: 3, col: 1, category: 'alkali' }, { symbol: 'Mg', name: 'Magnesium', row: 3, col: 2, category: 'alkaline-earth' }, { symbol: 'Al', name: 'Aluminium', row: 3, col: 13, category: 'post-transition' }, { symbol: 'Si', name: 'Silicon', row: 3, col: 14, category: 'metalloid' }, { symbol: 'P', name: 'Phosphorus', row: 3, col: 15, category: 'nonmetal' }, { symbol: 'S', name: 'Sulfur', row: 3, col: 16, category: 'nonmetal' }, { symbol: 'Cl', name: 'Chlorine', row: 3, col: 17, category: 'nonmetal' }, { symbol: 'Ar', name: 'Argon', row: 3, col: 18, category: 'noble-gas' }, { symbol: 'K', name: 'Potassium', row: 4, col: 1, category: 'alkali' }, { symbol: 'Ca', name: 'Calcium', row: 4, col: 2, category: 'alkaline-earth' }, { symbol: 'Sc', name: 'Scandium', row: 4, col: 3, category: 'transition' }, { symbol: 'Ti', name: 'Titanium', row: 4, col: 4, category: 'transition' }, { symbol: 'V', name: 'Vanadium', row: 4, col: 5, category: 'transition' }, { symbol: 'Cr', name: 'Chromium', row: 4, col: 6, category: 'transition' }, { symbol: 'Mn', name: 'Manganese', row: 4, col: 7, category: 'transition' }, { symbol: 'Fe', name: 'Iron', row: 4, col: 8, category: 'transition' }, { symbol: 'Co', name: 'Cobalt', row: 4, col: 9, category: 'transition' }, { symbol: 'Ni', name: 'Nickel', row: 4, col: 10, category: 'transition' }, { symbol: 'Cu', name: 'Copper', row: 4, col: 11, category: 'transition' }, { symbol: 'Zn', name: 'Zinc', row: 4, col: 12, category: 'post-transition' }, { symbol: 'Ga', name: 'Gallium', row: 4, col: 13, category: 'post-transition' }, { symbol: 'Ge', name: 'Germanium', row: 4, col: 14, category: 'metalloid' }, { symbol: 'As', name: 'Arsenic', row: 4, col: 15, category: 'metalloid' }, { symbol: 'Se', name: 'Selenium', row: 4, col: 16, category: 'nonmetal' }, { symbol: 'Br', name: 'Bromine', row: 4, col: 17, category: 'nonmetal' }, { symbol: 'Kr', name: 'Krypton', row: 4, col: 18, category: 'noble-gas' }, { symbol: 'Rb', name: 'Rubidium', row: 5, col: 1, category: 'alkali' }, { symbol: 'Sr', name: 'Strontium', row: 5, col: 2, category: 'alkaline-earth' }, { symbol: 'Y', name: 'Yttrium', row: 5, col: 3, category: 'transition' }, { symbol: 'Zr', name: 'Zirconium', row: 5, col: 4, category: 'transition' }, { symbol: 'Nb', name: 'Niobium', row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', name: 'Lead', row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', row: 10, col: 3, category: 'actinide' }, { symbol: 'Th', name: 'Thorium', row: 10, col: 4, category: 'actinide' }, { symbol: 'Pa', name: 'Protactinium', row: 10, col: 5, category: 'actinide' }, { symbol: 'U', name: 'Uranium', row: 10, col: 6, category: 'actinide' }, { symbol: 'Np', name: 'Neptunium', row: 10, col: 7, category: 'actinide' }, { symbol: 'Pu', name: 'Plutonium', row: 10, col: 8, category: 'actinide' } ];
-            const categories = { 'alkali': { name: 'Alkali Metal' },'alkaline-earth': { name: 'Alkaline Earth' },'lanthanide': { name: 'Lanthanide' },'actinide': { name: 'Actinide' },'transition': { name: 'Transition Metal' },'post-transition': { name: 'Post-Transition Metal' },'metalloid': { name: 'Metalloid' },'nonmetal': { name: 'Nonmetal' },'noble-gas': { name: 'Noble Gas' } };
-
-            const findDataForElement = (symbol) => {
-                if(Object.keys(atomicData).length === 0) return null;
-                const regex = new RegExp(`^${symbol}(\\s|$)`);
-                const keys = Object.keys(atomicData).filter(key => regex.test(key));
-                if(keys.length === 0) return null;
-                let allLines = [];
-                keys.forEach(key => {
-                    if (atomicData[key] && atomicData[key].length > 0) {
-                        allLines = allLines.concat(atomicData[key].map(line => ({ ...line, ion: key })));
+            mainNavLinks.forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    showPanel(targetId);
+                    if (targetId === 'projects') showProjectsView('categories');
+                    // New: Handle "Gallery" panel display
+                    if (targetId === 'gallery') {
+                        // For a simple gallery, no sub-views like projects, just show the main gallery content
+                        document.getElementById('gallery').style.display = 'block';
                     }
-                });
-                return allLines.length > 0 ? { symbol, lines: allLines } : null;
-            }
-            const createPeriodicTable = () => {
-                periodicTableContainer.innerHTML = '';
-                const fragment = document.createDocumentFragment();
-                const elementMap = new Map(elements.map(el => [`${el.row}-${el.col}`, el]));
-                for (let row = 1; row <= 10; row++) {
-                    for (let col = 1; col <= 18; col++) {
-                        const elementData = elementMap.get(`${row}-${col}`);
-                        if (elementData) {
-                            const cell = document.createElement('button');
-                            cell.className = `element-cell ${elementData.category}`;
-                            cell.textContent = elementData.symbol;
-                            cell.dataset.symbol = elementData.symbol;
-                            cell.style.gridRowStart = row;
-                            cell.style.gridColumnStart = col;
-                            cell.disabled = !findDataForElement(elementData.symbol);
-                            cell.addEventListener('click', () => handleElementClick(elementData.symbol));
-                            fragment.appendChild(cell);
-                        } else {
-                             if (row === 6 && col === 3) {
-                                const placeholder = document.createElement('div');
-                                placeholder.className = 'flex items-center justify-center text-xs text-center rounded-lg bg-violet-800 text-white p-1';
-                                placeholder.textContent = '57-71';
-                                placeholder.style.gridRowStart = row;
-                                placeholder.style.gridColumnStart = col;
-                                fragment.appendChild(placeholder);
-                            }
-                             if (row === 7 && col === 3) {
-                                const placeholder = document.createElement('div');
-                                placeholder.className = 'flex items-center justify-center text-xs text-center rounded-lg bg-fuchsia-800 text-white p-1';
-                                placeholder.textContent = '89-103';
-                                placeholder.style.gridRowStart = row;
-                                placeholder.style.gridColumnStart = col;
-                                fragment.appendChild(placeholder);
-                            }
-                        }
-                    }
-                }
-                periodicTableContainer.appendChild(fragment);
-            };
-            const createCategoryLegend = () => {
-                categoryLegendContainer.innerHTML = '';
-                const fragment = document.createDocumentFragment();
-                for (const [key, value] of Object.entries(categories)) {
-                    const legendItem = document.createElement('div');
-                    legendItem.className = 'flex items-center';
-                    legendItem.innerHTML = `<div class="w-3 h-3 rounded-sm mr-1.5 ${key}"></div><span>${value.name}</span>`;
-                    fragment.appendChild(legendItem);
-                }
-                categoryLegendContainer.appendChild(fragment);
-            };
-            const resizeCanvas = () => {
-                const dpr = window.devicePixelRatio || 1;
-                const rect = spectrumCanvas.getBoundingClientRect();
-                spectrumCanvas.width = rect.width * dpr;
-                spectrumCanvas.height = rect.height * dpr;
-                ctx.scale(dpr, dpr);
-            };
-            const wavelengthToRgb = (wavelength) => {
-                if (wavelength < 380) { // UV
-                    const intensity = 0.5 + 0.5 * (wavelength - 200) / 180;
-                    return `rgb(${Math.round(intensity*150)}, ${Math.round(intensity*0)}, ${Math.round(intensity*200)})`;
-                }
-                if (wavelength > 750) { // IR
-                    const intensity = 1.0 - 0.7 * (wavelength - 750) / (1000 - 750);
-                    return `rgb(${Math.round(intensity*139)}, 0, 0)`;
-                }
-                const t = 1 - ((wavelength - 380) / (750 - 380));
-                return d3.interpolateSpectral(t);
-            }
-            const drawSpectra = () => {
-                resizeCanvas();
-                const { clientWidth, clientHeight } = spectrumCanvas;
-                ctx.clearRect(0, 0, clientWidth, clientHeight);
-                visiblePeaks = [];
-                const elementsToDraw = appState.selectedElements
-                    .map(symbol => findDataForElement(symbol))
-                    .filter(data => data !== null);
-                if (elementsToDraw.length === 0) {
-                    ctx.fillStyle = '#6b7280';
-                    ctx.font = '16px Inter';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Select an element to view its spectrum.', clientWidth / 2, clientHeight / 2);
-                    return;
-                }
-                let globalMaxIntensity = 0;
-                elementsToDraw.forEach(elementData => {
-                    elementData.lines.forEach(line => {
-                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
-                        if (!isNaN(intensity) && intensity > globalMaxIntensity) {
-                            globalMaxIntensity = intensity;
-                        }
-                    });
-                });
-                if(globalMaxIntensity === 0) globalMaxIntensity = 1;
-                const numSpectra = elementsToDraw.length;
-                const spectrumHeight = clientHeight / numSpectra;
-                elementsToDraw.forEach((elementData, index) => {
-                    const yOffset = index * spectrumHeight;
-                    if (appState.isCompareMode && numSpectra > 1) {
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                        ctx.font = 'bold 14px Inter';
-                        ctx.textAlign = 'left';
-                        ctx.textBaseline = 'top';
-                        ctx.fillText(elementData.symbol, 10, yOffset + 10);
-                    }
-                    elementData.lines.forEach(line => {
-                        const wavelength = parseFloat(line.wavelength);
-                        if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) {
-                            return;
-                        }
-                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
-                        if (isNaN(intensity) || intensity <= 0) return;
-                        const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * clientWidth;
-                        visiblePeaks.push({ wavelength, x, intensity, symbol: elementData.symbol });
-                        const logIntensity = Math.log10(intensity + 1);
-                        const logMax = Math.log10(globalMaxIntensity + 1);
-                        const lineHeight = (logIntensity / logMax) * (spectrumHeight * 0.9);
-                        ctx.strokeStyle = wavelengthToRgb(wavelength);
-                        ctx.lineWidth = 1.5;
-                        ctx.beginPath();
-                        ctx.moveTo(x, yOffset + spectrumHeight);
-                        ctx.lineTo(x, yOffset + spectrumHeight - lineHeight);
-                        ctx.stroke();
-                    });
-                });
-            };
-            const handlePan = (e) => {
-                if (!viewState.isDragging) return;
-                const deltaX = e.clientX - viewState.lastX;
-                viewState.lastX = e.clientX;
-                const range = viewState.maxWavelength - viewState.minWavelength;
-                const deltaWavelength = (deltaX / spectrumCanvas.clientWidth) * range;
-                viewState.minWavelength -= deltaWavelength;
-                viewState.maxWavelength -= deltaWavelength;
-                drawSpectra();
-            };
-            const handleZoom = (e) => {
-                e.preventDefault();
-                const rect = spectrumCanvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const currentWavelength = viewState.minWavelength + (x / rect.width) * (viewState.maxWavelength - viewState.minWavelength);
-                const zoomFactor = e.deltaY < 0 ? 0.8 : 1.25;
-                const newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
-                if (newRange < 1 || newRange > 50000) return;
-                viewState.minWavelength = currentWavelength - (x / rect.width) * newRange;
-                viewState.maxWavelength = viewState.minWavelength + newRange;
-                drawSpectra();
-            };
-            const showWavelengthTooltip = (e) => {
-                const rect = spectrumCanvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const closestPeak = visiblePeaks.reduce((closest, peak) => {
-                    const distance = Math.abs(peak.x - x);
-                    return distance < closest.distance ? { ...peak, distance } : closest;
-                }, { distance: Infinity });
-                if (closestPeak.distance < 10) {
-                    wavelengthTooltip.style.opacity = '1';
-                    wavelengthTooltip.style.left = `${closestPeak.x + 15}px`;
-                    wavelengthTooltip.style.top = `${y}px`;
-                    wavelengthTooltip.innerHTML = `<strong>${closestPeak.symbol}:</strong> ${closestPeak.wavelength.toFixed(3)} nm<br><strong>Int:</strong> ${closestPeak.intensity}`;
-                } else {
-                    wavelengthTooltip.style.opacity = '0';
-                }
-            };
-            const handleFind = () => {
-                const target = parseFloat(wavelengthInput.value);
-                const tolerance = parseFloat(toleranceInput.value) || 0.1;
-                if (isNaN(target)) { return; }
-                if (Object.keys(atomicData).length === 0) {
-                    uploadStatus.textContent = 'Please load data before using the finder.';
-                    uploadStatus.classList.remove('text-green-400');
-                    uploadStatus.classList.add('text-red-400');
-                    return;
-                }
-                const results = [];
-                elements.forEach(elementInfo => {
-                    const elementData = findDataForElement(elementInfo.symbol);
-                    if (!elementData) return;
-                    const matchingLines = elementData.lines.filter(line =>
-                        Math.abs(parseFloat(line.wavelength) - target) <= tolerance
-                    );
-                    if (matchingLines.length > 0) {
-                        matchingLines.forEach(line => {
-                            results.push({ element: line.ion, wavelength: parseFloat(line.wavelength), intensity: line.intensity_obs });
-                        });
-                    }
-                });
-                displayFinderResults(results, target, tolerance);
-            };
-            const displayFinderResults = (results, target, tolerance) => {
-                finderModal.style.display = 'flex';
-                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> line(s) at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
-                if (results.length === 0) {
-                    finderModalResults.innerHTML += '<p>No matching spectral lines found.</p>';
-                    return;
-                }
-                results.sort((a,b) => a.wavelength - b.wavelength).forEach(result => {
-                    finderModalResults.innerHTML += `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.element}</h3><div class="text-sm text-gray-300 ml-2">→ <strong>${result.wavelength.toFixed(4)} nm</strong> (Rel. Int: ${result.intensity})</div></div>`;
-                });
-            };
-            const handleElementClick = (symbol) => {
-                if (appState.isCompareMode) {
-                    const index = appState.selectedElements.indexOf(symbol);
-                    if (index > -1) { appState.selectedElements.splice(index, 1); }
-                    else if (appState.selectedElements.length < appState.maxCompare) { appState.selectedElements.push(symbol); }
-                } else {
-                    appState.selectedElements = (appState.selectedElements[0] === symbol) ? [] : [symbol];
-                }
-                updateUI();
-                drawSpectra();
-            };
-            const updateUI = () => {
-                document.querySelectorAll('#periodic-table .element-cell').forEach(cell => {
-                    cell.classList.toggle('selected', appState.selectedElements.includes(cell.dataset.symbol));
-                });
-                currentElementSpan.textContent = appState.selectedElements.join(', ') || 'None';
-                comparisonListDiv.innerHTML = '';
-                if(appState.isCompareMode) {
-                    const colors = ['bg-blue-500', 'bg-teal-500', 'bg-red-500'];
-                    appState.selectedElements.forEach((symbol, index) => {
-                        const item = document.createElement('div');
-                        item.className = 'comparison-item flex justify-between items-center p-2 rounded-md bg-gray-700';
-                        item.innerHTML = `<span class="font-semibold flex items-center"><div class="w-4 h-4 rounded-full ${colors[index]} mr-2 border-2 border-gray-800"></div>${symbol}</span><button data-symbol="${symbol}" class="w-6 h-6 flex items-center justify-center bg-red-600 hover:bg-red-700 rounded-full text-white font-bold">×</button>`;
-                        comparisonListDiv.appendChild(item);
-                    });
-                    comparisonListDiv.querySelectorAll('button').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            const symbolToRemove = e.currentTarget.dataset.symbol;
-                            appState.selectedElements = appState.selectedElements.filter(s => s !== symbolToRemove);
-                            updateUI();
-                            drawSpectra();
-                        });
-                    });
-                }
-            };
-            const handleDataLoaded = (data) => {
-                atomicData = data;
-                isDataLoaded = true;
-                uploadStatus.textContent = '✅ Data loaded successfully.';
-                uploadStatus.classList.remove('text-gray-400', 'text-red-400');
-                uploadStatus.classList.add('text-green-400');
-                createPeriodicTable();
-                if(categoryLegendContainer.children.length === 0) createCategoryLegend();
-            };
-            const loadDataFromRepo = async () => {
-                const repoUrl = 'https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/nist_atomic_data.json';
-                uploadStatus.textContent = 'Loading data from repository...';
-                uploadStatus.classList.remove('text-red-400', 'text-green-400');
-                uploadStatus.classList.add('text-gray-400');
-                try {
-                    const response = await fetch(repoUrl);
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const data = await response.json();
-                    handleDataLoaded(data);
-                } catch (error) {
-                    console.error("Error fetching data from repository:", error);
-                    uploadStatus.textContent = '❌ Failed to load repo data. Upload a file.';
-                    uploadStatus.classList.add('text-red-400');
-                }
-            };
-            const handleFileUpload = (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        handleDataLoaded(data);
-                    } catch (error) {
-                        console.error("Error parsing JSON file:", error);
-                        uploadStatus.textContent = `❌ Error loading file. Is it a valid JSON?`;
-                         uploadStatus.classList.add('text-red-400');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            jsonUploadInput.addEventListener('change', handleFileUpload);
-            compareToggle.addEventListener('change', () => {
-                appState.isCompareMode = compareToggle.checked;
-                if (!appState.isCompareMode && appState.selectedElements.length > 1) {
-                    appState.selectedElements = [appState.selectedElements[0]];
-                }
-                updateUI();
-                drawSpectra();
-            });
-            findBtn.addEventListener('click', handleFind);
-            finderModalCloseBtn.addEventListener('click', () => finderModal.style.display = 'none');
-            viewerModalClose.addEventListener('click', () => viewerModal.style.display = 'none');
-            window.addEventListener('click', (e) => { if (e.target == finderModal) finderModal.style.display = 'none'; });
-            window.addEventListener('resize', drawSpectra);
-            spectrumCanvas.addEventListener('mousedown', (e) => { viewState.isDragging = true; viewState.lastX = e.clientX; spectrumCanvas.style.cursor = 'grabbing'; });
-            document.addEventListener('mouseup', () => { viewState.isDragging = false; spectrumCanvas.style.cursor = 'grab'; });
-            spectrumCanvas.addEventListener('mouseleave', () => { wavelengthTooltip.style.opacity = '0'; });
-            spectrumCanvas.addEventListener('mousemove', (e) => { handlePan(e); showWavelengthTooltip(e); });
-            spectrumCanvas.addEventListener('wheel', handleZoom, { passive: false });
-            return {
-                open: () => {
-                    viewerModal.style.display = 'flex';
-                    createPeriodicTable();
-                    if (!isDataLoaded) { loadDataFromRepo(); }
-                    drawSpectra();
-                }
-            };
-        })();
+                });
+            });
 
-        // --- Spectrometer Calibration Tool Module (IIFE) ---
-        const CalibrationToolModule = (() => {
-            const modal = document.getElementById('calibration-modal');
-            const closeBtn = document.getElementById('calibration-modal-close');
-            const addDataPointBtn = document.getElementById('add-datapoint-btn');
-            const calculateBtn = document.getElementById('calculate-btn');
-            const dataPointsContainer = document.getElementById('data-points-container');
-            const resultsContainer = document.getElementById('results-container');
-            const rSquaredResult = document.getElementById('r-squared-result');
-            const equationResult = document.getElementById('equation-result');
-            const c3Result = document.getElementById('c3-result');
-            const c2Result = document.getElementById('c2-result');
-            const c1Result = document.getElementById('c1-result');
-            const c0Result = document.getElementById('c0-result');
-            const canvas = document.getElementById('calibration-canvas');
-            let chart;
-            let dataPoints = [];
+            breadcrumbsEl.addEventListener('click', e => {
+                if (e.target.tagName !== 'SPAN' || !e.target.dataset.view) return;
+                const { view, categoryId, categoryName } = e.target.dataset;
+                showProjectsView(view, { category: categoryId, categoryName });
+            });
 
-            const open = () => {
-                modal.style.display = 'flex';
-                if (dataPointsContainer.children.length === 0) {
-                    // Add a few default empty rows to start
-                    addDataPointRow();
-                    addDataPointRow();
-                    addDataPointRow();
-                    addDataPointRow();
-                }
-                updateCalculateButtonState();
-            };
+            categoryListEl.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const categoryId = card.getAttribute('data-category');
+                    const categoryName = card.querySelector('h3').textContent;
+                    showProjectsView('project-list', { category: categoryId, categoryName: categoryName });
+                });
+            });
 
-            const close = () => { modal.style.display = 'none'; };
+            launchNistViewerBtn.addEventListener('click', () => { NistViewerModule.open(); });
+            launchCalibrationToolBtn.addEventListener('click', () => { CalibrationToolModule.open(); });
+        };
 
-            const addDataPointRow = () => {
-                const row = document.createElement('div');
-                row.className = 'data-input-grid';
-                row.innerHTML = `
-                    <input type="number" placeholder="e.g., 435.83" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500" name="wavelength">
-                    <input type="number" placeholder="e.g., 512" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500" name="pixel">
-                    <button class="remove-datarow-btn">×</button>
-                `;
-                dataPointsContainer.appendChild(row);
-                row.querySelector('.remove-datarow-btn').addEventListener('click', () => {
-                    row.remove();
-                    updateCalculateButtonState();
-                });
-                row.querySelectorAll('input').forEach(input => input.addEventListener('input', updateCalculateButtonState));
-            };
+        // --- NIST Viewer Application Module (IIFE)---
+        const NistViewerModule = (() => {
+            let atomicData = {};
+            let isDataLoaded = false;
+            let appState = { isCompareMode: false, selectedElements: [], maxCompare: 3 };
+            let viewState = { minWavelength: 200, maxWavelength: 1000, isDragging: false, lastX: 0 };
+            let visiblePeaks = [];
 
-            const updateCalculateButtonState = () => {
-                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
-                let validPairs = 0;
-                rows.forEach(row => {
-                    const wl = row.querySelector('input[name="wavelength"]').value;
-                    const px = row.querySelector('input[name="pixel"]').value;
-                    if(wl && px) validPairs++;
-                });
-                calculateBtn.disabled = validPairs < 4;
-            };
+            const viewerModal = document.getElementById('viewer-modal');
+            const periodicTableContainer = document.getElementById('periodic-table');
+            const categoryLegendContainer = document.getElementById('category-legend');
+            const uploadStatus = document.getElementById('upload-status');
+            const spectrumCanvas = document.getElementById('spectrum-canvas');
+            const wavelengthTooltip = document.getElementById('wavelength-tooltip');
+            const currentElementSpan = document.getElementById('current-element-viewer');
+            const jsonUploadInput = document.getElementById('json-upload');
+            const compareToggle = document.getElementById('compare-toggle');
+            const comparisonListDiv = document.getElementById('comparison-list');
+            const findBtn = document.getElementById('find-btn');
+            const wavelengthInput = document.getElementById('wavelength-input');
+            const toleranceInput = document.getElementById('tolerance-input');
+            const finderModal = document.getElementById('finder-modal');
+            const finderModalResults = document.getElementById('finder-modal-results');
+            const finderModalCloseBtn = document.getElementById('finder-modal-close-btn');
+            const viewerModalClose = document.getElementById('viewer-modal-close');
+            const ctx = spectrumCanvas.getContext('2d');
 
-            const calculate = () => {
-                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
-                dataPoints = [];
-                rows.forEach(row => {
-                    const wavelength = parseFloat(row.querySelector('input[name="wavelength"]').value);
-                    const pixel = parseFloat(row.querySelector('input[name="pixel"]').value);
-                    if (!isNaN(wavelength) && !isNaN(pixel)) {
-                        dataPoints.push({ x: pixel, y: wavelength });
-                    }
-                });
+            const elements = [ { symbol: 'H', name: 'Hydrogen', row: 1, col: 1, category: 'nonmetal' }, { symbol: 'He', name: 'Helium', row: 1, col: 18, category: 'noble-gas' }, { symbol: 'Li', name: 'Lithium', row: 2, col: 1, category: 'alkali' }, { symbol: 'Be', name: 'Beryllium', row: 2, col: 2, category: 'alkaline-earth' }, { symbol: 'B', name: 'Boron', row: 2, col: 13, category: 'metalloid' }, { symbol: 'C', name: 'Carbon', row: 2, col: 14, category: 'nonmetal' }, { symbol: 'N', name: 'Nitrogen', row: 2, col: 15, category: 'nonmetal' }, { symbol: 'O', name: 'Oxygen', row: 2, col: 16, category: 'nonmetal' }, { symbol: 'F', name: 'Fluorine', row: 2, col: 17, category: 'nonmetal' }, { symbol: 'Ne', name: 'Neon', row: 2, col: 18, category: 'noble-gas' }, { symbol: 'Na', name: 'Sodium', row: 3, col: 1, category: 'alkali' }, { symbol: 'Mg', name: 'Magnesium', row: 3, col: 2, category: 'alkaline-earth' }, { symbol: 'Al', name: 'Aluminium', row: 3, col: 13, category: 'post-transition' }, { symbol: 'Si', name: 'Silicon', row: 3, col: 14, category: 'metalloid' }, { symbol: 'P', name: 'Phosphorus', row: 3, col: 15, category: 'nonmetal' }, { symbol: 'S', name: 'Sulfur', row: 3, col: 16, category: 'nonmetal' }, { symbol: 'Cl', name: 'Chlorine', row: 3, col: 17, category: 'nonmetal' }, { symbol: 'Ar', name: 'Argon', row: 3, col: 18, category: 'noble-gas' }, { symbol: 'K', name: 'Potassium', row: 4, col: 1, category: 'alkali' }, { symbol: 'Ca', name: 'Calcium', row: 4, col: 2, category: 'alkaline-earth' }, { symbol: 'Sc', name: 'Scandium', row: 4, col: 3, category: 'transition' }, { symbol: 'Ti', name: 'Titanium', row: 4, col: 4, category: 'transition' }, { symbol: 'V', name: 'Vanadium', row: 4, col: 5, category: 'transition' }, { symbol: 'Cr', name: 'Chromium', row: 4, col: 6, category: 'transition' }, { symbol: 'Mn', name: 'Manganese', row: 4, col: 7, category: 'transition' }, { symbol: 'Fe', name: 'Iron', row: 4, col: 8, category: 'transition' }, { symbol: 'Co', name: 'Cobalt', row: 4, col: 9, category: 'transition' }, { symbol: 'Ni', name: 'Nickel', row: 4, col: 10, category: 'transition' }, { symbol: 'Cu', name: 'Copper', row: 4, col: 11, category: 'transition' }, { symbol: 'Zn', name: 'Zinc', row: 4, col: 12, category: 'post-transition' }, { symbol: 'Ga', name: 'Gallium', row: 4, col: 13, category: 'post-transition' }, { symbol: 'Ge', name: 'Germanium', row: 4, col: 14, category: 'metalloid' }, { symbol: 'As', name: 'Arsenic', row: 4, col: 15, category: 'metalloid' }, { symbol: 'Se', name: 'Selenium', row: 4, col: 16, category: 'nonmetal' }, { symbol: 'Br', name: 'Bromine', row: 4, col: 17, category: 'nonmetal' }, { symbol: 'Kr', name: 'Krypton', row: 4, col: 18, category: 'noble-gas' }, { symbol: 'Rb', name: 'Rubidium', row: 5, col: 1, category: 'alkali' }, { symbol: 'Sr', name: 'Strontium', row: 5, col: 2, category: 'alkaline-earth' }, { symbol: 'Y', name: 'Yttrium', row: 5, col: 3, category: 'transition' }, { symbol: 'Zr', name: 'Zirconium', row: 5, col: 4, category: 'transition' }, { symbol: 'Nb', name: 'Niobium', row: 5, col: 5, category: 'transition' }, { symbol: 'Mo', name: 'Molybdenum', row: 5, col: 6, category: 'transition' }, { symbol: 'Tc', name: 'Technetium', row: 5, col: 7, category: 'transition' }, { symbol: 'Ru', name: 'Ruthenium', row: 5, col: 8, category: 'transition' }, { symbol: 'Rh', name: 'Rhodium', row: 5, col: 9, category: 'transition' }, { symbol: 'Pd', name: 'Palladium', row: 5, col: 10, category: 'transition' }, { symbol: 'Ag', name: 'Silver', row: 5, col: 11, category: 'transition' }, { symbol: 'Cd', name: 'Cadmium', row: 5, col: 12, category: 'post-transition' }, { symbol: 'In', name: 'Indium', row: 5, col: 13, category: 'post-transition' }, { symbol: 'Sn', name: 'Tin', row: 5, col: 14, category: 'post-transition' }, { symbol: 'Sb', name: 'Antimony', row: 5, col: 15, category: 'metalloid' }, { symbol: 'Te', name: 'Tellurium', row: 5, col: 16, category: 'metalloid' }, { symbol: 'I', name: 'Iodine', row: 5, col: 17, category: 'nonmetal' }, { symbol: 'Xe', name: 'Xenon', row: 5, col: 18, category: 'noble-gas' }, { symbol: 'Cs', name: 'Caesium', row: 6, col: 1, category: 'alkali' }, { symbol: 'Ba', name: 'Barium', row: 6, col: 2, category: 'alkaline-earth' }, { symbol: 'La', name: 'Lanthanum', row: 9, col: 3, category: 'lanthanide' }, { symbol: 'Ce', name: 'Cerium', row: 9, col: 4, category: 'lanthanide' }, { symbol: 'Pr', name: 'Praseodymium', row: 9, col: 5, category: 'lanthanide' }, { symbol: 'Nd', name: 'Neodymium', row: 9, col: 6, category: 'lanthanide' }, { symbol: 'Pm', name: 'Promethium', row: 9, col: 7, category: 'lanthanide' }, { symbol: 'Sm', name: 'Samarium', row: 9, col: 8, category: 'lanthanide' }, { symbol: 'Eu', name: 'Europium', row: 9, col: 9, category: 'lanthanide' }, { symbol: 'Gd', name: 'Gadolinium', row: 9, col: 10, category: 'lanthanide' }, { symbol: 'Tb', name: 'Terbium', row: 9, col: 11, category: 'lanthanide' }, { symbol: 'Dy', name: 'Dysprosium', row: 9, col: 12, category: 'lanthanide' }, { symbol: 'Ho', name: 'Holmium', row: 9, col: 13, category: 'lanthanide' }, { symbol: 'Er', name: 'Erbium', row: 9, col: 14, category: 'lanthanide' }, { symbol: 'Tm', name: 'Thulium', row: 9, col: 15, category: 'lanthanide' }, { symbol: 'Yb', name: 'Ytterbium', row: 9, col: 16, category: 'lanthanide' }, { symbol: 'Lu', name: 'Lutetium', row: 9, col: 17, category: 'lanthanide' }, { symbol: 'Hf', name: 'Hafnium', row: 6, col: 4, category: 'transition' }, { symbol: 'Ta', name: 'Tantalum', row: 6, col: 5, category: 'transition' }, { symbol: 'W', name: 'Tungsten', row: 6, col: 6, category: 'transition' }, { symbol: 'Re', name: 'Rhenium', row: 6, col: 7, category: 'transition' }, { symbol: 'Os', name: 'Osmium', row: 6, col: 8, category: 'transition' }, { symbol: 'Ir', name: 'Iridium', row: 6, col: 9, category: 'transition' }, { symbol: 'Pt', name: 'Platinum', row: 6, col: 10, category: 'transition' }, { symbol: 'Au', name: 'Gold', row: 6, col: 11, category: 'transition' }, { symbol: 'Hg', name: 'Mercury', row: 6, col: 12, category: 'post-transition' }, { symbol: 'Tl', name: 'Thallium', row: 6, col: 13, category: 'post-transition' }, { symbol: 'Pb', name: 'Lead', row: 6, col: 14, category: 'post-transition' }, { symbol: 'Bi', name: 'Bismuth', row: 6, col: 15, category: 'post-transition' }, { symbol: 'Po', name: 'Polonium', row: 6, col: 16, category: 'post-transition' }, { symbol: 'At', name: 'Astatine', row: 6, col: 17, category: 'metalloid' }, { symbol: 'Rn', name: 'Radon', row: 6, col: 18, category: 'noble-gas' }, { symbol: 'Fr', name: 'Francium', row: 7, col: 1, category: 'alkali' }, { symbol: 'Ra', name: 'Radium', row: 7, col: 2, category: 'alkaline-earth' }, { symbol: 'Ac', name: 'Actinium', row: 10, col: 3, category: 'actinide' }, { symbol: 'Th', name: 'Thorium', row: 10, col: 4, category: 'actinide' }, { symbol: 'Pa', name: 'Protactinium', row: 10, col: 5, category: 'actinide' }, { symbol: 'U', name: 'Uranium', row: 10, col: 6, category: 'actinide' }, { symbol: 'Np', name: 'Neptunium', row: 10, col: 7, category: 'actinide' }, { symbol: 'Pu', name: 'Plutonium', row: 10, col: 8, category: 'actinide' } ];
+            const categories = { 'alkali': { name: 'Alkali Metal' },'alkaline-earth': { name: 'Alkaline Earth' },'lanthanide': { name: 'Lanthanide' },'actinide': { name: 'Actinide' },'transition': { name: 'Transition Metal' },'post-transition': { name: 'Post-Transition Metal' },'metalloid': { name: 'Metalloid' },'nonmetal': { name: 'Nonmetal' },'noble-gas': { name: 'Noble Gas' } };
 
-                if (dataPoints.length < 4) {
-                    alert("Please provide at least 4 data points for a 3rd order polynomial fit.");
-                    return;
-                }
+            const findDataForElement = (symbol) => {
+                if(Object.keys(atomicData).length === 0) return null;
+                const regex = new RegExp(`^${symbol}(\\s|$)`);
+                const keys = Object.keys(atomicData).filter(key => regex.test(key));
+                if(keys.length === 0) return null;
+                let allLines = [];
+                keys.forEach(key => {
+                    if (atomicData[key] && atomicData[key].length > 0) {
+                        allLines = allLines.concat(atomicData[key].map(line => ({ ...line, ion: key })));
+                    }
+                });
+                return allLines.length > 0 ? { symbol, lines: allLines } : null;
+            }
+            const createPeriodicTable = () => {
+                periodicTableContainer.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                const elementMap = new Map(elements.map(el => [`${el.row}-${el.col}`, el]));
+                for (let row = 1; row <= 10; row++) {
+                    for (let col = 1; col <= 18; col++) {
+                        const elementData = elementMap.get(`${row}-${col}`);
+                        if (elementData) {
+                            const cell = document.createElement('button');
+                            cell.className = `element-cell ${elementData.category}`;
+                            cell.textContent = elementData.symbol;
+                            cell.dataset.symbol = elementData.symbol;
+                            cell.style.gridRowStart = row;
+                            cell.style.gridColumnStart = col;
+                            cell.disabled = !findDataForElement(elementData.symbol);
+                            cell.addEventListener('click', () => handleElementClick(elementData.symbol));
+                            fragment.appendChild(cell);
+                        } else {
+                             if (row === 6 && col === 3) {
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'flex items-center justify-center text-xs text-center rounded-lg bg-violet-800 text-white p-1';
+                                placeholder.textContent = '57-71';
+                                placeholder.style.gridRowStart = row;
+                                placeholder.style.gridColumnStart = col;
+                                fragment.appendChild(placeholder);
+                            }
+                             if (row === 7 && col === 3) {
+                                const placeholder = document.createElement('div');
+                                placeholder.className = 'flex items-center justify-center text-xs text-center rounded-lg bg-fuchsia-800 text-white p-1';
+                                placeholder.textContent = '89-103';
+                                placeholder.style.gridRowStart = row;
+                                placeholder.style.gridColumnStart = col;
+                                fragment.appendChild(placeholder);
+                            }
+                        }
+                    }
+                }
+                periodicTableContainer.appendChild(fragment);
+            };
+            const createCategoryLegend = () => {
+                categoryLegendContainer.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                for (const [key, value] of Object.entries(categories)) {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'flex items-center';
+                    legendItem.innerHTML = `<div class="w-3 h-3 rounded-sm mr-1.5 ${key}"></div><span>${value.name}</span>`;
+                    fragment.appendChild(legendItem);
+                }
+                categoryLegendContainer.appendChild(fragment);
+            };
+            const resizeCanvas = () => {
+                const dpr = window.devicePixelRatio || 1;
+                const rect = spectrumCanvas.getBoundingClientRect();
+                spectrumCanvas.width = rect.width * dpr;
+                spectrumCanvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
+            };
+            const wavelengthToRgb = (wavelength) => {
+                if (wavelength < 380) { // UV
+                    const intensity = 0.5 + 0.5 * (wavelength - 200) / 180;
+                    return `rgb(${Math.round(intensity*150)}, ${Math.round(intensity*0)}, ${Math.round(intensity*200)})`;
+                }
+                if (wavelength > 750) { // IR
+                    const intensity = 1.0 - 0.7 * (wavelength - 750) / (1000 - 750);
+                    return `rgb(${Math.round(intensity*139)}, 0, 0)`;
+                }
+                const t = 1 - ((wavelength - 380) / (750 - 380));
+                return d3.interpolateSpectral(t);
+            }
+            const drawSpectra = () => {
+                resizeCanvas();
+                const { clientWidth, clientHeight } = spectrumCanvas;
+                ctx.clearRect(0, 0, clientWidth, clientHeight);
+                visiblePeaks = [];
+                const elementsToDraw = appState.selectedElements
+                    .map(symbol => findDataForElement(symbol))
+                    .filter(data => data !== null);
+                if (elementsToDraw.length === 0) {
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '16px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Select an element to view its spectrum.', clientWidth / 2, clientHeight / 2);
+                    return;
+                }
+                let globalMaxIntensity = 0;
+                elementsToDraw.forEach(elementData => {
+                    elementData.lines.forEach(line => {
+                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
+                        if (!isNaN(intensity) && intensity > globalMaxIntensity) {
+                            globalMaxIntensity = intensity;
+                        }
+                    });
+                });
+                if(globalMaxIntensity === 0) globalMaxIntensity = 1;
+                const numSpectra = elementsToDraw.length;
+                const spectrumHeight = clientHeight / numSpectra;
+                elementsToDraw.forEach((elementData, index) => {
+                    const yOffset = index * spectrumHeight;
+                    if (appState.isCompareMode && numSpectra > 1) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.font = 'bold 14px Inter';
+                        ctx.textAlign = 'left';
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(elementData.symbol, 10, yOffset + 10);
+                    }
+                    elementData.lines.forEach(line => {
+                        const wavelength = parseFloat(line.wavelength);
+                        if (isNaN(wavelength) || wavelength < viewState.minWavelength || wavelength > viewState.maxWavelength) {
+                            return;
+                        }
+                        const intensity = parseFloat(String(line.intensity_obs).replace(/[^\d.]/g, ''));
+                        if (isNaN(intensity) || intensity <= 0) return;
+                        const x = ((wavelength - viewState.minWavelength) / (viewState.maxWavelength - viewState.minWavelength)) * clientWidth;
+                        visiblePeaks.push({ wavelength, x, intensity, symbol: elementData.symbol });
+                        const logIntensity = Math.log10(intensity + 1);
+                        const logMax = Math.log10(globalMaxIntensity + 1);
+                        const lineHeight = (logIntensity / logMax) * (spectrumHeight * 0.9);
+                        ctx.strokeStyle = wavelengthToRgb(wavelength);
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(x, yOffset + spectrumHeight);
+                        ctx.lineTo(x, yOffset + spectrumHeight - lineHeight);
+                        ctx.stroke();
+                    });
+                });
+            };
+            const handlePan = (e) => {
+                if (!viewState.isDragging) return;
+                const deltaX = e.clientX - viewState.lastX;
+                viewState.lastX = e.clientX;
+                const range = viewState.maxWavelength - viewState.minWavelength;
+                const deltaWavelength = (deltaX / spectrumCanvas.clientWidth) * range;
+                viewState.minWavelength -= deltaWavelength;
+                viewState.maxWavelength -= deltaWavelength;
+                drawSpectra();
+            };
+            const handleZoom = (e) => {
+                e.preventDefault();
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const currentWavelength = viewState.minWavelength + (x / rect.width) * (viewState.maxWavelength - viewState.minWavelength);
+                const zoomFactor = e.deltaY < 0 ? 0.8 : 1.25;
+                const newRange = (viewState.maxWavelength - viewState.minWavelength) * zoomFactor;
+                if (newRange < 1 || newRange > 50000) return;
+                viewState.minWavelength = currentWavelength - (x / rect.width) * newRange;
+                viewState.maxWavelength = viewState.minWavelength + newRange;
+                drawSpectra();
+            };
+            const showWavelengthTooltip = (e) => {
+                const rect = spectrumCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const closestPeak = visiblePeaks.reduce((closest, peak) => {
+                    const distance = Math.abs(peak.x - x);
+                    return distance < closest.distance ? { ...peak, distance } : closest;
+                }, { distance: Infinity });
+                if (closestPeak.distance < 10) {
+                    wavelengthTooltip.style.opacity = '1';
+                    wavelengthTooltip.style.left = `${closestPeak.x + 15}px`;
+                    wavelengthTooltip.style.top = `${y}px`;
+                    wavelengthTooltip.innerHTML = `<strong>${closestPeak.symbol}:</strong> ${closestPeak.wavelength.toFixed(3)} nm<br><strong>Int:</strong> ${closestPeak.intensity}`;
+                } else {
+                    wavelengthTooltip.style.opacity = '0';
+                }
+            };
+            const handleFind = () => {
+                const target = parseFloat(wavelengthInput.value);
+                const tolerance = parseFloat(toleranceInput.value) || 0.1;
+                if (isNaN(target)) { return; }
+                if (Object.keys(atomicData).length === 0) {
+                    uploadStatus.textContent = 'Please load data before using the finder.';
+                    uploadStatus.classList.remove('text-green-400');
+                    uploadStatus.classList.add('text-red-400');
+                    return;
+                }
+                const results = [];
+                elements.forEach(elementInfo => {
+                    const elementData = findDataForElement(elementInfo.symbol);
+                    if (!elementData) return;
+                    const matchingLines = elementData.lines.filter(line =>
+                        Math.abs(parseFloat(line.wavelength) - target) <= tolerance
+                    );
+                    if (matchingLines.length > 0) {
+                        matchingLines.forEach(line => {
+                            results.push({ element: line.ion, wavelength: parseFloat(line.wavelength), intensity: line.intensity_obs });
+                        });
+                    }
+                });
+                displayFinderResults(results, target, tolerance);
+            };
+            const displayFinderResults = (results, target, tolerance) => {
+                finderModal.style.display = 'flex';
+                finderModalResults.innerHTML = `<p class="text-gray-400 mb-4">Found <strong>${results.length}</strong> line(s) at <strong>${target} ± ${tolerance} nm</strong>.</p>`;
+                if (results.length === 0) {
+                    finderModalResults.innerHTML += '<p>No matching spectral lines found.</p>';
+                    return;
+                }
+                results.sort((a,b) => a.wavelength - b.wavelength).forEach(result => {
+                    finderModalResults.innerHTML += `<div class="mb-3 p-3 bg-gray-800 rounded-lg"><h3 class="text-lg font-bold text-teal-400">${result.element}</h3><div class="text-sm text-gray-300 ml-2">→ <strong>${result.wavelength.toFixed(4)} nm</strong> (Rel. Int: ${result.intensity})</div></div>`;
+                });
+            };
+            const handleElementClick = (symbol) => {
+                if (appState.isCompareMode) {
+                    const index = appState.selectedElements.indexOf(symbol);
+                    if (index > -1) { appState.selectedElements.splice(index, 1); }
+                    else if (appState.selectedElements.length < appState.maxCompare) { appState.selectedElements.push(symbol); }
+                } else {
+                    appState.selectedElements = (appState.selectedElements[0] === symbol) ? [] : [symbol];
+                }
+                updateUI();
+                drawSpectra();
+            };
+            const updateUI = () => {
+                document.querySelectorAll('#periodic-table .element-cell').forEach(cell => {
+                    cell.classList.toggle('selected', appState.selectedElements.includes(cell.dataset.symbol));
+                });
+                currentElementSpan.textContent = appState.selectedElements.join(', ') || 'None';
+                comparisonListDiv.innerHTML = '';
+                if(appState.isCompareMode) {
+                    const colors = ['bg-blue-500', 'bg-teal-500', 'bg-red-500'];
+                    appState.selectedElements.forEach((symbol, index) => {
+                        const item = document.createElement('div');
+                        item.className = 'comparison-item flex justify-between items-center p-2 rounded-md bg-gray-700';
+                        item.innerHTML = `<span class="font-semibold flex items-center"><div class="w-4 h-4 rounded-full ${colors[index]} mr-2 border-2 border-gray-800"></div>${symbol}</span><button data-symbol="${symbol}" class="w-6 h-6 flex items-center justify-center bg-red-600 hover:bg-red-700 rounded-full text-white font-bold">×</button>`;
+                        comparisonListDiv.appendChild(item);
+                    });
+                    comparisonListDiv.querySelectorAll('button').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const symbolToRemove = e.currentTarget.dataset.symbol;
+                            appState.selectedElements = appState.selectedElements.filter(s => s !== symbolToRemove);
+                            updateUI();
+                        });
+                    });
+                }
+            };
+            const handleDataLoaded = (data) => {
+                atomicData = data;
+                isDataLoaded = true;
+                uploadStatus.textContent = '✅ Data loaded successfully.';
+                uploadStatus.classList.remove('text-gray-400', 'text-red-400');
+                uploadStatus.classList.add('text-green-400');
+                createPeriodicTable();
+                if(categoryLegendContainer.children.length === 0) createCategoryLegend();
+            };
+            const loadDataFromRepo = async () => {
+                const repoUrl = 'https://raw.githubusercontent.com/santoabboud/santoabboud.github.io/main/assets/img/nist_atomic_data.json';
+                uploadStatus.textContent = 'Loading data from repository...';
+                uploadStatus.classList.remove('text-red-400', 'text-green-400');
+                uploadStatus.classList.add('text-gray-400');
+                try {
+                    const response = await fetch(repoUrl);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    handleDataLoaded(data);
+                } catch (error) {
+                    console.error("Error fetching data from repository:", error);
+                    uploadStatus.textContent = '❌ Failed to load repo data. Upload a file.';
+                    uploadStatus.classList.add('text-red-400');
+                }
+            };
+            const handleFileUpload = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        handleDataLoaded(data);
+                    } catch (error) {
+                        console.error("Error parsing JSON file:", error);
+                        uploadStatus.textContent = `❌ Error loading file. Is it a valid JSON?`;
+                         uploadStatus.classList.add('text-red-400');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            jsonUploadInput.addEventListener('change', handleFileUpload);
+            compareToggle.addEventListener('change', () => {
+                appState.isCompareMode = compareToggle.checked;
+                if (!appState.isCompareMode && appState.selectedElements.length > 1) {
+                    appState.selectedElements = [appState.selectedElements[0]];
+                }
+                updateUI();
+                drawSpectra();
+            });
+            findBtn.addEventListener('click', handleFind);
+            finderModalCloseBtn.addEventListener('click', () => finderModal.style.display = 'none');
+            viewerModalClose.addEventListener('click', () => viewerModal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target == finderModal) finderModal.style.display = 'none'; });
+            window.addEventListener('resize', drawSpectra);
+            spectrumCanvas.addEventListener('mousedown', (e) => { viewState.isDragging = true; viewState.lastX = e.clientX; spectrumCanvas.style.cursor = 'grabbing'; });
+            document.addEventListener('mouseup', () => { viewState.isDragging = false; spectrumCanvas.style.cursor = 'grab'; });
+            spectrumCanvas.addEventListener('mouseleave', () => { wavelengthTooltip.style.opacity = '0'; });
+            spectrumCanvas.addEventListener('mousemove', (e) => { handlePan(e); showWavelengthTooltip(e); });
+            spectrumCanvas.addEventListener('wheel', handleZoom, { passive: false });
+            return {
+                open: () => {
+                    viewerModal.style.display = 'flex';
+                    createPeriodicTable();
+                    if (!isDataLoaded) { loadDataFromRepo(); }
+                    drawSpectra();
+                }
+            };
+        })();
 
-                // Perform polynomial regression
-                const coeffs = polynomialRegression(dataPoints, 3);
-                if (!coeffs) {
-                    alert("Calculation failed. Ensure data points are not collinear and are valid numbers.");
-                    return;
-                }
+        // --- Spectrometer Calibration Tool Module (IIFE) ---
+        const CalibrationToolModule = (() => {
+            const modal = document.getElementById('calibration-modal');
+            const closeBtn = document.getElementById('calibration-modal-close');
+            const addDataPointBtn = document.getElementById('add-datapoint-btn');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const dataPointsContainer = document.getElementById('data-points-container');
+            const resultsContainer = document.getElementById('results-container');
+            const rSquaredResult = document.getElementById('r-squared-result');
+            const equationResult = document.getElementById('equation-result');
+            const c3Result = document.getElementById('c3-result');
+            const c2Result = document.getElementById('c2-result');
+            const c1Result = document.getElementById('c1-result');
+            const c0Result = document.getElementById('c0-result');
+            const canvas = document.getElementById('calibration-canvas');
+            let chart;
+            let dataPoints = [];
 
-                const [c0, c1, c2, c3] = coeffs;
+            const open = () => {
+                modal.style.display = 'flex';
+                if (dataPointsContainer.children.length === 0) {
+                    // Add a few default empty rows to start
+                    addDataPointRow();
+                    addDataPointRow();
+                    addDataPointRow();
+                    addDataPointRow();
+                }
+                updateCalculateButtonState();
+            };
 
-                // Calculate R^2
-                const rSquared = calculateRSquared(dataPoints, coeffs);
+            const close = () => { modal.style.display = 'none'; };
 
-                // Display results
-                displayResults({c0, c1, c2, c3, rSquared});
+            const addDataPointRow = () => {
+                const row = document.createElement('div');
+                row.className = 'data-input-grid';
+                row.innerHTML = `
+                    <input type="number" placeholder="e.g., 435.83" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500" name="wavelength">
+                    <input type="number" placeholder="e.g., 512" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 w-full text-base focus:ring-blue-500 focus:border-blue-500" name="pixel">
+                    <button class="remove-datarow-btn">×</button>
+                `;
+                dataPointsContainer.appendChild(row);
+                row.querySelector('.remove-datarow-btn').addEventListener('click', () => {
+                    row.remove();
+                    updateCalculateButtonState();
+                });
+                row.querySelectorAll('input').forEach(input => input.addEventListener('input', updateCalculateButtonState));
+            };
 
-                // Draw graph
-                drawGraph(dataPoints, coeffs);
-            };
+            const updateCalculateButtonState = () => {
+                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
+                let validPairs = 0;
+                rows.forEach(row => {
+                    const wl = row.querySelector('input[name="wavelength"]').value;
+                    const px = row.querySelector('input[name="pixel"]').value;
+                    if(wl && px) validPairs++;
+                });
+                calculateBtn.disabled = validPairs < 4;
+            };
 
-            const displayResults = (results) => {
-                rSquaredResult.textContent = results.rSquared.toFixed(5);
-                c0Result.textContent = results.c0.toExponential(4);
-                c1Result.textContent = results.c1.toExponential(4);
-                c2Result.textContent = results.c2.toExponential(4);
-                c3Result.textContent = results.c3.toExponential(4);
-                equationResult.textContent = `c₃·p³ + c₂·p² + c₁·p + c₀`;
-                resultsContainer.classList.remove('hidden');
-            };
+            const calculate = () => {
+                const rows = dataPointsContainer.querySelectorAll('.data-input-grid');
+                dataPoints = [];
+                rows.forEach(row => {
+                    const wavelength = parseFloat(row.querySelector('input[name="wavelength"]').value);
+                    const pixel = parseFloat(row.querySelector('input[name="pixel"]').value);
+                    if (!isNaN(wavelength) && !isNaN(pixel)) {
+                        dataPoints.push({ x: pixel, y: wavelength });
+                    }
+                });
 
-            const drawGraph = (points, coeffs) => {
-                const fittedLine = [];
-                const minPixel = Math.min(...points.map(p => p.x));
-                const maxPixel = Math.max(...points.map(p => p.x));
-                const range = maxPixel - minPixel;
+                if (dataPoints.length < 4) {
+                    alert("Please provide at least 4 data points for a 3rd order polynomial fit.");
+                    return;
+                }
 
-                for (let i = 0; i <= 100; i++) {
-                    const p = minPixel + (i / 100) * range;
-                    const wl = coeffs[3] * p**3 + coeffs[2] * p**2 + coeffs[1] * p + coeffs[0];
-                    fittedLine.push({x: p, y: wl});
-                }
+                // Perform polynomial regression
+                const coeffs = polynomialRegression(dataPoints, 3);
+                if (!coeffs) {
+                    alert("Calculation failed. Ensure data points are not collinear and are valid numbers.");
+                    return;
+                }
 
-                if (chart) { chart.destroy(); }
-                const ctx = canvas.getContext('2d');
-                chart = new Chart(ctx, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [{
-                            label: 'Data Points',
-                            data: points,
-                            backgroundColor: 'rgba(20, 184, 166, 0.8)', // teal-500
-                            borderColor: 'rgba(20, 184, 166, 1)',
-                            pointRadius: 5,
-                        }, {
-                            label: 'Fitted Curve',
-                            data: fittedLine,
-                            borderColor: 'rgba(59, 130, 246, 1)', // blue-500
-                            backgroundColor: 'transparent',
-                            type: 'line',
-                            pointRadius: 0,
-                            borderWidth: 2,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: { title: { display: true, text: 'Pixel Number', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } },
-                            y: { title: { display: true, text: 'Wavelength (nm)', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } }
-                        },
-                        plugins: { legend: { labels: { color: '#d1d5db' } } }
-                    }
-                });
-            };
+                const [c0, c1, c2, c3] = coeffs;
 
-            const polynomialRegression = (data, order) => {
-                const n = data.length;
-                if(n <= order) return null;
-                const matrixA = Array(order + 1).fill(0).map(() => Array(order + 1).fill(0));
-                const vectorB = Array(order + 1).fill(0);
+                // Calculate R^2
+                const rSquared = calculateRSquared(dataPoints, coeffs);
 
-                for(let i=0; i < n; i++) {
-                    for(let j=0; j <= order; j++) {
-                        vectorB[j] += data[i].y * Math.pow(data[i].x, j);
-                        for(let k=0; k <= order; k++) {
-                            matrixA[j][k] += Math.pow(data[i].x, j + k);
-                        }
-                    }
-                }
+                // Display results
+                displayResults({c0, c1, c2, c3, rSquared});
 
-                const invA = invertMatrix(matrixA);
-                if(!invA) return null;
+                // Draw graph
+                drawGraph(dataPoints, coeffs);
+            };
 
-                const coeffs = Array(order + 1).fill(0);
-                for(let i=0; i <= order; i++) {
-                    for(let j=0; j <= order; j++) {
-                        coeffs[i] += invA[i][j] * vectorB[j];
-                    }
-                }
-                return coeffs;
-            };
+            const displayResults = (results) => {
+                rSquaredResult.textContent = results.rSquared.toFixed(5);
+                c0Result.textContent = results.c0.toExponential(4);
+                c1Result.textContent = results.c1.toExponential(4);
+                c2Result.textContent = results.c2.toExponential(4);
+                c3Result.textContent = results.c3.toExponential(4);
+                equationResult.textContent = `c₃·p³ + c₂·p² + c₁·p + c₀`;
+                resultsContainer.classList.remove('hidden');
+            };
 
-             const calculateRSquared = (data, coeffs) => {
-                let ssTot = 0;
-                let ssRes = 0;
-                const yMean = data.reduce((sum, p) => sum + p.y, 0) / data.length;
+            const drawGraph = (points, coeffs) => {
+                const fittedLine = [];
+                const minPixel = Math.min(...points.map(p => p.x));
+                const maxPixel = Math.max(...points.map(p => p.x));
+                const range = maxPixel - minPixel;
 
-                data.forEach(p => {
-                    const yPred = coeffs[3]*p.x**3 + coeffs[2]*p.x**2 + coeffs[1]*p.x + coeffs[0];
-                    ssTot += (p.y - yMean) ** 2;
-                    ssRes += (p.y - yPred) ** 2;
-                });
-                return 1 - (ssRes / ssTot);
-            };
+                for (let i = 0; i <= 100; i++) {
+                    const p = minPixel + (i / 100) * range;
+                    const wl = coeffs[3] * p**3 + coeffs[2] * p**2 + coeffs[1] * p + coeffs[0];
+                    fittedLine.push({x: p, y: wl});
+                }
 
-            const invertMatrix = (A) => {
-                let n = A.length;
-                let I = Array(n).fill(0).map(row => Array(n).fill(0));
-                for(let i=0; i<n; i++) I[i][i] = 1;
+                if (chart) { chart.destroy(); }
+                const ctx = canvas.getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Data Points',
+                            data: points,
+                            backgroundColor: 'rgba(20, 184, 166, 0.8)', // teal-500
+                            borderColor: 'rgba(20, 184, 166, 1)',
+                            pointRadius: 5,
+                        }, {
+                            label: 'Fitted Curve',
+                            data: fittedLine,
+                            borderColor: 'rgba(59, 130, 246, 1)', // blue-500
+                            backgroundColor: 'transparent',
+                            type: 'line',
+                            pointRadius: 0,
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Pixel Number', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } },
+                            y: { title: { display: true, text: 'Wavelength (nm)', color: '#d1d5db'}, grid: { color: '#374151' }, ticks: { color: '#d1d5db' } }
+                        },
+                        plugins: { legend: { labels: { color: '#d1d5db' } } }
+                    }
+                });
+            };
 
-                let C = A.map((row, i) => [...row, ...I[i]]);
+            const polynomialRegression = (data, order) => {
+                const n = data.length;
+                if(n <= order) return null;
+                const matrixA = Array(order + 1).fill(0).map(() => Array(order + 1).fill(0));
+                const vectorB = Array(order + 1).fill(0);
 
-                for (let i = 0; i < n; i++) {
-                    let pivot = i;
-                    while(pivot < n && C[pivot][i] === 0) pivot++;
-                    if(pivot === n) return null; // No unique solution
-                    [C[i], C[pivot]] = [C[pivot], C[i]];
+                for(let i=0; i < n; i++) {
+                    for(let j=0; j <= order; j++) {
+                        vectorB[j] += data[i].y * Math.pow(data[i].x, j);
+                        for(let k=0; k <= order; k++) {
+                            matrixA[j][k] += Math.pow(data[i].x, j + k);
+                        }
+                    }
+                }
 
-                    let div = C[i][i];
-                    for (let j = i; j < 2*n; j++) C[i][j] /= div;
+                const invA = invertMatrix(matrixA);
+                if(!invA) return null;
 
-                    for (let k = 0; k < n; k++) {
-                        if (i !== k) {
-                            let mult = C[k][i];
-                            for (let j = i; j < 2*n; j++) {
-                                C[k][j] -= mult * C[i][j];
-                            }
-                        }
-                    }
-                }
-                return C.map(row => row.slice(n));
-            }
+                const coeffs = Array(order + 1).fill(0);
+                for(let i=0; i <= order; i++) {
+                    for(let j=0; j <= order; j++) {
+                        coeffs[i] += invA[i][j] * vectorB[j];
+                    }
+                }
+                return coeffs;
+            };
+
+             const calculateRSquared = (data, coeffs) => {
+                let ssTot = 0;
+                let ssRes = 0;
+                const yMean = data.reduce((sum, p) => sum + p.y, 0) / data.length;
+
+                data.forEach(p => {
+                    const yPred = coeffs[3]*p.x**3 + coeffs[2]*p.x**2 + coeffs[1]*p.x + coeffs[0];
+                    ssTot += (p.y - yMean) ** 2;
+                    ssRes += (p.y - yPred) ** 2;
+                });
+                return 1 - (ssRes / ssTot);
+            };
+
+            const invertMatrix = (A) => {
+                let n = A.length;
+                let I = Array(n).fill(0).map(row => Array(n).fill(0));
+                for(let i=0; i<n; i++) I[i][i] = 1;
+
+                let C = A.map((row, i) => [...row, ...I[i]]);
+
+                for (let i = 0; i < n; i++) {
+                    let pivot = i;
+                    while(pivot < n && C[pivot][i] === 0) pivot++;
+                    if(pivot === n) return null; // No unique solution
+                    [C[i], C[pivot]] = [C[pivot], C[i]];
+
+                    let div = C[i][i];
+                    for (let j = i; j < 2*n; j++) C[i][j] /= div;
+
+                    for (let k = 0; k < n; k++) {
+                        if (i !== k) {
+                            let mult = C[k][i];
+                            for (let j = i; j < 2*n; j++) {
+                                C[k][j] -= mult * C[i][j];
+                            }
+                        }
+                    }
+                }
+                return C.map(row => row.slice(n));
+            }
 
 
-            // --- Event Listeners ---
-            closeBtn.addEventListener('click', close);
-            addDataPointBtn.addEventListener('click', addDataPointRow);
-            calculateBtn.addEventListener('click', calculate);
+            // --- Event Listeners ---
+            closeBtn.addEventListener('click', close);
+            addDataPointBtn.addEventListener('click', addDataPointRow);
+            calculateBtn.addEventListener('click', calculate);
 
-            return { open };
-        })();
+            return { open };
+        })();
 
-        initPortfolio();
-    });
-    </script>
+        initPortfolio();
+    });
+    </script>
 </body>
 </html>
