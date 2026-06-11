@@ -1,0 +1,19 @@
+---
+/** The site signature: physically computed 380–700 nm strip with
+ *  laser-line ticks; 1064 sits out past the visible edge.
+ *  thin = footer variant (no ticks). */
+const { thin = false } = Astro.props;
+---
+{thin ? (
+  <div class="specrule thin" aria-hidden="true"><div class="grad"></div></div>
+) : (
+  <div class="specrule" aria-hidden="true">
+    <div class="grad" style="position:relative">
+      <span class="tick" style="left:7.8%">405</span>
+      <span class="tick" style="left:33.8%">488</span>
+      <span class="tick" style="left:47.5%">532</span>
+      <span class="tick" style="left:79.0%">633</span>
+    </div>
+    <div class="tail"><span class="tick ir" style="left:62%">1064</span></div>
+  </div>
+)}

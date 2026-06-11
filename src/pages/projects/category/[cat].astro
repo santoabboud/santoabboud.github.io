@@ -1,0 +1,22 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../../../config';
+
+export async function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((cat) => ({ params: { cat } }));
+}
+const { cat } = Astro.params;
+const projects = (await getCollection('projects', ({ data }) => !data.draft && data.category === cat))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title={CATEGORIES[cat]}>
+  <section class="hero" style="padding-top:40px">
+    <p class="eyebrow"><a href="/projects/" style="color:inherit;font-weight:400">PROJECTS</a> / {CATEGORIES[cat].toUpperCase()}</p>
+    <h1>{CATEGORIES[cat]}</h1>
+  </section>
+  {projects.length > 0
+    ? <section class="grid">{projects.map((p) => <ProjectCard project={p} />)}</section>
+    : <p class="note">Nothing published here yet — write-ups in progress.</p>}
+</Base>

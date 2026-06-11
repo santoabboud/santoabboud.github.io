@@ -1,0 +1,17 @@
+---
+import SpectralRule from './SpectralRule.astro';
+import { SITE } from '../config';
+const sha = (process.env.GITHUB_SHA ?? 'dev').slice(0, 7);
+const rev = new Date().toISOString().slice(0, 10);
+---
+<footer class="site-footer wrap">
+  <SpectralRule thin />
+  <div class="foot-line">
+    <span>© {new Date().getFullYear()} BILAL ABBOUD
+      · <a href={SITE.links.github}>GITHUB</a>
+      · <a href={SITE.links.linkedin}>LINKEDIN</a>
+      · <a href={SITE.links.youtube}>YOUTUBE</a>
+      · <a href="/rss.xml">RSS</a></span>
+    <span class="rev"><b>REV</b> {rev} · BUILD {sha}</span>
+  </div>
+</footer>

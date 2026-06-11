@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+_staging/
+*.log
+SESSION_STATE.json

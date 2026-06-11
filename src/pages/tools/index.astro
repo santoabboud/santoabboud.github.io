@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Tools" description="Interactive optics tools: NIST atomic spectra viewer and spectrometer calibration calculator.">
+  <section class="hero" style="padding-top:40px">
+    <h1>Tools</h1>
+    <p class="bio">Browser-based instruments for the optical bench. Everything runs client-side.</p>
+  </section>
+  <section class="grid">
+    <article class="card"><a class="cardlink" href="/tools/spectra/">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">TOOL</span>
+        <h3>Atomic Spectra Viewer</h3>
+        <p>143,786 NIST ASD lines, 549 species, 94 elements. Periodic-table selection, ionization-stage filters, zoomable spectra, line finder.</p>
+      </div></a>
+    </article>
+    <article class="card"><a class="cardlink" href="/tools/calibration/">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">TOOL</span>
+        <h3>Spectrometer Calibration Calculator</h3>
+        <p>Pixel→wavelength polynomial fits (orders 1–6) in a numerically stable Chebyshev basis, with coefficient uncertainties, R², and residual plots.</p>
+      </div></a>
+    </article>
+    <article class="card">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">IN DESIGN</span>
+        <h3>LIBS Spectrum Simulator</h3>
+        <p>LTE Boltzmann–Saha synthetic spectra with Voigt profiles and Stark widths. Awaiting the v2 NIST dataset (levels, A<sub>ki</sub>, g<sub>k</sub>, partition functions).</p>
+      </div>
+    </article>
+  </section>
+</Base>

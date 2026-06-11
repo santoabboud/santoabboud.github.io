@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Atomic Spectra Viewer" description="Interactive NIST ASD atomic emission line viewer: 143,786 lines, 549 species, ionization-stage filtering, line finder.">
+  <section class="hero" style="padding-top:40px">
+    <h1>Atomic Spectra Viewer</h1>
+    <p class="bio">Observed emission lines from the NIST Atomic Spectra Database — 143,786 lines across 549 species. Pick up to three elements; scroll to zoom, drag to pan, double-click to reset.</p>
+  </section>
+
+  <div class="callout"><span class="lbl">DATA CAVEATS</span>
+    Wavelengths are passed through from a legacy ASD scrape; its air/vacuum convention is unverified (ASD default: air ≥ 200 nm, vacuum below) — treat sub-pm comparisons accordingly. Relative intensities are per-species and source-condition-dependent: stick heights are log-normalized <em>within each element band</em> and are <em>not</em> comparable across species. Provenance: <a href="/data/spectra/_manifest.json">data manifest</a>.
+  </div>
+
+  <div data-sv>
+    <div class="pt-grid" data-pt aria-label="Periodic table element selector"></div>
+
+    <div class="sv-controls">
+      <span style="color:var(--muted)">STAGES:</span>
+      <label><input type="checkbox" data-stage="1" checked /> I</label>
+      <label><input type="checkbox" data-stage="2" checked /> II</label>
+      <label><input type="checkbox" data-stage="3" checked /> III</label>
+      <label><input type="checkbox" data-stage="ge4" /> ≥IV</label>
+      <span data-selected style="display:flex;gap:6px"></span>
+      <button class="btn" data-reset style="margin-left:auto">RESET VIEW (180–1100 nm)</button>
+    </div>
+
+    <div class="sv-canvas-wrap">
+      <canvas data-canvas aria-label="Spectral line plot. Scroll to zoom, drag to pan."></canvas>
+      <div class="sv-tooltip" data-tooltip></div>
+    </div>
+    <p class="note" data-status style="margin-top:8px">Loading data manifest…</p>
+
+    <div class="tool-panel" style="margin-top:22px">
+      <h2>Line finder</h2>
+      <p class="note" style="margin-top:0">Search all 549 species for lines near a wavelength. First use fetches a ~2.3 MB index.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <input type="number" data-find-input step="any" placeholder="λ [nm]" style="width:130px" aria-label="Wavelength in nanometres" />
+        <span class="note">±</span>
+        <input type="number" data-find-tol step="any" value="0.1" style="width:90px" aria-label="Tolerance in nanometres" />
+        <span class="note">nm</span>
+        <button class="btn primary" data-find-btn>FIND</button>
+      </div>
+      <div data-find-results></div>
+    </div>
+  </div>
+
+  <script>
+    import { initSpectraViewer } from '../../lib/spectra-viewer.js';
+    initSpectraViewer(document.querySelector('[data-sv]'));
+  </script>
+</Base>

@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '../../config';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const usedCats = [...new Set(projects.map((p) => p.data.category))];
+---
+<Base title="Projects" description="Build logs and write-ups: lasers, spectroscopy, microscopy, cameras, batteries, and the occasional anvil.">
+  <section class="hero" style="padding-top:40px">
+    <h1>Projects</h1>
+    <p class="bio">
+      {usedCats.map((c, i) => (
+        <>
+          <a href={`/projects/category/${c}/`}>{CATEGORIES[c]}</a>{i < usedCats.length - 1 ? ' · ' : ''}
+        </>
+      ))}
+    </p>
+  </section>
+  <section class="grid">
+    {projects.map((p) => <ProjectCard project={p} />)}
+  </section>
+</Base>

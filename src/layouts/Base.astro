@@ -1,0 +1,47 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config';
+const { title, description = SITE.bio, noindex = false } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} — R&D Notebook`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+---
+<!DOCTYPE html>
+<html lang="en">{/* set data-theme="argon" etc. here to switch palettes (see tokens.css) */}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  {SITE.goatcounter && (
+    <script
+      data-goatcounter={`https://${SITE.goatcounter}.goatcounter.com/count`}
+      async
+      src="//gc.zgo.at/count.v3.js"
+      crossorigin="anonymous"
+      integrity="sha384-QGgNMMRFTi8ul5kHJ+vXysPe8gySvSA/Y3rpXZiRLzKPIw8CWY+a3ObKmQsyDr+a"
+      is:inline
+    ></script>
+  )}
+</head>
+<body>
+  <Header />
+  <main class="wrap">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>

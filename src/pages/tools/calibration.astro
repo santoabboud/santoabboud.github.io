@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Calibration Calculator" description="Spectrometer pixel→wavelength polynomial calibration with a numerically stable Chebyshev-basis fit, coefficient uncertainties, R², and residual plots.">
+  <section class="hero" style="padding-top:40px">
+    <h1>Spectrometer Calibration Calculator</h1>
+    <p class="bio">Least-squares λ(px) = Σ C<sub>k</sub>·px<sup>k</sup>, fitted in a scaled Chebyshev basis (numerically stable to order 6 even on 4096-px detectors), reported as raw monomial coefficients with 1σ uncertainties. Validated against numpy to &lt;10⁻⁹ relative.</p>
+  </section>
+
+  <div class="cal-grid" data-cal>
+    <div class="tool-panel">
+      <h2>Calibration points</h2>
+      <p class="note" style="margin-top:0">One point per line: <code>pixel, wavelength_nm</code> (comma, tab, or space separated). Order m needs ≥ m+1 points; uncertainties need ≥ m+2.</p>
+      <textarea data-points rows="12" style="width:100%; resize:vertical" spellcheck="false" placeholder="e.g.&#10;78.4, 365.015&#10;287.1, 404.656&#10;451.0, 435.833"></textarea>
+      <div style="display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap">
+        <label class="note" for="cal-order">Order</label>
+        <select id="cal-order" data-order>
+          <option>1</option><option>2</option><option selected>3</option>
+          <option>4</option><option>5</option><option>6</option>
+        </select>
+        <button class="btn primary" data-fit>FIT</button>
+        <button class="btn" data-example>LOAD EXAMPLE</button>
+        <button class="btn" data-copy style="display:none">COPY COEFFS</button>
+      </div>
+      <p class="note" data-err style="color:var(--acc-bright)"></p>
+    </div>
+
+    <div class="tool-panel">
+      <h2>Result</h2>
+      <div data-out><p class="note">Fit results appear here.</p></div>
+    </div>
+  </div>
+
+  <div class="tool-panel" style="margin-top:4px">
+    <h2>Fit &amp; residuals</h2>
+    <canvas data-plot style="width:100%; display:block" aria-label="Calibration fit and residual plots"></canvas>
+  </div>
+
+  <p class="note">Numerics: the fit solves normal equations in a Chebyshev basis T<sub>k</sub>(u), u ∈ [−1, 1] over the pixel range, then converts exactly to monomial C<sub>k</sub> — avoiding the ~10²⁰ dynamic range that makes raw-monomial normal equations lose most coefficient digits in double precision. Cov(C) = J·s²(AᵀA)⁻¹·Jᵀ with s² = SSR/(N−p). Source: <a href="https://github.com/santoabboud/santoabboud.github.io">repo</a>, validated in <code>scripts/test_calibration.mjs</code>.</p>
+
+  <script>
+    import { fitCalibration } from '../../lib/calibration.js';
+
+    const root = document.querySelector('[data-cal]').parentElement;
+    const $ = (s) => root.querySelector(s);
+    const ta = $('[data-points]'), errEl = $('[data-err]'), out = $('[data-out]');
+    const copyBtn = $('[data-copy]'), plot = $('[data-plot]');
+    let lastFit = null, lastPts = null;
+
+    const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+    function parsePoints(text) {
+      const pts = [], errs = [];
+      text.split(/\r?\n/).forEach((line, i) => {
+        const t = line.trim();
+        if (!t || t.startsWith('#')) return;
+        const f = t.split(/[,;\t ]+/).map(Number);
+        if (f.length < 2 || f.some((v) => !Number.isFinite(v)))
+          errs.push(`line ${i + 1}: "${line.trim()}"`);
+        else pts.push({ x: f[0], y: f[1] });
+      });
+      return { pts, errs };
+    }
+
+    // value ± σ, σ to 2 significant figures
+    const fmt = (v, s) =>
+      s == null
+        ? Number(v.toPrecision(10)).toExponential(6)
+        : `${Number(v.toPrecision(10)).toExponential(6)} ± ${Number(s.toPrecision(2)).toExponential(1)}`;
+
+    function doFit() {
+      errEl.textContent = '';
+      const { pts, errs } = parsePoints(ta.value);
+      if (errs.length) { errEl.textContent = `Could not parse: ${errs.join('; ')}`; return; }
+      const order = parseInt($('[data-order]').value, 10);
+      const fit = fitCalibration(pts, order);
+      if (fit.error) { errEl.textContent = fit.error; return; }
+      lastFit = fit; lastPts = pts;
+      const rms = fit.rmsResidualNm;
+      const rmsStr = rms < 1 ? `${(rms * 1000).toFixed(1)} pm` : `${rms.toFixed(4)} nm`;
+      out.innerHTML =
+        `<table class="spec-table cal-results">` +
+        fit.coeffRaw.map((c, k) =>
+          `<tr><td>C${k} [nm·px⁻${k}]</td><td>${fmt(c, fit.coeffSigma ? fit.coeffSigma[k] : null)}</td></tr>`).join('') +
+        `<tr><td>R²</td><td>${Number(fit.r2.toPrecision(10))}</td></tr>` +
+        `<tr><td>RMS residual</td><td>${rmsStr}</td></tr>` +
+        `<tr><td>N · dof</td><td>${fit.n} · ${fit.n - order - 1}${fit.coeffSigma ? '' : ' (σ undefined at dof = 0)'}</td></tr>` +
+        `</table>`;
+      copyBtn.style.display = '';
+      drawPlot();
+    }
+
+    function drawPlot() {
+      if (!lastFit) return;
+      const dpr = window.devicePixelRatio || 1;
+      const Wc = plot.clientWidth, Hc = 380;
+      plot.style.height = `${Hc}px`;
+      plot.width = Wc * dpr; plot.height = Hc * dpr;
+      const ctx = plot.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const colT = css('--text'), colM = css('--muted'), colL = css('--line'),
+            colA = css('--acc'), colP2 = css('--panel2');
+      ctx.fillStyle = colP2; ctx.fillRect(0, 0, Wc, Hc);
+      const [x0, x1] = lastFit.domain;
+      const padL = 64, padR = 14;
+      const X = (px) => padL + ((px - x0) / (x1 - x0)) * (Wc - padL - padR);
+
+      // panel 1: data + curve
+      const y0t = 16, y1t = 218;
+      const ys = lastPts.map((p) => p.y);
+      const yMin = Math.min(...ys), yMax = Math.max(...ys), yPad = 0.06 * (yMax - yMin || 1);
+      const Y1 = (lam) => y1t - ((lam - yMin + yPad) / (yMax - yMin + 2 * yPad)) * (y1t - y0t);
+      ctx.strokeStyle = colL; ctx.strokeRect(padL, y0t, Wc - padL - padR, y1t - y0t);
+      ctx.strokeStyle = colT; ctx.beginPath();
+      for (let i = 0; i <= 200; i++) {
+        const px = x0 + (i / 200) * (x1 - x0);
+        const y = Y1(lastFit.predict(px));
+        i ? ctx.lineTo(X(px), y) : ctx.moveTo(X(px), y);
+      }
+      ctx.stroke();
+      ctx.fillStyle = colA;
+      for (const p of lastPts) { ctx.beginPath(); ctx.arc(X(p.x), Y1(p.y), 3.4, 0, 7); ctx.fill(); }
+      ctx.fillStyle = colM; ctx.font = "10.5px 'JetBrains Mono', monospace";
+      ctx.fillText('λ [nm] vs pixel — points + fit', padL, y0t - 4);
+      ctx.fillText(yMax.toFixed(1), 8, y0t + 10); ctx.fillText(yMin.toFixed(1), 8, y1t);
+
+      // panel 2: residuals
+      const y0b = 252, y1b = 360;
+      const res = lastFit.residuals;
+      const rAbs = Math.max(...res.map(Math.abs), 1e-12) * 1.15;
+      const usePm = rAbs < 0.5;
+      const Y2 = (r) => (y0b + y1b) / 2 - (r / rAbs) * ((y1b - y0b) / 2);
+      ctx.strokeStyle = colL; ctx.strokeRect(padL, y0b, Wc - padL - padR, y1b - y0b);
+      ctx.setLineDash([4, 4]); ctx.beginPath();
+      ctx.moveTo(padL, (y0b + y1b) / 2); ctx.lineTo(Wc - padR, (y0b + y1b) / 2);
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = colA; ctx.fillStyle = colA;
+      lastPts.forEach((p, i) => {
+        ctx.beginPath(); ctx.moveTo(X(p.x), (y0b + y1b) / 2); ctx.lineTo(X(p.x), Y2(res[i])); ctx.stroke();
+        ctx.beginPath(); ctx.arc(X(p.x), Y2(res[i]), 2.6, 0, 7); ctx.fill();
+      });
+      ctx.fillStyle = colM;
+      ctx.fillText(`residuals [${usePm ? 'pm' : 'nm'}], full scale ±${usePm ? (rAbs * 1000).toFixed(1) : rAbs.toFixed(3)}`, padL, y0b - 4);
+      ctx.fillText('pixel', Wc - padR - 34, y1b + 14);
+    }
+
+    $('[data-fit]').onclick = doFit;
+    copyBtn.onclick = () => {
+      if (!lastFit) return;
+      const t = lastFit.coeffRaw.map((c, k) =>
+        `C${k}\t${c.toExponential(10)}${lastFit.coeffSigma ? `\t±\t${lastFit.coeffSigma[k].toExponential(3)}` : ''}`).join('\n');
+      navigator.clipboard.writeText(t);
+      copyBtn.textContent = 'COPIED';
+      setTimeout(() => (copyBtn.textContent = 'COPY COEFFS'), 1200);
+    };
+    $('[data-example]').onclick = () => {
+      // Synthetic example: nominal Hg/Ar pen-lamp lines, pixel positions
+      // generated from an arbitrary plausible cubic + rounding (NOT a real
+      // instrument calibration).
+      ta.value = [
+        '# pixel, λ[nm]  — synthetic Hg/Ar example',
+        '78.4, 365.015', '287.1, 404.656', '450.9, 435.833',
+        '1031.6, 546.074', '1194.7, 576.960', '1205.8, 579.066',
+        '1822.4, 696.543', '2043.0, 738.398',
+      ].join('\n');
+      errEl.textContent = '';
+    };
+    new ResizeObserver(() => drawPlot()).observe(plot);
+  </script>
+</Base>

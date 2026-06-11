@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+<Base title="About">
+  <section class="hero" style="padding-top:40px">
+    <h1>About</h1>
+    <p class="bio">{SITE.bio}</p>
+  </section>
+  <div class="prose">
+    <!-- TODO(BSA): longer story arc goes here once compiled. -->
+    <h2>Contact</h2>
+    <p>
+      Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+      GitHub: <a href={SITE.links.github}>github.com/santoabboud</a><br />
+      LinkedIn: <a href={SITE.links.linkedin}>linkedin.com/in/bilal-abboud</a><br />
+      YouTube: <a href={SITE.links.youtube}>youtube.com/@ebislab</a>
+    </p>
+    {/* Activity (talks · judging · reviewing) renders here once entries
+        exist — see PROJECT_STATE.md. Intentionally absent until then. */}
+  </div>
+</Base>

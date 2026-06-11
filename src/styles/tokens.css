@@ -1,0 +1,60 @@
+/* ============================================================
+   DESIGN TOKENS — canonical theme: DATASHEET (light)
+   sand-tan paper · carbon ink · burnt-amber links · ink marks
+
+   Spectral values (--w-*) are wavelength-pegged: computed from
+   the CIE 1931 2° color-matching functions -> sRGB, clip-mapped.
+   Reproduce with: python3 scripts/wavelength_tokens.py
+   Neutrals are eye-picked (paper/ink are pigment-world colors).
+   ============================================================ */
+:root{
+  --bg:#E7DCC2;            /* paper */
+  --panel:#F0E8D2;
+  --panel2:#F8F2E2;
+  --line:#C8B894;          /* hairlines */
+  --text:#1B150D;          /* carbon ink */
+  --muted:#6E614A;
+  --acc:#8A4F0C;           /* burnt-amber: links, interactive */
+  --acc-bright:#A35E0E;
+  --mark:#4A3D28;          /* marks: tags, active nav, ¶, CAUTION */
+  --mark-bright:#1B150D;
+  --dot:rgba(70,55,30,.18);/* breadboard dot grid */
+  --codebg:#EFE6CD;
+  --rulebg:#0E0B06;        /* spectral-rule plate */
+
+  /* wavelength-pegged reference colors (clip-mapped sRGB) */
+  --w-405:#7C00FF;  /* GaN violet        */
+  --w-488:#00D6FF;  /* Ar-ion blue-green */
+  --w-511:#00FF45;  /* Cu-vapor green    */
+  --w-532:#00FF00;  /* Nd:YAG SHG        */
+  --w-578:#FFBF00;  /* Cu-vapor yellow   */
+  --w-633:#FF0000;  /* HeNe red          */
+
+  /* the signature: CIE-computed 380–700 nm gradient (desaturate-
+     mapped, edge-tapered) — regenerate via scripts/wavelength_tokens.py */
+  --spectral-gradient:linear-gradient(90deg, #000000 0.0%, #000000 1.6%, #00173A 3.1%, #00116E 4.7%, #400099 6.2%, #6C00BC 7.8%, #8500D8 9.4%, #8F00ED 10.9%, #8D00FA 12.5%, #8600FF 14.1%, #8100FF 15.6%, #8300FF 17.2%, #8700FF 18.8%, #8100FF 20.3%, #7500FF 21.9%, #6200FF 23.4%, #3E00FF 25.0%, #0035FF 26.6%, #0065FF 28.1%, #008BFF 29.7%, #00B0FF 31.2%, #00D5FF 32.8%, #00F7FF 34.4%, #00FFEB 35.9%, #00FFD7 37.5%, #00FFC7 39.1%, #00FFBB 40.6%, #00FFB1 42.2%, #00FFA8 43.8%, #00FFA0 45.3%, #00FF97 46.9%, #00FF8B 48.4%, #00FF7A 50.0%, #00FF5B 51.6%, #2DFF00 53.1%, #7CFF00 54.7%, #ACFF00 56.2%, #D7FF00 57.8%, #FFFE00 59.4%, #FFD900 60.9%, #FFBA00 62.5%, #FF9F00 64.1%, #FF8700 65.6%, #FF6F00 67.2%, #FF5700 68.8%, #FF3B00 70.3%, #FF1300 71.9%, #FF0029 73.4%, #FF003A 75.0%, #FF0043 76.6%, #FF0049 78.1%, #FF004D 79.7%, #FF004E 81.2%, #FF004F 82.8%, #FC004D 84.4%, #F50048 85.9%, #E90041 87.5%, #DA0036 89.1%, #C70028 90.6%, #B00013 92.2%, #950D00 93.8%, #761900 95.3%, #531800 96.9%, #2A0D00 98.4%, #000000 100.0%);
+}
+
+/* ------------------------------------------------------------
+   DORMANT THEMES — switch by setting data-theme on <html>
+   (in src/layouts/Base.astro) or by replacing :root above.
+   Kept verbatim from the approved sampler for zero-cost revisits.
+   ------------------------------------------------------------ */
+[data-theme="argon"]{   /* cool dark · 488.0 nm Ar-ion accent */
+  --bg:#070A0D; --panel:#0F151B; --panel2:#151D24; --line:#243038;
+  --text:#E6EDF1; --muted:#93A4AE; --acc:#00C0E5; --acc-bright:#00D6FF;
+  --mark:#6E8794; --mark-bright:#8FA9B6; --dot:rgba(120,150,165,.13);
+  --codebg:#0B1015; --rulebg:#000;
+}
+[data-theme="cuvapor"]{ /* dark · Cu-vapor 510.6/578.2 nm pair */
+  --bg:#060A07; --panel:#0D130E; --panel2:#131B13; --line:#243224;
+  --text:#E8F0E6; --muted:#93A78F; --acc:#00E53D; --acc-bright:#00FF45;
+  --mark:#E5AB00; --mark-bright:#FFBF00; --dot:rgba(140,170,140,.13);
+  --codebg:#0A0F0B; --rulebg:#000;
+}
+[data-theme="kapton"]{  /* warm dark · polyimide amber */
+  --bg:#0C0A07; --panel:#15110B; --panel2:#1C1710; --line:#33291B;
+  --text:#EFE7D9; --muted:#A6977E; --acc:#E2B26A; --acc-bright:#F2C77F;
+  --mark:#B97F2E; --mark-bright:#D49538; --dot:rgba(190,160,110,.12);
+  --codebg:#100D08; --rulebg:#000;
+}

@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import CategoryGlyph from './CategoryGlyph.astro';
+import { CATEGORIES } from '../config';
+const { project } = Astro.props;
+const { title, description, category, cover, coverAlt } = project.data;
+---
+<article class="card">
+  <a class="cardlink" href={`/projects/${project.id}/`}>
+    <div class="thumbwrap">
+      {cover
+        ? <Image src={cover} alt={coverAlt ?? title} widths={[400, 800]} sizes="(max-width: 640px) 100vw, 340px" />
+        : <CategoryGlyph category={category} />}
+    </div>
+    <div class="pad">
+      <span class="tag">{CATEGORIES[category].toUpperCase()}</span>
+      <h3>{title}</h3>
+      <p>{description}</p>
+    </div>
+  </a>
+</article>

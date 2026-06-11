@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import SpectralRule from '../components/SpectralRule.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../config';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = projects.slice(0, 6);
+---
+<Base>
+  <section class="hero">
+    <p class="eyebrow">{SITE.eyebrow}</p>
+    <h1>Multidisciplinary R&amp;D scientist &amp; engineer.</h1>
+    <p class="bio">{SITE.bio.replace('Multidisciplinary R&D scientist & engineer experienced in ', 'Experienced in ')}</p>
+    <SpectralRule />
+  </section>
+
+  <p class="section-label"><span class="n">¶</span> FEATURED WORK · <a href="/projects/">ALL PROJECTS →</a></p>
+  <section class="grid">
+    {featured.map((p) => <ProjectCard project={p} />)}
+  </section>
+
+  <p class="section-label"><span class="n">¶</span> TOOLS</p>
+  <section class="grid">
+    <article class="card"><a class="cardlink" href="/tools/spectra/">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">TOOL</span>
+        <h3>Atomic Spectra Viewer</h3>
+        <p>143,786 NIST lines across 549 species. Periodic-table selection, ionization-stage filters, line finder.</p>
+      </div></a>
+    </article>
+    <article class="card"><a class="cardlink" href="/tools/calibration/">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">TOOL</span>
+        <h3>Spectrometer Calibration Calculator</h3>
+        <p>Pixel→wavelength polynomial fits in a numerically stable basis, with coefficient uncertainties.</p>
+      </div></a>
+    </article>
+  </section>
+</Base>
