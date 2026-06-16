@@ -1,6 +1,6 @@
 # santoabboud-site — living project state
 
-Last updated: 2026-06-11T03:50:00Z  (session S1)
+Last updated: 2026-06-16 (session S2)
 
 ## Project ground truth
 
@@ -79,3 +79,14 @@ gap that silently dropped 35 hyper-ionized species), ported both tools
 (calibration cross-validated vs numpy after fixing the convert(kind=)
 reference bug), wrote CI + docs, fresh-root git init. Deferred: F3/F4
 (user inputs), F5/F6 (next major work). Deliverable: tarball S1.
+### S2 (2026-06-16)
+Project-card preview restyle (src/styles/global.css only): replaced the tall
+16:9 card preview box with a short fixed-height banner (120px) — photos
+object-fit:cover, category glyphs centered+uncropped — plus lighter card chrome
+(radius 8, hover -2). Bounded to proportions/chrome; Datasheet v1 palette/type
+untouched (theme stays locked). Produced a standalone analytical instruction set
+for edgetrace.ai's design language (delivered to user as
+edgetrace_design_language_instruction_set.md, NOT in repo). Open question left
+with user: portrait photos center-crop in the flatter band — offered contain /
+text-forward alternatives. Build green (17 routes, 0 draft leakage). Deliverable:
+tarball S2 + regenerated single-file preview (S2).

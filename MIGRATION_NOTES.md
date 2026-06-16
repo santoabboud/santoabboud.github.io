@@ -54,3 +54,20 @@ cutover (single-commit history, index.html @ 1508 lines).
   hardcoded-cubic R²) → scaled Chebyshev basis, generic order 1–6,
   coefficient 1σ uncertainties, residual plots. Validated against numpy
   to <10⁻⁹ relative (scripts/test_calibration.mjs).
+
+## S2 (2026-06-16) — project-card preview restyle
+- Project-card preview band changed from a 16:9 box (`aspect-ratio:16/9` +
+  object-fit:cover) to a short fixed-height banner (120px, flex-centered):
+  - photos still fill via object-fit:cover (now a wide banner crop);
+  - category glyphs now render whole and centered (height:74%, width:auto),
+    no longer cropped by the band.
+- Card chrome lightened: border-radius 10→8px, hover lift 3→2px, pad 14→13px.
+- src/styles/global.css ONLY; no markup/component change. Affects every
+  ProjectCard (homepage featured grid, /projects, category pages) uniformly.
+- Rationale: reduce overall card height ("not such a tall preview"); flatter,
+  cleaner proportions inspired by edgetrace.ai, kept entirely within Datasheet
+  v1 (no palette/type change). See edgetrace_design_language_instruction_set.md.
+- OPEN TRADEOFF (pending user pref): portrait source photos (e.g. Frankenscope
+  cover) are center-cropped to the banner. Alternatives if undesired:
+  object-fit:contain on a matched panel, or text-forward cards (drop the index
+  photo, keep it on the article page).
