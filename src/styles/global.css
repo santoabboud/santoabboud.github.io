@@ -41,11 +41,11 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 .nav a[aria-current="page"],.nav a.active{color:var(--text); border-bottom-color:var(--acc)}
 
 /* ---------------- hero ---------------- */
-.hero{padding:clamp(48px,9vw,104px) 0 0}
+.hero{padding:clamp(40px,7vw,84px) 0 0}
 .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em;
   text-transform:uppercase; color:var(--muted); margin:0 0 22px}
-.hero h1{font-weight:700; font-size:clamp(2.4rem,6.6vw,4.8rem); line-height:1.02;
-  letter-spacing:-.025em; margin:0 0 26px; max-width:18ch}
+.hero h1{font-weight:700; font-size:clamp(2.6rem,7.2vw,5.4rem); line-height:1.02;
+  letter-spacing:-.025em; margin:0 0 24px; max-width:18ch}
 .bio{color:var(--text); max-width:60ch; margin:0 0 38px; font-size:clamp(1.05rem,1.6vw,1.3rem); line-height:1.5}
 
 /* photonics signature: a precise, labelled visible-spectrum reference —
@@ -63,8 +63,8 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 /* ---------------- section labels ---------------- */
 .section-label{display:flex; align-items:baseline; gap:14px;
   font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em;
-  text-transform:uppercase; color:var(--muted); margin:0 0 26px;
-  padding-top:18px; border-top:1px solid var(--line-strong)}
+  text-transform:uppercase; color:var(--muted); margin:0 0 22px;
+  padding-top:16px; border-top:1px solid var(--line-strong)}
 .section-label .n{color:var(--acc); font-weight:600}
 .section-label a{font-weight:400; color:var(--muted); margin-left:auto}
 .section-label a:hover{color:var(--text)}
@@ -72,7 +72,7 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 /* ---------------- project / tool grid ---------------- */
 .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:1px; background:var(--line); border:1px solid var(--line);
-  margin-bottom:64px}
+  margin-bottom:52px}
 .card{background:var(--bg); padding:0; overflow:hidden}
 .card a.cardlink{display:block; color:inherit} .card a.cardlink:hover{text-decoration:none}
 .card a.cardlink:hover h3{text-decoration:underline; text-underline-offset:3px}
