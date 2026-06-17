@@ -50,8 +50,16 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 
 /* photonics signature: a precise, labelled visible-spectrum reference —
    the one place the full spectrum appears, deliberately (not decoration). */
-.spectral{max-width:780px; padding-top:6px}
-.spectral-bar{height:8px; background:var(--spectral-gradient)}  /* mood element, unlabelled */
+/* photonics signature: visible CIE gradient (380–700 nm) extended into a NIR
+   tail (700–1100 nm), laser-line ticks labelled above the bar, no caption.
+   Bar is linear in wavelength so the ticks sit at their true positions. */
+.spectral{max-width:780px; padding-top:26px}
+.spectral-bar{position:relative; height:9px; display:flex}
+.spectral-bar .vis{width:44.44%; background:var(--spectral-gradient)}      /* 380–700 nm */
+.spectral-bar .ir{flex:1; background:linear-gradient(90deg,#1b0d05,#0e0e11)} /* 700–1100 nm NIR */
+.spectral-bar .tick{position:absolute; top:-7px; height:7px; width:1px; background:var(--muted)}
+.spectral-bar .tick span{position:absolute; bottom:9px; left:50%; transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.05em; color:var(--text); white-space:nowrap}
 .specrule{display:none}  /* legacy chunky rule retired */
 
 /* ---------------- section labels ---------------- */
