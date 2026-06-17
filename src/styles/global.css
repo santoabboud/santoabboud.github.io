@@ -70,20 +70,21 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 .section-label a:hover{color:var(--text)}
 
 /* ---------------- project / tool grid ---------------- */
-.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
   gap:1px; background:var(--line); border:1px solid var(--line);
   margin-bottom:52px}
 .card{background:var(--bg); padding:0; overflow:hidden}
 .card a.cardlink{display:block; color:inherit} .card a.cardlink:hover{text-decoration:none}
 .card a.cardlink:hover h3{text-decoration:underline; text-underline-offset:3px}
 /* material band — real photos, framed flat (no radius, no shadow) */
-.thumbwrap{position:relative; height:168px; display:flex; align-items:center;
+/* editorial 3:2 image band, image-led; one consistent ratio, smart-framed */
+.thumbwrap{position:relative; aspect-ratio:3/2; display:flex; align-items:center;
   justify-content:center; overflow:hidden; background:var(--panel2);
   border-bottom:1px solid var(--line)}
-.thumbwrap img{display:block; width:100%; height:100%; object-fit:cover;
-  transition:transform .35s ease}
-.card:hover .thumbwrap img{transform:scale(1.045)}
-.thumbwrap svg{display:block; width:auto; height:60%; opacity:.8}
+.thumbwrap img{display:block; width:100%; height:100%; object-fit:cover; object-position:center;
+  transition:transform .4s ease}
+.card:hover .thumbwrap img{transform:scale(1.04)}
+.thumbwrap svg{display:block; width:auto; height:52%; opacity:.85}
 .card .pad{padding:16px 18px 20px}
 .tag{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px;
   letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:10px}
@@ -108,6 +109,18 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 .prose blockquote{margin:0 0 1.15em; padding:2px 0 2px 18px; border-left:2px solid var(--line-strong); color:var(--muted)}
 .meta-line{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 30px}
 .meta-line .tag{margin:0 10px 0 0}
+
+/* CV / résumé — terse two-column rows, hairline-separated (Swiss data block) */
+.cv{max-width:880px; margin-top:6px}
+.cv-row{display:grid; grid-template-columns:170px 1fr; gap:28px; padding:20px 0; border-top:1px solid var(--line-strong)}
+.cv-row:last-child{border-bottom:1px solid var(--line-strong)}
+.cv-label{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); padding-top:3px}
+.cv-body{font-size:1rem; line-height:1.5}
+.cv-body p{margin:0 0 .5em} .cv-body p:last-child{margin:0}
+.cv-item{display:flex; flex-wrap:wrap; gap:0 10px; align-items:baseline}
+.cv-item .role{font-weight:600} .cv-item .meta{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em; color:var(--muted)}
+.cv-links a{display:inline-block; margin:0 18px 6px 0}
+@media (max-width:620px){ .cv-row{grid-template-columns:1fr; gap:6px} }
 
 /* ---------------- callouts / tables ---------------- */
 .callout{background:var(--panel); border:1px solid var(--line); border-left:2px solid var(--line-strong);
