@@ -8,19 +8,25 @@
    Neutrals are eye-picked (paper/ink are pigment-world colors).
    ============================================================ */
 :root{
-  --bg:#E7DCC2;            /* paper */
-  --panel:#F0E8D2;
-  --panel2:#F8F2E2;
-  --line:#C8B894;          /* hairlines */
-  --text:#1B150D;          /* carbon ink */
-  --muted:#6E614A;
-  --acc:#8A4F0C;           /* burnt-amber: links, interactive */
-  --acc-bright:#A35E0E;
-  --mark:#4A3D28;          /* marks: tags, active nav, ¶, CAUTION */
-  --mark-bright:#1B150D;
-  --dot:rgba(70,55,30,.18);/* breadboard dot grid */
-  --codebg:#EFE6CD;
-  --rulebg:#0E0B06;        /* spectral-rule plate */
+  /* CONCRETE & INK — Swiss/International typographic, architectural monochrome.
+     No chromatic accent: emphasis comes from type, grid, hairline rules, and
+     material photography. (Neutrals eye-picked; --w-* spectral values below are
+     physics-pegged and untouched.) */
+  --bg:#E5E4E0;            /* concrete, light */
+  --panel:#EFEEEB;         /* raised surface */
+  --panel2:#D9D8D3;        /* inset / secondary surface */
+  --line:#BFBEB8;          /* hairline (light) */
+  --line-strong:#16181A;   /* structural ink hairline */
+  --text:#16181A;          /* ink — near-black, faintly cool */
+  --muted:#6B6A65;         /* secondary concrete grey */
+  --concrete:#9A9994;      /* mid grey */
+  --acc:#16181A;           /* interactive = ink (monochrome; affordance via weight/underline) */
+  --acc-bright:#000000;
+  --mark:#16181A;          /* marks: tags, active nav */
+  --mark-bright:#16181A;
+  --dot:rgba(40,42,46,.05);/* (legacy token; grid background retired) */
+  --codebg:#DDDCD7;
+  --rulebg:#15161A;        /* dark plate for tool canvases (intentional inversion) */
 
   /* wavelength-pegged reference colors (clip-mapped sRGB) */
   --w-405:#7C00FF;  /* GaN violet        */

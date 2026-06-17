@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import SpectralRule from '../components/SpectralRule.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../config';
@@ -14,15 +13,14 @@ const featured = projects.slice(0, 6);
     <p class="eyebrow">{SITE.eyebrow}</p>
     <h1>Multidisciplinary R&amp;D scientist &amp; engineer.</h1>
     <p class="bio">{SITE.bio.replace('Multidisciplinary R&D scientist & engineer experienced in ', 'Experienced in ')}</p>
-    <SpectralRule />
   </section>
 
-  <p class="section-label"><span class="n">¶</span> FEATURED WORK · <a href="/projects/">ALL PROJECTS →</a></p>
+  <p class="section-label"><span class="n">01</span> Selected work <a href="/projects/">All projects →</a></p>
   <section class="grid">
     {featured.map((p) => <ProjectCard project={p} />)}
   </section>
 
-  <p class="section-label"><span class="n">¶</span> TOOLS</p>
+  <p class="section-label"><span class="n">02</span> Tools</p>
   <section class="grid">
     <article class="card"><a class="cardlink" href="/tools/spectra/">
       <div class="pad" style="padding-top:16px">
@@ -36,6 +34,13 @@ const featured = projects.slice(0, 6);
         <span class="tag">TOOL</span>
         <h3>Spectrometer Calibration Calculator</h3>
         <p>Pixel→wavelength polynomial fits in a numerically stable basis, with coefficient uncertainties.</p>
+      </div></a>
+    </article>
+    <article class="card"><a class="cardlink" href="/tools/libs/">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">TOOL</span>
+        <h3>LIBS Analyzer</h3>
+        <p>Laser-induced breakdown spectroscopy: NIST line matching, transparent elemental confidence, plasma temperature, and calibration-free composition. All client-side.</p>
       </div></a>
     </article>
   </section>
