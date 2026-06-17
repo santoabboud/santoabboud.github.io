@@ -51,11 +51,11 @@ export function initLibsApp(root) {
     spectrum: null, proc: null, matchIndex: null, matcher: null, manifest: null,
     results: [], selected: new Set(), lineCache: new Map(),
     view: { min: 200, max: 1100 }, drag: null, raf: 0,
-    settings: { sigmaCal: 0.05, k: 5, snipIter: 25, instrumentFWHM: 0.4, stages: new Set([1, 2, 3]) },
-    active: null,                 // Set of symbols, or null = all
-    ptMode: 'all',                // 'all' | preset name | 'custom'
-    custom: { include: new Set(), exclude: new Set() },
+    settings: { sigmaCal: 0.15, k: 5, snipIter: 25, instrumentFWHM: 0.4, stages: new Set([1, 2, 3]) },
+    enabled: new Set(ELEMENTS.map((e) => e.s)),  // active element universe (the prior)
+    preset: 'all',
   };
+  const ALL_SYMS = ELEMENTS.map((e) => e.s);
   const PAD_L = 54, PAD_R = 14, PAD_T = 12, AXIS_H = 30;
   const setStatus = (m) => { statusEl.textContent = m; };
 
@@ -110,6 +110,7 @@ export function initLibsApp(root) {
     if (!p.nPoints) { setStatus('Could not parse spectrum: ' + (p.warnings[0] || 'no data')); return; }
     if (p.warnings.length) setStatus(p.warnings.join(' '));
     setSpectrum(p.lambda_nm, p.intensity, file.name);
+    runAnalysis();
   }
 
   async function loadSample(name) {
@@ -131,19 +132,13 @@ export function initLibsApp(root) {
     const g = () => Math.sqrt(-2 * Math.log(rnd() || 1e-9)) * Math.cos(2 * Math.PI * rnd());
     for (let i = 0; i < lam.length; i++) I[i] = 400 + 250 * Math.exp(-((lam[i] - 430) ** 2) / (2 * 90 ** 2)) + spec.intensity[i] * S + 18 * g();
     setSpectrum(lam, I, name + ' (synthetic)');
+    runAnalysis();
   }
 
   /* ---------------- analysis ---------------- */
+  // null = no restriction (all enabled); else the enabled subset (the prior).
   function activeElements() {
-    if (state.ptMode === 'all') return null;
-    if (state.ptMode === 'custom') {
-      const base = new Set(ELEMENTS.map((e) => e.s));
-      for (const e of state.custom.exclude) base.delete(e);
-      // if include set is non-empty, restrict to it (minus excludes)
-      if (state.custom.include.size) return new Set([...state.custom.include].filter((e) => !state.custom.exclude.has(e)));
-      return base;
-    }
-    return new Set(PRESETS[state.ptMode]);
+    return state.enabled.size >= ALL_SYMS.length ? null : new Set(state.enabled);
   }
 
   async function runAnalysis() {
@@ -175,7 +170,7 @@ export function initLibsApp(root) {
         <td><span class="confbar" style="--c:${(r.confidence * 100).toFixed(0)}%;--col:${confColor(r.confidence)}"></span>${(r.confidence * 100).toFixed(0)}%</td>
         <td>${r.nPeaksMatched}</td><td>${r.nStrongPresent}/${r.nStrong}</td>
         <td>${r.C_coinc.toFixed(2)}</td><td>${r.C_strong.toFixed(2)}</td>
-        <td>${r.C_boltz.toFixed(2)}</td><td>${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}</td></tr>`).join('')}</tbody></table>`;
+        <td>${r.C_boltz != null ? r.C_boltz.toFixed(2) : '—'}</td><td>${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}</td></tr>`).join('')}</tbody></table>`;
     resultsEl.querySelectorAll('[data-ovl]').forEach((cb) => cb.onchange = () => toggleOverlay(cb.dataset.ovl, cb.checked));
   }
 
@@ -196,34 +191,32 @@ export function initLibsApp(root) {
     renderResults(); requestDraw();
   }
 
-  /* ---------------- periodic table pre-select ---------------- */
+  /* ---------------- periodic-table pre-select ----------------
+     One clear model: each cell is enabled (in the active set) or not. Presets
+     set the enabled set; clicking a cell toggles it and switches to "custom". */
+  const countEl = $('[data-pt-count]');
+  function setPreset(p) {
+    state.preset = p;
+    root.querySelectorAll('[data-preset]').forEach((x) => x.classList.toggle('active', x.dataset.preset === p));
+  }
   function renderPT() {
     ptEl.querySelectorAll('button[data-sym]').forEach((b) => {
-      const s = b.dataset.sym;
-      let st = 'in';
-      if (state.ptMode === 'custom') {
-        if (state.custom.exclude.has(s)) st = 'out';
-        else if (state.custom.include.size && !state.custom.include.has(s)) st = 'dim';
-      } else if (state.ptMode !== 'all') {
-        st = PRESETS[state.ptMode].includes(s) ? 'in' : 'dim';
-      }
-      b.dataset.state = st;
+      const on = state.enabled.has(b.dataset.sym);
+      b.dataset.state = on ? 'in' : 'dim';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    if (countEl) countEl.textContent = state.enabled.size >= ALL_SYMS.length
+      ? 'all elements' : `${state.enabled.size} elements`;
   }
   for (const el of ELEMENTS) {
     const b = document.createElement('button');
     b.dataset.sym = el.s; b.className = 'pt-cell'; b.title = el.n; b.textContent = el.s;
     b.style.gridRow = el.r; b.style.gridColumn = el.c;
     b.onclick = () => {
-      state.ptMode = 'custom';
-      const inc = state.custom.include, exc = state.custom.exclude, s = el.s;
-      // cycle: neutral -> include -> exclude -> neutral
-      if (!inc.has(s) && !exc.has(s)) inc.add(s);
-      else if (inc.has(s)) { inc.delete(s); exc.add(s); }
-      else exc.delete(s);
-      $('[data-preset].active')?.classList.remove('active');
-      $('[data-preset="custom"]')?.classList.add('active');
+      state.enabled.has(el.s) ? state.enabled.delete(el.s) : state.enabled.add(el.s);
+      setPreset(null);            // manual edit => custom (no preset highlighted)
       renderPT();
+      if (state.proc && state.matcher) runAnalysis();   // keep results in sync
     };
     ptEl.appendChild(b);
   }
@@ -320,16 +313,27 @@ export function initLibsApp(root) {
   sampleSel.onchange = () => { if (sampleSel.value) loadSample(sampleSel.value); };
   $('[data-run]').onclick = runAnalysis;
 
+  const reanalyze = () => { if (state.proc && state.matcher) runAnalysis(); };
   const sig = $('[data-sigma]'), sigOut = $('[data-sigma-out]');
-  sig.oninput = () => { state.settings.sigmaCal = +sig.value; sigOut.textContent = (+sig.value * 1000).toFixed(0) + ' pm'; };
+  const showSig = () => { sigOut.textContent = (state.settings.sigmaCal * 1000).toFixed(0) + ' pm'; };
+  sig.oninput = () => { state.settings.sigmaCal = +sig.value; showSig(); };
+  sig.onchange = reanalyze;
   const kIn = $('[data-thresh]'), kOut = $('[data-thresh-out]');
-  kIn.oninput = () => { state.settings.k = +kIn.value; kOut.textContent = kIn.value + 'σ'; if (state.spectrum) runPreprocess(); requestDraw(); };
-  $('[data-profile]').onchange = (e) => { state.settings.instrumentFWHM = PROFILES[e.target.value] ?? 0.4; };
-  root.querySelectorAll('[data-stage]').forEach((cb) => cb.onchange = () => { cb.checked ? state.settings.stages.add(+cb.dataset.stage) : state.settings.stages.delete(+cb.dataset.stage); requestDraw(); });
+  kIn.oninput = () => { state.settings.k = +kIn.value; kOut.textContent = kIn.value + 'σ'; if (state.spectrum) { runPreprocess(); requestDraw(); } };
+  kIn.onchange = reanalyze;
+  $('[data-profile]').onchange = (e) => {
+    const fwhm = PROFILES[e.target.value] ?? 0.4;
+    state.settings.instrumentFWHM = fwhm;
+    state.settings.sigmaCal = fwhm >= 0.1 ? 0.15 : 0.02;   // match tolerance ~ resolution
+    sig.value = state.settings.sigmaCal; showSig();
+    reanalyze();
+  };
+  root.querySelectorAll('[data-stage]').forEach((cb) => cb.onchange = () => { cb.checked ? state.settings.stages.add(+cb.dataset.stage) : state.settings.stages.delete(+cb.dataset.stage); requestDraw(); reanalyze(); });
   root.querySelectorAll('[data-preset]').forEach((b) => b.onclick = () => {
-    root.querySelectorAll('[data-preset]').forEach((x) => x.classList.remove('active')); b.classList.add('active');
-    state.ptMode = b.dataset.preset; if (state.ptMode === 'all') { state.custom.include.clear(); state.custom.exclude.clear(); }
-    renderPT();
+    const p = b.dataset.preset;
+    state.enabled = new Set(p === 'all' ? ALL_SYMS : PRESETS[p].filter((s) => ALL_SYMS.includes(s)));
+    setPreset(p); renderPT();
+    if (state.proc) runAnalysis();   // re-rank with the new prior
   });
   $('[data-export]').onclick = exportCSV;
 
@@ -341,5 +345,5 @@ export function initLibsApp(root) {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'libs_identification.csv'; a.click();
   }
 
-  renderPT(); requestDraw();
+  setPreset('all'); renderPT(); requestDraw();
 }
