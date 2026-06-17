@@ -4,3 +4,4 @@ dist/
 _staging/
 *.log
 SESSION_STATE.json
+scripts/_nist_cache/
