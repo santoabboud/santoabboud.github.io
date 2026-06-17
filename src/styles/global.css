@@ -50,14 +50,8 @@ a.wordmark:hover{text-decoration:none; opacity:.7}
 
 /* photonics signature: a precise, labelled visible-spectrum reference —
    the one place the full spectrum appears, deliberately (not decoration). */
-.spectral{max-width:780px; padding-top:22px}
-.spectral-bar{position:relative; height:9px; background:var(--spectral-gradient)}
-.spectral-bar .tick{position:absolute; top:0; height:9px; width:1px; background:rgba(0,0,0,.55)}
-.spectral-bar .tick span{position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
-  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.05em; color:var(--text); white-space:nowrap}
-.spectral-cap{display:flex; justify-content:space-between; margin-top:8px;
-  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.13em;
-  text-transform:uppercase; color:var(--muted)}
+.spectral{max-width:780px; padding-top:6px}
+.spectral-bar{height:8px; background:var(--spectral-gradient)}  /* mood element, unlabelled */
 .specrule{display:none}  /* legacy chunky rule retired */
 
 /* ---------------- section labels ---------------- */
