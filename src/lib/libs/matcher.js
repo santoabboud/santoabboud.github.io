@@ -133,21 +133,24 @@ export function identifyElements(peaks, matcher, opts = {}) {
     const hits = perElem.get(el) || [];
     const k = hits.length;                              // distinct peaks matched (<= nPeaks)
 
-    // C_coinc: per peak, P(element has a line within tol) ~ min(1, 2*tol*density)
-    const pHit = Math.min(1, 2 * tolTyp * (nLines / W));
-    const mu = peaks.length * pHit;
-    const pCoinc = poissonSF(k, mu);
-    const C_coinc = k >= 1 ? 1 - pCoinc : 0;
-
-    // C_strong: are the expected-strongest lines present (a peak within tol)?
+    // Expected-strongest lines (the ones we'd actually detect if present).
     const withConst = lines.filter((L) => L.Aki != null && L.Ek != null && L.gk != null && L.gk * L.Aki > 0);
     const top = withConst.map((L) => ({ L, s: strength(L) })).sort((a, b) => b.s - a.s).slice(0, strongTopK);
-    const matchedLineSet = new Set(hits.map((h) => h.line.lam));
     const present = (L) => {
-      // a top line is "present" if some matched peak's attributed line is ~it
       for (const h of hits) if (Math.abs(h.line.lam - L.lam) < tolTyp + 1e-9) return true;
       return false;
     };
+
+    // C_coinc: do the element's STRONG lines appear more than by chance? Using
+    // strong lines (not the whole catalog) is the correct baseline -- a weak-
+    // line-heavy catalog must not inflate the chance expectation. A present
+    // element's strong lines are highly surprising vs a per-line chance ~2%.
+    const pChanceLine = Math.min(1, 2 * tolTyp * (peaks.length / W));
+    const kStrong = top.reduce((n, { L }) => n + (present(L) ? 1 : 0), 0);
+    const muStrong = top.length * pChanceLine;
+    const C_coinc = top.length ? 1 - poissonSF(kStrong, muStrong) : 0;
+
+    // C_strong: intensity-weighted recall of the strongest lines.
     let sTot = 0, sMatched = 0;
     for (const { L, s } of top) { sTot += s; if (present(L)) sMatched += s; }
     const C_strong = sTot > 0 ? sMatched / sTot : 0;
@@ -174,7 +177,8 @@ export function identifyElements(peaks, matcher, opts = {}) {
 
     out.push({
       element: el, confidence: pr * gm, nPeaksMatched: k, nLinesInRange: nLines,
-      muChance: mu, pCoincidence: pCoinc, C_coinc, C_strong, C_boltz,
+      nStrongPresent: kStrong, nStrong: top.length, muStrongChance: muStrong,
+      C_coinc, C_strong, C_boltz,
       boltzR2: fit.n >= 3 ? fit.r2 : null, fittedT_K: physicalT ? fittedT : null,
       prior: pr, peaks: hits,
     });
