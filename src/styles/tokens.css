@@ -20,9 +20,9 @@
   --text:#16181A;          /* ink — near-black, faintly cool */
   --muted:#6B6A65;         /* secondary concrete grey */
   --concrete:#9A9994;      /* mid grey */
-  --acc:#16181A;           /* interactive = ink (monochrome; affordance via weight/underline) */
-  --acc-bright:#000000;
-  --mark:#16181A;          /* marks: tags, active nav */
+  --acc:#5B1FE0;           /* photonics accent: laser violet (~405 nm UV-adjacent) */
+  --acc-bright:#7C00FF;    /* GaN violet — hover/active */
+  --mark:#16181A;          /* marks: tags, active nav text */
   --mark-bright:#16181A;
   --dot:rgba(40,42,46,.05);/* (legacy token; grid background retired) */
   --codebg:#DDDCD7;
