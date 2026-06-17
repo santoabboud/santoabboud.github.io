@@ -3,20 +3,45 @@ import Base from '../layouts/Base.astro';
 import { SITE } from '../config';
 ---
 <Base title="About">
-  <section class="hero" style="padding-top:40px">
+  <section class="hero" style="padding-top:clamp(40px,7vw,72px)">
     <h1>About</h1>
     <p class="bio">{SITE.bio}</p>
   </section>
-  <div class="prose">
-    <!-- TODO(BSA): longer story arc goes here once compiled. -->
-    <h2>Contact</h2>
-    <p>
-      Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
-      GitHub: <a href={SITE.links.github}>github.com/santoabboud</a><br />
-      LinkedIn: <a href={SITE.links.linkedin}>linkedin.com/in/bilal-abboud</a><br />
-      YouTube: <a href={SITE.links.youtube}>youtube.com/@ebislab</a>
-    </p>
-    {/* Activity (talks · judging · reviewing) renders here once entries
-        exist — see PROJECT_STATE.md. Intentionally absent until then. */}
+
+  <div class="cv">
+    <section class="cv-row">
+      <div class="cv-label">Focus</div>
+      <div class="cv-body">Lasers · Quantum photonics · Materials · Batteries · Semiconductor &amp; solid-state physics</div>
+    </section>
+
+    {/* Experience and Education render once real entries are supplied — kept
+        out until then (no fabricated credentials). Frame to populate:
+    <section class="cv-row"><div class="cv-label">Experience</div><div class="cv-body">
+      <p class="cv-item"><span class="role">Role</span> <span class="meta">Organization · 20XX–present</span></p>
+    </div></section>
+    <section class="cv-row"><div class="cv-label">Education</div><div class="cv-body">
+      <p class="cv-item"><span class="role">Degree, Field</span> <span class="meta">Institution · 20XX</span></p>
+    </div></section>
+    */}
+
+    <section class="cv-row">
+      <div class="cv-label">Selected work</div>
+      <div class="cv-body cv-links">
+        <a href="/projects/frankenscope/">The Frankenscope</a>
+        <a href="/projects/usb2000-firmware/">Ocean Optics USB2000 firmware</a>
+        <a href="/tools/libs/">LIBS Analyzer</a>
+        <a href="/tools/spectra/">Atomic Spectra Viewer</a>
+      </div>
+    </section>
+
+    <section class="cv-row">
+      <div class="cv-label">Contact</div>
+      <div class="cv-body cv-links">
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <a href={SITE.links.github}>GitHub</a>
+        <a href={SITE.links.linkedin}>LinkedIn</a>
+        <a href={SITE.links.youtube}>YouTube</a>
+      </div>
+    </section>
   </div>
 </Base>
