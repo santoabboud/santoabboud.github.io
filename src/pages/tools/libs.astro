@@ -1,0 +1,97 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="LIBS Analyzer" description="Client-side laser-induced breakdown spectroscopy analysis: NIST line matching, transparent elemental confidence, plasma temperature, and calibration-free composition.">
+  <section class="hero" style="padding-top:40px">
+    <h1>LIBS Analyzer</h1>
+    <p class="bio">Drop a spectrometer CSV (or load a synthetic sample). The tool removes the plasma continuum, finds emission peaks, matches them to 147,949 NIST ASD lines, and reports each element with an <em>auditable</em> confidence — coincidence-vs-chance × strong-line presence × Boltzmann consistency — plus a plasma temperature. Everything runs in your browser; your spectra are never uploaded.</p>
+  </section>
+
+  <div class="callout"><span class="lbl">METHOD &amp; CAVEATS</span>
+    Confidence is a transparent ranking score, not a calibrated probability — each component is shown. The coincidence guard penalizes line-rich elements that match by chance; the domain pre-select acts as a prior. Boltzmann temperatures assume optically-thin LTE and a flat (or pre-corrected) spectral response. NIST ASD v5.12 (DOI 10.18434/T4W30F); air wavelengths via Peck–Reeder. Provenance: <a href="/data/libs/_manifest.json">data manifest</a>.
+  </div>
+
+  <div data-libs>
+    <div class="libs-bar">
+      <label class="btn primary">LOAD CSV<input type="file" data-file accept=".csv,.txt,.tsv" hidden /></label>
+      <label class="note">or sample:
+        <select data-sample><option value="">— synthetic sample —</option></select>
+      </label>
+      <label class="note">profile:
+        <select data-profile>
+          <option value="HR4000">Ocean Optics HR4000 (0.4 nm)</option>
+          <option value="Monochromator">Monochromator (5 pm)</option>
+        </select>
+      </label>
+      <button class="btn primary" data-run style="margin-left:auto">▶ RUN ANALYSIS</button>
+      <button class="btn" data-export>EXPORT CSV</button>
+    </div>
+
+    <div class="sv-canvas-wrap" style="margin-top:8px">
+      <canvas data-canvas aria-label="LIBS spectrum. Scroll to zoom, drag to pan, double-click to reset."></canvas>
+      <div class="sv-tooltip" data-tooltip></div>
+    </div>
+    <p class="note" data-status style="margin-top:8px">Loading dataset manifest…</p>
+
+    <div class="libs-settings">
+      <label>uncertainty σ<sub>cal</sub>: <input type="range" data-sigma min="0.005" max="0.3" step="0.005" value="0.05" /> <span data-sigma-out>50 pm</span></label>
+      <label>detection: <input type="range" data-thresh min="2" max="10" step="1" value="5" /> <span data-thresh-out>5σ</span></label>
+      <span>stages:
+        <label><input type="checkbox" data-stage="1" checked /> I</label>
+        <label><input type="checkbox" data-stage="2" checked /> II</label>
+        <label><input type="checkbox" data-stage="3" checked /> III</label>
+      </span>
+    </div>
+
+    <div class="tool-panel" style="margin-top:18px">
+      <h2>Element pre-select <span class="note" style="font-weight:400">— prior on what's plausible</span></h2>
+      <div class="libs-presets">
+        <button class="btn active" data-preset="all">ALL</button>
+        <button class="btn" data-preset="metallurgy">METALLURGY</button>
+        <button class="btn" data-preset="minerals">MINERALS</button>
+        <button class="btn" data-preset="ceramics">CERAMICS</button>
+        <button class="btn" data-preset="batteries">BATTERIES</button>
+        <button class="btn" data-preset="custom">CUSTOM</button>
+      </div>
+      <p class="note" style="margin:8px 0 4px">Click cells to cycle <span style="color:var(--acc)">include</span> → <span style="color:var(--muted)">exclude</span> → neutral (switches to custom).</p>
+      <div class="pt-grid" data-pt aria-label="Periodic-table element pre-select"></div>
+    </div>
+
+    <div class="libs-cols">
+      <div class="tool-panel">
+        <h2>Identified elements</h2>
+        <div data-results><p class="note">Load a spectrum and run the analysis.</p></div>
+      </div>
+      <div class="tool-panel">
+        <h2>Plasma diagnostics</h2>
+        <div data-diagnostics><p class="note">Diagnostics appear after analysis.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .libs-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:4px}
+    .libs-bar label.btn{display:inline-flex;align-items:center}
+    .libs-settings{display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted)}
+    .libs-settings input[type=range]{vertical-align:middle}
+    .libs-settings label{display:flex;gap:6px;align-items:center}
+    .libs-presets{display:flex;flex-wrap:wrap;gap:6px}
+    .libs-presets .btn.active{background:var(--mark);border-color:var(--mark);color:var(--bg);font-weight:600}
+    .pt-cell[data-state="dim"]{opacity:.32}
+    .pt-cell[data-state="out"]{background:var(--codebg);border-color:var(--line);color:var(--muted);text-decoration:line-through}
+    .pt-cell[data-state="in"]{}
+    .libs-cols{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-top:18px}
+    @media (max-width:820px){ .libs-cols{grid-template-columns:1fr} }
+    .libs-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:11px}
+    .libs-table th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:4px 6px}
+    .libs-table td{padding:3px 6px;border-bottom:1px solid var(--codebg)}
+    .libs-table tr.sel{background:var(--codebg)}
+    .confbar{display:inline-block;width:54px;height:7px;border:1px solid var(--line);margin-right:6px;vertical-align:middle;
+      background:linear-gradient(90deg,var(--col) var(--c),transparent var(--c))}
+  </style>
+
+  <script>
+    import { initLibsApp } from '../../lib/libs/app.js';
+    initLibsApp(document.querySelector('[data-libs]'));
+  </script>
+</Base>

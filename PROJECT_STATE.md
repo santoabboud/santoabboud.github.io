@@ -36,15 +36,26 @@ Last updated: 2026-06-16 (session S2)
 ### F3: USB2000 image localization — STATUS: blocked on user photos
 - [ ] Receive 9 originals → strip_resize → swap per `usb2000-firmware/IMAGES_TODO.md` → set FIG.09 as cover
 ### F4: About story arc — STATUS: blocked on user copy
-### F5: NIST ASD scraper v2 — STATUS: queued (design approved S0/pre-compaction)
-λ_air+λ_vac, A_ki, E_i/E_k, g_i/g_k, stages, level tables, ionization
-energies. Prerequisite for F6.
-### F6: LIBS spectrum simulator — STATUS: queued (model approved)
-LTE Boltzmann+Saha, partition truncation at E_ion−ΔE, Voigt (Doppler ⊕
-instrument Gaussian; Stark Lorentzian via Konjević tables for workhorse
-lines + disclosed n_e-linear fallback), optional slab self-absorption.
-Validation: Boltzmann-plot inversion recovers T_e; Saha vs published H
-curves; Hβ Stark vs Griem.
+### F5: NIST ASD scraper v2 + dataset — STATUS: shipped (S3)
+Scrapers `scrape_nist_lines.py` (lines I–IV, 180–1100 nm, vacuum-canonical
+show_av=3) + `scrape_nist_levels.py` (levels+g+ionization limits). Build
+`build_libs_dataset.py` → `public/data/libs/` (99 elements, 147,949 lines,
+66,788 levels, 317 species; air via Peck–Reeder; columnar match index).
+ASD v5.12, DOI 10.18434/T4W30F. Raw cache gitignored (`scripts/_nist_cache/`).
+### F6: LTE forward model — STATUS: shipped (S3)
+`src/lib/libs/{constants,physics,wavelength,forward}.js`. Boltzmann+Saha,
+truncated partition functions, Voigt (exact convolution + pseudo-Voigt),
+Doppler/Stark, synthetic spectra. Validated: T_e recovery <0.5%, Na D 2:1,
+air conv <0.1 pm vs NIST. (Self-absorption slab + Konjević Stark tables:
+follow-up.)
+### F7: LIBS Analyzer (inverse) — STATUS: shipped (S3) — /tools/libs/
+`src/lib/libs/{ingest,preprocess,matcher,diagnostics,app.js}`. CSV ingest →
+SNIP/peak-fit → peak-centric NIST match → transparent confidence (coincidence
+× strong-line × Boltzmann) → T_e + CF-LIBS. CF-LIBS recovers known synthetic
+composition exactly. 58 tests green (`npm test`). UI build-validated; browser
+runtime smoke-test still advisable. NOT YET deployed (push is the hard stop).
+Follow-ups: n_e UI (Stark tables), annotated-PNG export, residual view,
+optional desktop (.exe) target reusing the DOM-free analysis core.
 
 ## Architectural notes
 ### Astro 6 content API (S1)
@@ -90,3 +101,19 @@ edgetrace_design_language_instruction_set.md, NOT in repo). Open question left
 with user: portrait photos center-crop in the flatter band — offered contain /
 text-forward alternatives. Build green (17 routes, 0 draft leakage). Deliverable:
 tarball S2 + regenerated single-file preview (S2).
+### S3 (2026-06-16)
+Built the LIBS analysis stack (user-directed; broad autonomy granted, deploy
+withheld). F5: probed live ASD endpoints (lines1.pl/energy1.pl — found single-
+species omits element/sp_num cols; multiple ionization "Limit" rows → take the
+lowest as χ), ran throttled/cached/resumable scrapes (lines 99/99 ok 0 err;
+levels 316 species 0 err), built v2 dataset + columnar match index. F6: physics
+core from CODATA (self-verifying constants), exact+pseudo Voigt, Peck–Reeder
+air. F7: ingest (Ocean-Optics format, unit/order autodetect), SNIP/MAD/SG +
+weighted-log-parabola centroids (<15 pm), PEAK-CENTRIC matcher with strong-line
+coincidence model (fixed a full-universe false positive: Zr displacing Na),
+CF-LIBS (recovers known composition exactly), canvas UI at /tools/libs/. Set up
+portable Node (none installed). 58 tests green; astro build green (18 routes).
+On branch `libs-app`, NOT pushed. Discussed a desktop (.exe) live-acquisition
+target — analysis core is DOM-free so it ports verbatim; main work is the
+per-vendor (Ocean Optics SeaBreeze / Avantes DLL / custom) acquisition layer +
+gated-trigger sync. Deliverable: branch libs-app (7 commits).

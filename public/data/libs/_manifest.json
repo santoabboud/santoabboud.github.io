@@ -1,0 +1,1133 @@
+{
+ "source": "NIST ASD v5.12 (lines1.pl + energy1.pl)",
+ "asd_version": "5.12",
+ "wavelength": "air derived from vacuum via Peck & Reeder (1972)",
+ "energy_unit": "cm-1",
+ "line_columns": [
+  "lam_air",
+  "lam_vac",
+  "Aki",
+  "Ek",
+  "gk",
+  "Ei",
+  "gi",
+  "int",
+  "acc",
+  "src(0=obs,1=Ritz)"
+ ],
+ "citation": "Kramida, A., Ralchenko, Yu., Reader, J. and NIST ASD Team (2024). NIST ASD v5.12, DOI 10.18434/T4W30F.",
+ "elements": [
+  {
+   "sym": "H",
+   "Z": 1,
+   "stages": [
+    1
+   ],
+   "lines": 173,
+   "has_levels": true
+  },
+  {
+   "sym": "He",
+   "Z": 2,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 379,
+   "has_levels": true
+  },
+  {
+   "sym": "Li",
+   "Z": 3,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 579,
+   "has_levels": true
+  },
+  {
+   "sym": "Be",
+   "Z": 4,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 892,
+   "has_levels": true
+  },
+  {
+   "sym": "B",
+   "Z": 5,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 715,
+   "has_levels": true
+  },
+  {
+   "sym": "C",
+   "Z": 6,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2019,
+   "has_levels": true
+  },
+  {
+   "sym": "N",
+   "Z": 7,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1536,
+   "has_levels": true
+  },
+  {
+   "sym": "O",
+   "Z": 8,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2432,
+   "has_levels": true
+  },
+  {
+   "sym": "F",
+   "Z": 9,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 351,
+   "has_levels": true
+  },
+  {
+   "sym": "Ne",
+   "Z": 10,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2841,
+   "has_levels": true
+  },
+  {
+   "sym": "Na",
+   "Z": 11,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1636,
+   "has_levels": true
+  },
+  {
+   "sym": "Mg",
+   "Z": 12,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1033,
+   "has_levels": true
+  },
+  {
+   "sym": "Al",
+   "Z": 13,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1074,
+   "has_levels": true
+  },
+  {
+   "sym": "Si",
+   "Z": 14,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1331,
+   "has_levels": true
+  },
+  {
+   "sym": "P",
+   "Z": 15,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 333,
+   "has_levels": true
+  },
+  {
+   "sym": "S",
+   "Z": 16,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1744,
+   "has_levels": true
+  },
+  {
+   "sym": "Cl",
+   "Z": 17,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 573,
+   "has_levels": true
+  },
+  {
+   "sym": "Ar",
+   "Z": 18,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2715,
+   "has_levels": true
+  },
+  {
+   "sym": "K",
+   "Z": 19,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 338,
+   "has_levels": true
+  },
+  {
+   "sym": "Ca",
+   "Z": 20,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 613,
+   "has_levels": true
+  },
+  {
+   "sym": "Sc",
+   "Z": 21,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2779,
+   "has_levels": true
+  },
+  {
+   "sym": "Ti",
+   "Z": 22,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 5070,
+   "has_levels": true
+  },
+  {
+   "sym": "V",
+   "Z": 23,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 6384,
+   "has_levels": true
+  },
+  {
+   "sym": "Cr",
+   "Z": 24,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 8037,
+   "has_levels": true
+  },
+  {
+   "sym": "Mn",
+   "Z": 25,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 3821,
+   "has_levels": true
+  },
+  {
+   "sym": "Fe",
+   "Z": 26,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 18047,
+   "has_levels": true
+  },
+  {
+   "sym": "Co",
+   "Z": 27,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 3758,
+   "has_levels": true
+  },
+  {
+   "sym": "Ni",
+   "Z": 28,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 931,
+   "has_levels": true
+  },
+  {
+   "sym": "Cu",
+   "Z": 29,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2747,
+   "has_levels": true
+  },
+  {
+   "sym": "Zn",
+   "Z": 30,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 308,
+   "has_levels": true
+  },
+  {
+   "sym": "Ga",
+   "Z": 31,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 370,
+   "has_levels": true
+  },
+  {
+   "sym": "Ge",
+   "Z": 32,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 274,
+   "has_levels": true
+  },
+  {
+   "sym": "As",
+   "Z": 33,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 110,
+   "has_levels": true
+  },
+  {
+   "sym": "Se",
+   "Z": 34,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 112,
+   "has_levels": true
+  },
+  {
+   "sym": "Br",
+   "Z": 35,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 306,
+   "has_levels": true
+  },
+  {
+   "sym": "Kr",
+   "Z": 36,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 2339,
+   "has_levels": true
+  },
+  {
+   "sym": "Rb",
+   "Z": 37,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1122,
+   "has_levels": true
+  },
+  {
+   "sym": "Sr",
+   "Z": 38,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1187,
+   "has_levels": true
+  },
+  {
+   "sym": "Y",
+   "Z": 39,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 532,
+   "has_levels": true
+  },
+  {
+   "sym": "Zr",
+   "Z": 40,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 973,
+   "has_levels": true
+  },
+  {
+   "sym": "Nb",
+   "Z": 41,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1003,
+   "has_levels": true
+  },
+  {
+   "sym": "Mo",
+   "Z": 42,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1073,
+   "has_levels": true
+  },
+  {
+   "sym": "Tc",
+   "Z": 43,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 640,
+   "has_levels": true
+  },
+  {
+   "sym": "Ru",
+   "Z": 44,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 620,
+   "has_levels": true
+  },
+  {
+   "sym": "Rh",
+   "Z": 45,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 544,
+   "has_levels": true
+  },
+  {
+   "sym": "Pd",
+   "Z": 46,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 152,
+   "has_levels": true
+  },
+  {
+   "sym": "Ag",
+   "Z": 47,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 464,
+   "has_levels": true
+  },
+  {
+   "sym": "Cd",
+   "Z": 48,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 225,
+   "has_levels": true
+  },
+  {
+   "sym": "In",
+   "Z": 49,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 756,
+   "has_levels": true
+  },
+  {
+   "sym": "Sn",
+   "Z": 50,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 398,
+   "has_levels": true
+  },
+  {
+   "sym": "Sb",
+   "Z": 51,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 195,
+   "has_levels": true
+  },
+  {
+   "sym": "Te",
+   "Z": 52,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 256,
+   "has_levels": true
+  },
+  {
+   "sym": "I",
+   "Z": 53,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 932,
+   "has_levels": true
+  },
+  {
+   "sym": "Xe",
+   "Z": 54,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 3117,
+   "has_levels": true
+  },
+  {
+   "sym": "Cs",
+   "Z": 55,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 2161,
+   "has_levels": true
+  },
+  {
+   "sym": "Ba",
+   "Z": 56,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 655,
+   "has_levels": true
+  },
+  {
+   "sym": "La",
+   "Z": 57,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 788,
+   "has_levels": true
+  },
+  {
+   "sym": "Ce",
+   "Z": 58,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 959,
+   "has_levels": true
+  },
+  {
+   "sym": "Pr",
+   "Z": 59,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1109,
+   "has_levels": true
+  },
+  {
+   "sym": "Nd",
+   "Z": 60,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 735,
+   "has_levels": true
+  },
+  {
+   "sym": "Pm",
+   "Z": 61,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 424,
+   "has_levels": true
+  },
+  {
+   "sym": "Sm",
+   "Z": 62,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 797,
+   "has_levels": true
+  },
+  {
+   "sym": "Eu",
+   "Z": 63,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 797,
+   "has_levels": true
+  },
+  {
+   "sym": "Gd",
+   "Z": 64,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 1013,
+   "has_levels": true
+  },
+  {
+   "sym": "Tb",
+   "Z": 65,
+   "stages": [
+    1,
+    2,
+    4
+   ],
+   "lines": 681,
+   "has_levels": true
+  },
+  {
+   "sym": "Dy",
+   "Z": 66,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 651,
+   "has_levels": true
+  },
+  {
+   "sym": "Ho",
+   "Z": 67,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 566,
+   "has_levels": true
+  },
+  {
+   "sym": "Er",
+   "Z": 68,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 637,
+   "has_levels": true
+  },
+  {
+   "sym": "Tm",
+   "Z": 69,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 991,
+   "has_levels": true
+  },
+  {
+   "sym": "Yb",
+   "Z": 70,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 724,
+   "has_levels": true
+  },
+  {
+   "sym": "Lu",
+   "Z": 71,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 266,
+   "has_levels": true
+  },
+  {
+   "sym": "Hf",
+   "Z": 72,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 5083,
+   "has_levels": true
+  },
+  {
+   "sym": "Ta",
+   "Z": 73,
+   "stages": [
+    1,
+    2,
+    4
+   ],
+   "lines": 681,
+   "has_levels": true
+  },
+  {
+   "sym": "W",
+   "Z": 74,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 10801,
+   "has_levels": true
+  },
+  {
+   "sym": "Re",
+   "Z": 75,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 832,
+   "has_levels": true
+  },
+  {
+   "sym": "Os",
+   "Z": 76,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 751,
+   "has_levels": true
+  },
+  {
+   "sym": "Ir",
+   "Z": 77,
+   "stages": [
+    1,
+    2,
+    4
+   ],
+   "lines": 888,
+   "has_levels": true
+  },
+  {
+   "sym": "Pt",
+   "Z": 78,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 2050,
+   "has_levels": true
+  },
+  {
+   "sym": "Au",
+   "Z": 79,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 243,
+   "has_levels": true
+  },
+  {
+   "sym": "Hg",
+   "Z": 80,
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "lines": 1033,
+   "has_levels": true
+  },
+  {
+   "sym": "Tl",
+   "Z": 81,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 121,
+   "has_levels": true
+  },
+  {
+   "sym": "Pb",
+   "Z": 82,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 215,
+   "has_levels": true
+  },
+  {
+   "sym": "Bi",
+   "Z": 83,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 234,
+   "has_levels": true
+  },
+  {
+   "sym": "Po",
+   "Z": 84,
+   "stages": [
+    1
+   ],
+   "lines": 37,
+   "has_levels": true
+  },
+  {
+   "sym": "At",
+   "Z": 85,
+   "stages": [
+    1
+   ],
+   "lines": 2,
+   "has_levels": true
+  },
+  {
+   "sym": "Rn",
+   "Z": 86,
+   "stages": [
+    1
+   ],
+   "lines": 65,
+   "has_levels": true
+  },
+  {
+   "sym": "Fr",
+   "Z": 87,
+   "stages": [
+    1
+   ],
+   "lines": 149,
+   "has_levels": true
+  },
+  {
+   "sym": "Ra",
+   "Z": 88,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 204,
+   "has_levels": true
+  },
+  {
+   "sym": "Ac",
+   "Z": 89,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 480,
+   "has_levels": true
+  },
+  {
+   "sym": "Th",
+   "Z": 90,
+   "stages": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "lines": 15916,
+   "has_levels": true
+  },
+  {
+   "sym": "Pa",
+   "Z": 91,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 85,
+   "has_levels": true
+  },
+  {
+   "sym": "U",
+   "Z": 92,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 436,
+   "has_levels": true
+  },
+  {
+   "sym": "Np",
+   "Z": 93,
+   "stages": [
+    1
+   ],
+   "lines": 90,
+   "has_levels": true
+  },
+  {
+   "sym": "Pu",
+   "Z": 94,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 271,
+   "has_levels": true
+  },
+  {
+   "sym": "Am",
+   "Z": 95,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 94,
+   "has_levels": true
+  },
+  {
+   "sym": "Cm",
+   "Z": 96,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 131,
+   "has_levels": true
+  },
+  {
+   "sym": "Bk",
+   "Z": 97,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 155,
+   "has_levels": true
+  },
+  {
+   "sym": "Cf",
+   "Z": 98,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 36,
+   "has_levels": true
+  },
+  {
+   "sym": "Es",
+   "Z": 99,
+   "stages": [
+    1,
+    2
+   ],
+   "lines": 23,
+   "has_levels": true
+  }
+ ],
+ "total_lines": 147949,
+ "total_levels": 66788,
+ "n_species_indexed": 317
+}
