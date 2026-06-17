@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node scripts/test_calibration.mjs && node scripts/test_libs_physics.mjs && node scripts/test_libs_wavelength.mjs && node scripts/test_libs_forward.mjs && node scripts/test_libs_ingest.mjs && node scripts/test_libs_matcher.mjs"
+    "test": "node scripts/test_calibration.mjs && node scripts/test_libs_physics.mjs && node scripts/test_libs_wavelength.mjs && node scripts/test_libs_forward.mjs && node scripts/test_libs_ingest.mjs && node scripts/test_libs_matcher.mjs && node scripts/test_libs_diagnostics.mjs"
   },
   "keywords": [],
   "author": "",
