@@ -34,7 +34,7 @@ import Base from '../../layouts/Base.astro';
     <p class="note" data-status style="margin-top:8px">Loading dataset manifest…</p>
 
     <div class="libs-settings">
-      <label>uncertainty σ<sub>cal</sub>: <input type="range" data-sigma min="0.005" max="0.3" step="0.005" value="0.05" /> <span data-sigma-out>50 pm</span></label>
+      <label>uncertainty σ<sub>cal</sub>: <input type="range" data-sigma min="0.005" max="0.3" step="0.005" value="0.15" /> <span data-sigma-out>150 pm</span></label>
       <label>detection: <input type="range" data-thresh min="2" max="10" step="1" value="5" /> <span data-thresh-out>5σ</span></label>
       <span>stages:
         <label><input type="checkbox" data-stage="1" checked /> I</label>
@@ -51,9 +51,9 @@ import Base from '../../layouts/Base.astro';
         <button class="btn" data-preset="minerals">MINERALS</button>
         <button class="btn" data-preset="ceramics">CERAMICS</button>
         <button class="btn" data-preset="batteries">BATTERIES</button>
-        <button class="btn" data-preset="custom">CUSTOM</button>
+        <span class="note" data-pt-count style="margin-left:auto">all elements</span>
       </div>
-      <p class="note" style="margin:8px 0 4px">Click cells to cycle <span style="color:var(--acc)">include</span> → <span style="color:var(--muted)">exclude</span> → neutral (switches to custom).</p>
+      <p class="note" style="margin:8px 0 4px">Pick a preset, then click cells to toggle individual elements on/off. Dimmed elements are excluded from matching. Narrowing to what's plausible for your sample sharpens the results.</p>
       <div class="pt-grid" data-pt aria-label="Periodic-table element pre-select"></div>
     </div>
 

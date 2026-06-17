@@ -156,9 +156,10 @@ export function identifyElements(peaks, matcher, opts = {}) {
     const C_strong = sTot > 0 ? sMatched / sTot : 0;
 
     // C_boltz: one amplitude per matched peak vs its attributed line
+    // Clean-line Boltzmann plot -> T_e DIAGNOSTIC only (needs isolated peaks).
     const xs = [], ys = [];
     for (const h of hits) {
-      if (h.dominantFrac < 0.6) continue;            // clean (isolated) peaks only
+      if (h.dominantFrac < 0.6) continue;
       const L = h.line, I = h.peak.amplitude;
       if (L.Aki == null || L.Ek == null || L.gk == null || !(L.gk * L.Aki > 0) || !(I > 0)) continue;
       xs.push(L.Ek); ys.push(Math.log(I * L.lam / (L.gk * L.Aki)));
@@ -166,19 +167,26 @@ export function identifyElements(peaks, matcher, opts = {}) {
     const fit = linFit(xs, ys);
     const fittedT = fit.slope < 0 ? -1 / (KB_CM1_PER_K * fit.slope) : NaN;
     const physicalT = fittedT > 3000 && fittedT < 60000;
-    const C_boltz = (fit.n >= 3 && physicalT) ? Math.max(0, Math.min(1, fit.r2)) : 0.5;
+    const C_boltz = (fit.n >= 3 && physicalT) ? Math.max(0, Math.min(1, fit.r2)) : null;
 
     const pr = prior && prior.has(el) ? prior.get(el) : 1;
-    const wsum = w.coinc + w.strong + w.boltz;
-    const gm = Math.pow(
-      Math.pow(Math.max(C_coinc, 1e-6), w.coinc)
-      * Math.pow(Math.max(C_strong, 1e-6), w.strong)
-      * Math.pow(Math.max(C_boltz, 1e-6), w.boltz), 1 / wsum);
+    // Confidence rests on the two ACTIVE-SET-INDEPENDENT components: coincidence
+    // (more than chance) and strong-line presence. The clean-line Boltzmann is
+    // reported as a T_e diagnostic only -- it is too fragile at instrument
+    // resolution to score, and (via line isolation) would otherwise make the
+    // confidence depend on which other elements are pre-selected.
+    const comps = [[C_coinc, w.coinc], [C_strong, w.strong]];
+    const wsum = comps.reduce((s, c) => s + c[1], 0);
+    const gm = Math.pow(comps.reduce((p, [v, wt]) => p * Math.pow(Math.max(v, 1e-6), wt), 1), 1 / wsum);
+    // Corroboration: confidence needs several confirmed strong lines; a single
+    // chance-aligned line stays low. Saturates toward 1 as lines accumulate.
+    const evidence = kStrong / (kStrong + 1);
+    const confidence = pr * evidence * gm;
 
     out.push({
-      element: el, confidence: pr * gm, nPeaksMatched: k, nLinesInRange: nLines,
+      element: el, confidence, nPeaksMatched: k, nLinesInRange: nLines,
       nStrongPresent: kStrong, nStrong: top.length, muStrongChance: muStrong,
-      C_coinc, C_strong, C_boltz,
+      C_coinc, C_strong, C_boltz, evidence,
       boltzR2: fit.n >= 3 ? fit.r2 : null, fittedT_K: physicalT ? fittedT : null,
       prior: pr, peaks: hits,
     });
