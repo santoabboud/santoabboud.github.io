@@ -225,6 +225,11 @@ def main():
         print(f"  {sym:3s} Z={Z:3d}  lines={nlines:5d}  "
               f"levels_stages={len(lv_stages)}", flush=True)
 
+    # Sort the columnar match index globally by air wavelength so the matcher
+    # can binary-search candidate lines for each detected peak.
+    order = sorted(range(len(mi["lam_air"])), key=lambda i: mi["lam_air"][i])
+    for key in ("lam_air", "sp", "Aki", "Ek", "gk", "int"):
+        mi[key] = [mi[key][i] for i in order]
     with open(os.path.join(OUT, "_match_index.json"), "w") as f:
         json.dump(mi, f, separators=(",", ":"))
     with open(os.path.join(OUT, "_manifest.json"), "w") as f:
