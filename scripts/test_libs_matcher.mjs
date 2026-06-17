@@ -53,7 +53,7 @@ const ranked = identifyElements(det.peaks, M, {
 
 console.log('  rank element conf   peaksMatched/inRange C_coinc C_strong C_boltz  T_fit');
 for (const r of ranked.slice(0, 7)) {
-  console.log(`   ${r.element.padEnd(3)}  ${r.confidence.toFixed(3)}  ${String(r.nPeaksMatched).padStart(4)}/${String(r.nLinesInRange).padEnd(5)}  ${r.C_coinc.toFixed(2)}   ${r.C_strong.toFixed(2)}    ${r.C_boltz.toFixed(2)}   ${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}`);
+  console.log(`   ${r.element.padEnd(3)}  ${r.confidence.toFixed(3)}  ${String(r.nPeaksMatched).padStart(4)}/${String(r.nLinesInRange).padEnd(5)}  ${r.C_coinc.toFixed(2)}   ${r.C_strong.toFixed(2)}    ${r.C_boltz != null ? r.C_boltz.toFixed(2) : '—'}   ${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}`);
 }
 
 const conf = Object.fromEntries(ranked.map((r) => [r.element, r]));
