@@ -49,6 +49,93 @@ export function snipBaseline(y, iterations = 40, { lls = true } = {}) {
   return base;
 }
 
+/* Symmetric positive-definite pentadiagonal solve via banded LDL^T (Cholesky).
+   Bands: u0 = diag, u1[i] = A[i][i+1], u2[i] = A[i][i+2]. O(n). */
+function cholPentaSolve(u0, u1, u2, b) {
+  const n = b.length;
+  const p0 = new Float64Array(n), p1 = new Float64Array(n), p2 = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    p2[i] = i >= 2 ? u2[i - 2] / p0[i - 2] : 0;
+    p1[i] = i >= 1 ? (u1[i - 1] - p2[i] * p1[i - 1]) / p0[i - 1] : 0;  // l1[i-1], not l2
+    p0[i] = Math.sqrt(Math.max(u0[i] - p1[i] * p1[i] - p2[i] * p2[i], 1e-12));
+  }
+  const y = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    let s = b[i];
+    if (i >= 1) s -= p1[i] * y[i - 1];
+    if (i >= 2) s -= p2[i] * y[i - 2];
+    y[i] = s / p0[i];
+  }
+  const x = new Float64Array(n);
+  for (let i = n - 1; i >= 0; i--) {
+    let s = y[i];
+    if (i + 1 < n) s -= p1[i + 1] * x[i + 1];
+    if (i + 2 < n) s -= p2[i + 2] * x[i + 2];
+    x[i] = s / p0[i];
+  }
+  return x;
+}
+
+/**
+ * Asymmetric Least Squares baseline (Eilers & Boelens 2005): minimize
+ * sum w_i (y_i - z_i)^2 + lambda sum (D2 z)_i^2, with weights p above the
+ * baseline and (1-p) below, iterated. lambda sets smoothness; p the asymmetry.
+ * The penalty matrix D2^T D2 is pentadiagonal -> O(n) banded solve.
+ */
+export function alsBaseline(y, { lambda = 1e5, p = 0.01, iters = 10 } = {}) {
+  const n = y.length;
+  const d0 = new Float64Array(n), d1 = new Float64Array(n), d2 = new Float64Array(n);
+  for (let k = 0; k < n - 2; k++) {                  // accumulate D2^T D2 bands
+    const idx = [k, k + 1, k + 2], val = [1, -2, 1];
+    for (let a = 0; a < 3; a++) for (let c = 0; c < 3; c++) {
+      const i = idx[a], j = idx[c], v = val[a] * val[c];
+      if (j === i) d0[i] += v; else if (j === i + 1) d1[i] += v; else if (j === i + 2) d2[i] += v;
+    }
+  }
+  const w = new Float64Array(n).fill(1);
+  let z = new Float64Array(n);
+  const u0 = new Float64Array(n), u1 = new Float64Array(n), u2 = new Float64Array(n), b = new Float64Array(n);
+  for (let it = 0; it < iters; it++) {
+    for (let i = 0; i < n; i++) { u0[i] = w[i] + lambda * d0[i]; u1[i] = lambda * d1[i]; u2[i] = lambda * d2[i]; b[i] = w[i] * y[i]; }
+    z = cholPentaSolve(u0, u1, u2, b);
+    for (let i = 0; i < n; i++) w[i] = y[i] > z[i] ? p : (1 - p);
+  }
+  return z;
+}
+
+/** Iterative-polynomial baseline: fit a low-order polynomial, clip points above
+ *  it (peaks), refit; converges to the continuum. x = wavelength axis. */
+export function polynomialBaseline(x, y, { order = 5, iters = 8 } = {}) {
+  const n = y.length, m = order + 1;
+  const x0 = x[0], x1 = x[n - 1], mid = (x0 + x1) / 2, half = (x1 - x0) / 2 || 1;
+  const xn = new Float64Array(n);
+  for (let i = 0; i < n; i++) xn[i] = (x[i] - mid) / half;     // normalize for conditioning
+  const fit = (yy) => {
+    const ps = new Float64Array(2 * order + 1);
+    for (let i = 0; i < n; i++) { let xp = 1; for (let p = 0; p <= 2 * order; p++) { ps[p] += xp; xp *= xn[i]; } }
+    const A = Array.from({ length: m }, (_, a) => Array.from({ length: m }, (_, b) => ps[a + b]));
+    const rhs = new Array(m).fill(0);
+    for (let i = 0; i < n; i++) { let xp = 1; for (let a = 0; a < m; a++) { rhs[a] += xp * yy[i]; xp *= xn[i]; } }
+    const c = solveSym(A, rhs);
+    const z = new Float64Array(n);
+    for (let i = 0; i < n; i++) { let xp = 1, s = 0; for (let a = 0; a < m; a++) { s += c[a] * xp; xp *= xn[i]; } z[i] = s; }
+    return z;
+  };
+  let yy = Float64Array.from(y), z = Float64Array.from(y);
+  for (let it = 0; it < iters; it++) { z = fit(yy); for (let i = 0; i < n; i++) if (yy[i] > z[i]) yy[i] = z[i]; }
+  return z;
+}
+
+/** Dispatch baseline by method name. */
+export function computeBaseline(lambda, y, o = {}) {
+  switch (o.baseline) {
+    case 'none': return new Float64Array(y.length);
+    case 'als': return alsBaseline(y, { lambda: o.alsLambda, p: o.alsP, iters: o.alsIters });
+    case 'poly': return polynomialBaseline(lambda, y, { order: o.polyOrder });
+    case 'snip': default: return snipBaseline(y, o.baselineIter ?? 40);
+  }
+}
+
 /* ---------------- noise ---------------- */
 
 /** Robust noise sigma from the MAD of first differences. */
@@ -161,33 +248,61 @@ function fwhmAround(corr, lambda, i, halfMax) {
   return Math.max(hi - lo, 0);
 }
 
+/** Topographic prominence of a local max at index i in array y. */
+function prominence(y, i) {
+  const amp = y[i], n = y.length;
+  let l = i, lmin = Infinity;
+  while (l > 0 && y[l - 1] < amp) { l--; if (y[l] < lmin) lmin = y[l]; }
+  let r = i, rmin = Infinity;
+  while (r < n - 1 && y[r + 1] < amp) { r++; if (y[r] < rmin) rmin = y[r]; }
+  if (lmin === Infinity) lmin = y[Math.max(i - 1, 0)];
+  if (rmin === Infinity) rmin = y[Math.min(i + 1, n - 1)];
+  return amp - Math.max(lmin, rmin);
+}
+
 /**
- * Detect emission peaks. opts:
- *   baselineIter, sgWindow, sgOrder, k (sigma threshold), minDistanceNm.
- * Returns { peaks:[{lambda, amplitude, snr, fwhm_nm, sigmaCentroid_nm, index}],
- *           baseline, corrected, sigma }.
+ * Detect emission peaks with a configurable, OceanView/AvaSoft-style parameter
+ * set. opts:
+ *   baseline: 'snip' (default) | 'als' | 'poly' | 'none'
+ *     baselineIter (snip) · alsLambda, alsP, alsIters · polyOrder
+ *   smooth (default true), sgWindow, sgOrder         — Savitzky-Golay for detection
+ *   thresholdMode: 'snr' (default) | 'absolute' | 'prominence'
+ *   threshold: k*sigma if snr; counts if absolute; counts if prominence
+ *              (alias: opts.k for back-compat with snr mode)
+ *   minDistanceNm, minWidthNm (FWHM), maxWidthNm     — peak filters
+ * Returns { peaks:[{lambda, amplitude, prominence, snr, fwhm_nm,
+ *           sigmaCentroid_nm, index}], baseline, corrected, sigma, params }.
  */
 export function detectPeaks(lambda, intensity, opts = {}) {
-  const { baselineIter = 40, sgWindow = 5, sgOrder = 2, k = 5, minDistanceNm = 0 } = opts;
-  const baseline = snipBaseline(intensity, baselineIter);
+  const {
+    baseline = 'snip', baselineIter = 40, alsLambda = 1e5, alsP = 0.01, alsIters = 10, polyOrder = 5,
+    smooth = true, sgWindow = 5, sgOrder = 2,
+    thresholdMode = 'snr', minDistanceNm = 0, minWidthNm = 0, maxWidthNm = Infinity,
+  } = opts;
+  const threshold = opts.threshold ?? opts.k ?? 5;
+  const base = computeBaseline(lambda, intensity,
+    { baseline, baselineIter, alsLambda, alsP, alsIters, polyOrder });
   const corrected = new Float64Array(intensity.length);
-  for (let i = 0; i < intensity.length; i++) corrected[i] = intensity[i] - baseline[i];
+  for (let i = 0; i < intensity.length; i++) corrected[i] = intensity[i] - base[i];
   const sigma = estimateNoiseMAD(corrected) || 1e-12;
-  const sm = savitzkyGolay(corrected, sgWindow, sgOrder);
-  const thr = k * sigma;
+  const sm = smooth ? savitzkyGolay(corrected, sgWindow, sgOrder) : corrected;
+  const ampThr = thresholdMode === 'snr' ? threshold * sigma
+    : thresholdMode === 'absolute' ? threshold : 0;   // prominence handled per-peak
+  const dxTyp = (lambda[lambda.length - 1] - lambda[0]) / (lambda.length - 1 || 1);
 
   let peaks = [];
   for (let i = 1; i < sm.length - 1; i++) {
-    if (corrected[i] <= thr) continue;
-    if (!(sm[i] >= sm[i - 1] && sm[i] > sm[i + 1])) continue;
+    if (!(sm[i] >= sm[i - 1] && sm[i] > sm[i + 1])) continue;   // smoothed local max
     const amp = corrected[i];
-    const center = refineCentroid(corrected, lambda, i, amp);
+    if (amp <= ampThr) continue;                               // snr / absolute gate
+    const prom = prominence(corrected, i);
+    if (thresholdMode === 'prominence' && prom < threshold) continue;
     const fwhm = fwhmAround(corrected, lambda, i, amp / 2);
+    if (fwhm < minWidthNm || fwhm > maxWidthNm) continue;       // width gate
+    const center = refineCentroid(corrected, lambda, i, amp);
     const snr = amp / sigma;
-    // Centroid uncertainty: Gaussian-peak Cramer-Rao scaling sigma_w/SNR,
-    // sigma_w = FWHM/2.355. Approximate; combined with sigma_cal at match time.
-    const sigmaCentroid = snr > 0 ? (fwhm / 2.3548) / snr : dx;
-    peaks.push({ index: i, lambda: center, amplitude: amp, snr, fwhm_nm: fwhm, sigmaCentroid_nm: sigmaCentroid });
+    const sigmaCentroid = snr > 0 ? (fwhm / 2.3548) / snr : dxTyp;
+    peaks.push({ index: i, lambda: center, amplitude: amp, prominence: prom, snr, fwhm_nm: fwhm, sigmaCentroid_nm: sigmaCentroid });
   }
 
   if (minDistanceNm > 0 && peaks.length > 1) {
@@ -197,5 +312,5 @@ export function detectPeaks(lambda, intensity, opts = {}) {
     }
     peaks = kept.sort((a, b) => a.lambda - b.lambda);
   }
-  return { peaks, baseline, corrected, sigma };
+  return { peaks, baseline: base, corrected, sigma, params: { baseline, thresholdMode, threshold } };
 }
