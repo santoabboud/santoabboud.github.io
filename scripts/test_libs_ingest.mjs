@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs';
 import { parseSpectrumCSV } from '../src/lib/libs/ingest.js';
 import {
   snipBaseline, estimateNoiseMAD, savitzkyGolay, detectPeaks,
+  alsBaseline, polynomialBaseline,
 } from '../src/lib/libs/preprocess.js';
 import { elementLineIntensities, synthesizeSpectrum } from '../src/lib/libs/forward.js';
 
@@ -57,6 +58,25 @@ const base = snipBaseline(sig, 20);
 let baseErr = 0;
 for (const i of [50, 250, 380, 550]) baseErr = Math.max(baseErr, Math.abs(base[i] - trueBase[i]) / trueBase[i]);
 check('SNIP recovers continuum in peak-free regions (<3%)', baseErr < 0.03, (baseErr * 100).toFixed(2) + '%', '<3%');
+// ALS and polynomial baselines should also recover the continuum.
+const idxs = [50, 250, 380, 550];
+const errOf = (b) => Math.max(...idxs.map((i) => Math.abs(b[i] - trueBase[i]) / trueBase[i]));
+const alsErr = errOf(alsBaseline(sig, { lambda: 1e5, p: 0.01, iters: 12 }));
+check('ALS recovers continuum (<5%)', alsErr < 0.05, (alsErr * 100).toFixed(2) + '%', '<5%');
+const polyErr = errOf(polynomialBaseline(lamA, sig, { order: 4, iters: 10 }));
+check('polynomial baseline recovers continuum (<6%)', polyErr < 0.06, (polyErr * 100).toFixed(2) + '%', '<6%');
+// threshold modes + ALS path: clean flat-baseline signal, 3 well-separated
+// peaks + noise, so every mode unambiguously recovers exactly 3.
+const flat = new Float64Array(N);
+for (let i = 0; i < N; i++) flat[i] = 500 + 8 * gauss();
+for (const [c, amp] of [[120, 600], [300, 900], [480, 400]])
+  for (let i = 0; i < N; i++) flat[i] += amp * Math.exp(-((i - c) ** 2) / (2 * 3 ** 2));
+const dAls = detectPeaks(lamA, flat, { baseline: 'als', alsLambda: 1e6, thresholdMode: 'snr', threshold: 5, minDistanceNm: 0.05 });
+check('detectPeaks(ALS, snr) finds the 3 peaks', dAls.peaks.length === 3, dAls.peaks.length, 3);
+const dAbs = detectPeaks(lamA, flat, { baseline: 'snip', baselineIter: 20, thresholdMode: 'absolute', threshold: 150, minDistanceNm: 0.05 });
+check('detectPeaks(absolute threshold) finds the 3 peaks', dAbs.peaks.length === 3, dAbs.peaks.length, 3);
+const dProm = detectPeaks(lamA, flat, { baseline: 'snip', baselineIter: 20, thresholdMode: 'prominence', threshold: 150, minDistanceNm: 0.05 });
+check('detectPeaks(prominence) finds the 3 peaks', dProm.peaks.length === 3, dProm.peaks.length, 3);
 
 const noise = new Float64Array(2000);
 for (let i = 0; i < noise.length; i++) noise[i] = 100 + 7 * gauss();
