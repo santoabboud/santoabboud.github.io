@@ -69,6 +69,11 @@ Internal temperatures are cross-checked with a thermal camera:
 <figcaption>FIG. 07 — Interior temperature distribution.</figcaption>
 </figure>
 
+<figure class="embed-short">
+<div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/UaO7eF6aZtY" title="Thermal-camera walkthrough of the chamber interior" allow="encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>
+<figcaption>FIG. 08 — Thermal-camera walkthrough of the chamber interior (video).</figcaption>
+</figure>
+
 <table class="spec-table">
   <tr><td>Topology</td><td>6 strings × 7 parallel cells (42 holders)</td></tr>
   <tr><td>Contacts</td><td>High-current spring-loaded Kelvin (4-wire) pins</td></tr>
@@ -84,19 +89,19 @@ In use, with cells loaded and the chamber closed:
 
 ![Chamber in use with cells loaded](./cells-loaded-1.jpg)
 
-<figcaption>FIG. 08 — Chamber closed and running under load.</figcaption>
+<figcaption>FIG. 09 — Chamber closed and running under load.</figcaption>
 </figure>
 
 <figure>
 
 ![Cells loaded into the chamber, second view](./cells-loaded-2.jpg)
 
-<figcaption>FIG. 09 — Loaded cell-holder array.</figcaption>
+<figcaption>FIG. 10 — Loaded cell-holder array.</figcaption>
 </figure>
 
 <figure>
 
 ![Cells loaded into the chamber, third view](./cells-loaded-3.jpg)
 
-<figcaption>FIG. 10 — Cycling under controlled temperature.</figcaption>
+<figcaption>FIG. 11 — Cycling under controlled temperature.</figcaption>
 </figure>
