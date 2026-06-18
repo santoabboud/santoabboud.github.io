@@ -26,12 +26,24 @@ export const PRESETS = {
   batteries: ['Li', 'Co', 'Ni', 'Mn', 'Fe', 'P', 'Al', 'Cu', 'Na', 'S', 'F', 'Ti', 'V', 'Si', 'C', 'Mg'],
 };
 
-/* Built-in synthetic samples (composition = number fractions). */
+/* Built-in synthetic samples (composition = illustrative number fractions),
+   grouped by domain for the picker. Synthesized live from the LTE model. */
 const SAMPLES = {
-  'Brass (Cu–Zn)': { comp: { Cu: 0.62, Zn: 0.38 }, Te: 9000, ne: 1e16 },
-  'Stainless steel': { comp: { Fe: 0.70, Cr: 0.18, Ni: 0.08, Mn: 0.04 }, Te: 10000, ne: 1.2e16 },
-  'Granite (silicate)': { comp: { Si: 0.32, Al: 0.18, Ca: 0.12, Na: 0.12, K: 0.10, Fe: 0.10, Mg: 0.06 }, Te: 9000, ne: 8e15 },
-  'Li-ion cathode (NMC)': { comp: { Li: 0.25, Ni: 0.25, Mn: 0.20, Co: 0.20, Fe: 0.10 }, Te: 9500, ne: 1e16 },
+  'Brass (Cu–Zn)': { group: 'Metallurgy', comp: { Cu: 0.62, Zn: 0.38 }, Te: 9000, ne: 1e16 },
+  'Bronze (Cu–Sn)': { group: 'Metallurgy', comp: { Cu: 0.88, Sn: 0.10, Zn: 0.02 }, Te: 9000, ne: 1e16 },
+  'Stainless steel': { group: 'Metallurgy', comp: { Fe: 0.70, Cr: 0.18, Ni: 0.08, Mn: 0.04 }, Te: 10000, ne: 1.2e16 },
+  'Tool steel': { group: 'Metallurgy', comp: { Fe: 0.85, Cr: 0.05, W: 0.03, Mo: 0.02, V: 0.02, Mn: 0.02, Si: 0.01 }, Te: 10000, ne: 1.2e16 },
+  'Aluminum alloy 6061': { group: 'Metallurgy', comp: { Al: 0.955, Mg: 0.012, Si: 0.008, Fe: 0.015, Cu: 0.003, Cr: 0.002, Mn: 0.005 }, Te: 9500, ne: 1e16 },
+  'Titanium alloy (Ti-6Al-4V)': { group: 'Metallurgy', comp: { Ti: 0.90, Al: 0.06, V: 0.04 }, Te: 10000, ne: 1e16 },
+  'Cupronickel (coin)': { group: 'Metallurgy', comp: { Cu: 0.75, Ni: 0.25 }, Te: 9000, ne: 1e16 },
+  'Granite': { group: 'Minerals & geology', comp: { Si: 0.32, Al: 0.18, Ca: 0.12, Na: 0.12, K: 0.10, Fe: 0.10, Mg: 0.06 }, Te: 9000, ne: 8e15 },
+  'Basalt': { group: 'Minerals & geology', comp: { Si: 0.25, Al: 0.16, Fe: 0.14, Ca: 0.14, Mg: 0.12, Na: 0.08, Ti: 0.04, Mn: 0.04, K: 0.03 }, Te: 9000, ne: 8e15 },
+  'Limestone': { group: 'Minerals & geology', comp: { Ca: 0.55, Mg: 0.15, Si: 0.15, Al: 0.08, Fe: 0.07 }, Te: 8500, ne: 7e15 },
+  'Soda-lime glass': { group: 'Ceramics & glass', comp: { Si: 0.45, Na: 0.20, Ca: 0.15, Mg: 0.08, Al: 0.07, K: 0.05 }, Te: 9000, ne: 8e15 },
+  'Alumina (Al₂O₃)': { group: 'Ceramics & glass', comp: { Al: 0.80, Ca: 0.06, Si: 0.06, Mg: 0.05, Na: 0.03 }, Te: 9500, ne: 1e16 },
+  'Li-ion cathode (NMC)': { group: 'Batteries', comp: { Li: 0.25, Ni: 0.25, Mn: 0.20, Co: 0.20, Fe: 0.10 }, Te: 9500, ne: 1e16 },
+  'LiFePO₄ cathode': { group: 'Batteries', comp: { Li: 0.30, Fe: 0.28, P: 0.28, Mn: 0.08, Mg: 0.06 }, Te: 9500, ne: 1e16 },
+  'Seawater (brine)': { group: 'Other', comp: { Na: 0.45, Mg: 0.15, Ca: 0.12, K: 0.12, B: 0.10, Sr: 0.04, Li: 0.02 }, Te: 8000, ne: 5e15 },
 };
 
 const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -51,7 +63,15 @@ export function initLibsApp(root) {
     spectrum: null, proc: null, matchIndex: null, matcher: null, manifest: null,
     results: [], selected: new Set(), lineCache: new Map(),
     view: { min: 200, max: 1100 }, drag: null, raf: 0,
-    settings: { sigmaCal: 0.15, k: 5, snipIter: 25, instrumentFWHM: 0.4, stages: new Set([1, 2, 3]) },
+    settings: {
+      sigmaCal: 0.15, instrumentFWHM: 0.4, stages: new Set([1, 2, 3]),
+      detect: {
+        baseline: 'snip', baselineIter: 25, alsLambda: 1e5, polyOrder: 5,
+        smooth: true, sgWindow: 5, sgOrder: 2,
+        thresholdMode: 'snr', threshold: 5,
+        minDistanceNm: 0.2, minWidthNm: 0, maxWidthNm: 0,
+      },
+    },
     enabled: new Set(ELEMENTS.map((e) => e.s)),  // active element universe (the prior)
     preset: 'all',
   };
@@ -96,12 +116,16 @@ export function initLibsApp(root) {
   }
   function runPreprocess() {
     if (!state.spectrum) return;
-    const { lambda, intensity } = state.spectrum;
+    const { lambda, intensity } = state.spectrum, d = state.settings.detect;
     state.proc = detectPeaks(lambda, intensity, {
-      baselineIter: state.settings.snipIter, k: state.settings.k,
-      minDistanceNm: Math.max(state.settings.instrumentFWHM * 0.5, 0.02),
+      baseline: d.baseline, baselineIter: d.baselineIter, alsLambda: d.alsLambda, polyOrder: d.polyOrder,
+      smooth: d.smooth, sgWindow: d.sgWindow, sgOrder: d.sgOrder,
+      thresholdMode: d.thresholdMode, threshold: d.threshold,
+      minDistanceNm: d.minDistanceNm, minWidthNm: d.minWidthNm,
+      maxWidthNm: d.maxWidthNm > 0 ? d.maxWidthNm : Infinity,
     });
-    setStatus(`${state.spectrum.label}: ${state.proc.peaks.length} peaks (σ=${state.proc.sigma.toFixed(1)}, ${lambda.length} pts).`);
+    const bl = { snip: 'SNIP', als: 'ALS', poly: 'polynomial', none: 'none' }[d.baseline];
+    setStatus(`${state.spectrum.label}: ${state.proc.peaks.length} peaks · ${bl} baseline · σ=${state.proc.sigma.toFixed(1)} · ${lambda.length} pts.`);
   }
 
   async function handleFile(file) {
@@ -156,22 +180,50 @@ export function initLibsApp(root) {
     setStatus(`Identified ${state.results.filter((r) => r.confidence > 0.3).length} candidate elements (of ${state.results.length} considered).`);
   }
 
-  function confColor(c) { return c > 0.7 ? 'var(--acc-bright)' : c > 0.4 ? 'var(--acc)' : 'var(--muted)'; }
+  const TIERS = [
+    { key: 'confident', label: 'Confident', min: 0.65 },
+    { key: 'probable', label: 'Probable', min: 0.40 },
+    { key: 'possible', label: 'Possible / trace', min: 0 },
+  ];
+  const tierOf = (c) => (c >= 0.65 ? 'confident' : c >= 0.40 ? 'probable' : 'possible');
+  const pct = (c) => (c * 100).toFixed(0);
+
+  function rowHtml(r) {
+    const t = tierOf(r.confidence), on = state.selected.has(r.element);
+    return `<tr class="el-row tier-${t} ${on ? 'sel' : ''}">
+      <td><input type="checkbox" data-ovl="${r.element}" ${on ? 'checked' : ''}></td>
+      <td class="el-sym">${r.element}</td>
+      <td class="conf-cell"><span class="confbar" style="--c:${pct(r.confidence)}%"></span><span class="conf-num">${pct(r.confidence)}%</span></td>
+      <td>${r.nStrongPresent}/${r.nStrong}</td>
+      <td>${r.C_coinc.toFixed(2)}</td><td>${r.C_strong.toFixed(2)}</td>
+      <td>${r.C_boltz != null ? r.C_boltz.toFixed(2) : '—'}</td>
+      <td>${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}</td></tr>`;
+  }
 
   function renderResults() {
-    const rows = state.results.filter((r) => r.nPeaksMatched > 0).slice(0, 30);
-    if (!rows.length) { resultsEl.innerHTML = '<p class="note">No elements matched. Try widening the uncertainty or changing the pre-select.</p>'; return; }
-    resultsEl.innerHTML = `<table class="libs-table"><thead><tr>
-      <th></th><th>El</th><th>Confidence</th><th>peaks</th><th>strong</th>
-      <th>C<sub>coinc</sub></th><th>C<sub>strong</sub></th><th>C<sub>boltz</sub></th><th>T<sub>e</sub> [K]</th></tr></thead><tbody>${
-      rows.map((r) => `<tr data-el="${r.element}" class="${state.selected.has(r.element) ? 'sel' : ''}">
-        <td><input type="checkbox" data-ovl="${r.element}" ${state.selected.has(r.element) ? 'checked' : ''}></td>
-        <td><b>${r.element}</b></td>
-        <td><span class="confbar" style="--c:${(r.confidence * 100).toFixed(0)}%;--col:${confColor(r.confidence)}"></span>${(r.confidence * 100).toFixed(0)}%</td>
-        <td>${r.nPeaksMatched}</td><td>${r.nStrongPresent}/${r.nStrong}</td>
-        <td>${r.C_coinc.toFixed(2)}</td><td>${r.C_strong.toFixed(2)}</td>
-        <td>${r.C_boltz != null ? r.C_boltz.toFixed(2) : '—'}</td><td>${r.fittedT_K ? r.fittedT_K.toFixed(0) : '—'}</td></tr>`).join('')}</tbody></table>`;
-    resultsEl.querySelectorAll('[data-ovl]').forEach((cb) => cb.onchange = () => toggleOverlay(cb.dataset.ovl, cb.checked));
+    const rows = state.results.filter((r) => r.nPeaksMatched > 0);
+    if (!rows.length) { resultsEl.innerHTML = '<p class="note">No elements matched. Widen the uncertainty, lower the detection threshold, or change the pre-select.</p>'; return; }
+    const confident = rows.filter((r) => r.confidence >= 0.65);
+    const chipEls = confident.slice(0, 12), more = confident.length - chipEls.length;
+    const summary = `<div class="libs-summary"><span class="lbl">Identified</span>${
+      confident.length
+        ? chipEls.map((r) => `<button class="el-chip" data-ovl="${r.element}" title="overlay ${r.element} lines">${r.element}<i>${pct(r.confidence)}</i></button>`).join('')
+          + (more > 0 ? `<span class="note">+${more} more — narrow the pre-select to sharpen</span>` : '')
+        : '<span class="note">no high-confidence elements — see candidates below</span>'}</div>`;
+    let body = '';
+    for (const { key, label } of TIERS) {
+      const tr = rows.filter((r) => tierOf(r.confidence) === key);
+      const shown = key === 'possible' ? tr.slice(0, 25) : tr;
+      if (!shown.length) continue;
+      body += `<tr class="tier-row tier-${key}"><td colspan="8">${label} · ${tr.length}</td></tr>`
+        + shown.map(rowHtml).join('');
+    }
+    resultsEl.innerHTML = summary + `<table class="libs-table"><thead><tr>
+      <th></th><th>El</th><th>Confidence</th><th>strong</th>
+      <th>C<sub>coinc</sub></th><th>C<sub>strong</sub></th><th>C<sub>boltz</sub></th><th>T<sub>e</sub></th></tr></thead><tbody>${body}</tbody></table>`;
+    resultsEl.querySelectorAll('[data-ovl]').forEach((cb) =>
+      (cb.tagName === 'INPUT' ? cb.onchange = () => toggleOverlay(cb.dataset.ovl, cb.checked)
+        : cb.onclick = () => toggleOverlay(cb.dataset.ovl, !state.selected.has(cb.dataset.ovl))));
   }
 
   function renderDiagnostics() {
@@ -309,24 +361,52 @@ export function initLibsApp(root) {
   wrap.addEventListener('dragover', (e) => { e.preventDefault(); });
   wrap.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
   const sampleSel = $('[data-sample]');
-  for (const n of Object.keys(SAMPLES)) { const o = document.createElement('option'); o.value = n; o.textContent = n; sampleSel.appendChild(o); }
+  const groups = {};
+  for (const [n, s] of Object.entries(SAMPLES)) (groups[s.group] ||= []).push(n);
+  for (const [g, names] of Object.entries(groups)) {
+    const og = document.createElement('optgroup'); og.label = g;
+    for (const n of names) { const o = document.createElement('option'); o.value = n; o.textContent = n; og.appendChild(o); }
+    sampleSel.appendChild(og);
+  }
   sampleSel.onchange = () => { if (sampleSel.value) loadSample(sampleSel.value); };
   $('[data-run]').onclick = runAnalysis;
 
   const reanalyze = () => { if (state.proc && state.matcher) runAnalysis(); };
+  const reprocess = () => { if (state.spectrum) { runPreprocess(); requestDraw(); reanalyze(); } };
+
   const sig = $('[data-sigma]'), sigOut = $('[data-sigma-out]');
   const showSig = () => { sigOut.textContent = (state.settings.sigmaCal * 1000).toFixed(0) + ' pm'; };
   sig.oninput = () => { state.settings.sigmaCal = +sig.value; showSig(); };
   sig.onchange = reanalyze;
-  const kIn = $('[data-thresh]'), kOut = $('[data-thresh-out]');
-  kIn.oninput = () => { state.settings.k = +kIn.value; kOut.textContent = kIn.value + 'σ'; if (state.spectrum) { runPreprocess(); requestDraw(); } };
-  kIn.onchange = reanalyze;
+
+  // detection-parameter panel (baseline method, threshold mode, filters)
+  const D = state.settings.detect;
+  const bind = (sel, fn, ev = 'onchange') => { const el = $(sel); if (el) el[ev] = () => fn(el); return el; };
+  const mdIn = $('[data-mindist]');
+  bind('[data-baseline]', (el) => { D.baseline = el.value; reprocess(); });
+  const thrUnit = $('[data-threshold-unit]');
+  const updThrUnit = () => { if (thrUnit) thrUnit.textContent = D.thresholdMode === 'snr' ? '× σ' : 'counts'; };
+  bind('[data-tmode]', (el) => { D.thresholdMode = el.value; updThrUnit(); reprocess(); });
+  bind('[data-threshold]', (el) => { D.threshold = +el.value || D.threshold; reprocess(); });
+  bind('[data-smooth]', (el) => { D.smooth = el.checked; reprocess(); });
+  bind('[data-sgwin]', (el) => { D.sgWindow = Math.max(2, +el.value || 5); reprocess(); });
+  bind('[data-mindist]', (el) => { D.minDistanceNm = Math.max(0, +el.value || 0); reprocess(); });
+  bind('[data-minwidth]', (el) => { D.minWidthNm = Math.max(0, +el.value || 0); reprocess(); });
+  bind('[data-maxwidth]', (el) => { D.maxWidthNm = Math.max(0, +el.value || 0); reprocess(); });
+  // reflect defaults into controls
+  for (const [sel, v] of [['[data-baseline]', D.baseline], ['[data-tmode]', D.thresholdMode],
+    ['[data-threshold]', D.threshold], ['[data-sgwin]', D.sgWindow], ['[data-mindist]', D.minDistanceNm],
+    ['[data-minwidth]', D.minWidthNm], ['[data-maxwidth]', D.maxWidthNm]]) { const el = $(sel); if (el) el.value = v; }
+  const smEl = $('[data-smooth]'); if (smEl) smEl.checked = D.smooth;
+  updThrUnit();
+
   $('[data-profile]').onchange = (e) => {
     const fwhm = PROFILES[e.target.value] ?? 0.4;
     state.settings.instrumentFWHM = fwhm;
-    state.settings.sigmaCal = fwhm >= 0.1 ? 0.15 : 0.02;   // match tolerance ~ resolution
+    state.settings.sigmaCal = fwhm >= 0.1 ? 0.15 : 0.02;       // match tolerance ~ resolution
     sig.value = state.settings.sigmaCal; showSig();
-    reanalyze();
+    D.minDistanceNm = Math.max(fwhm * 0.5, 0.01); if (mdIn) mdIn.value = D.minDistanceNm.toFixed(3);
+    reprocess();
   };
   root.querySelectorAll('[data-stage]').forEach((cb) => cb.onchange = () => { cb.checked ? state.settings.stages.add(+cb.dataset.stage) : state.settings.stages.delete(+cb.dataset.stage); requestDraw(); reanalyze(); });
   root.querySelectorAll('[data-preset]').forEach((b) => b.onclick = () => {
@@ -340,7 +420,7 @@ export function initLibsApp(root) {
   function exportCSV() {
     if (!state.results.length) { setStatus('Run an analysis first.'); return; }
     const lines = ['element,stage,confidence,nPeaksMatched,nStrongPresent,nStrong,C_coinc,C_strong,C_boltz,fittedT_K'];
-    for (const r of state.results) if (r.nPeaksMatched > 0) lines.push([r.element, '', r.confidence.toFixed(4), r.nPeaksMatched, r.nStrongPresent, r.nStrong, r.C_coinc.toFixed(3), r.C_strong.toFixed(3), r.C_boltz.toFixed(3), r.fittedT_K ? r.fittedT_K.toFixed(0) : ''].join(','));
+    for (const r of state.results) if (r.nPeaksMatched > 0) lines.push([r.element, '', r.confidence.toFixed(4), r.nPeaksMatched, r.nStrongPresent, r.nStrong, r.C_coinc.toFixed(3), r.C_strong.toFixed(3), r.C_boltz != null ? r.C_boltz.toFixed(3) : '', r.fittedT_K ? r.fittedT_K.toFixed(0) : ''].join(','));
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'libs_identification.csv'; a.click();
   }
