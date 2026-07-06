@@ -8,7 +8,7 @@ coverAlt: "The 50 mm fiber-optic-plate-bonded photocathode of the XX1332 intensi
 draft: false
 ---
 
-A Mullard / Philips **XX1332** — a genuinely giant Gen 2+ image intensifier tube — built into a usable night-vision device. It has a **50 mm diameter, fiber-optic-plate-bonded photocathode** input and a **40 mm diameter, fiber-optic-plate-bonded phosphor** output screen; most tubes are a fraction of this size.
+The Mullard / Philips XX1332 is a pretty gigantic Gen 2+ image intensifier tube. It has a 50 mm diameter fiber-optic-plate-bonded photocathode input and a 40 mm diameter fiber-optic-plate-bonded phosphor output screen, which makes it much larger than most tubes. This project builds it into a usable night-vision device.
 
 <figure>
 
@@ -24,7 +24,7 @@ A Mullard / Philips **XX1332** — a genuinely giant Gen 2+ image intensifier tu
 <figcaption>FIG. 02 — The 40 mm phosphor output screen.</figcaption>
 </figure>
 
-I threw the housing together in Fusion — something quick to test things out with. It's **modular**: it accepts different objectives on the input and different accessories on the output. A **1/4″ thread** on the bottom takes any standard mount, and a battery compartment powers it (twist to turn on).
+I threw the housing together in Fusion since I needed something quick to test some things out. It is modular, so it takes different objectives on the input and different accessories on the output. There is a 1/4″ thread on the bottom for any standard mount, and a battery compartment that you twist to turn on.
 
 <figure>
 
@@ -51,7 +51,7 @@ Here it is running, in the 3D-printed housing with a 100 mm f/1.5 M42 objective:
   <tr><td>Tube</td><td>Mullard / Philips XX1332, Gen 2+ (large format)</td></tr>
   <tr><td>Photocathode input</td><td>50 mm diameter, fiber-optic-plate bonded</td></tr>
   <tr><td>Phosphor output</td><td>40 mm diameter, fiber-optic-plate bonded</td></tr>
-  <tr><td>Housing</td><td>3D-printed (Fusion), modular — swappable objectives &amp; output accessories</td></tr>
+  <tr><td>Housing</td><td>3D-printed (Fusion), modular, with swappable objectives &amp; output accessories</td></tr>
   <tr><td>Objective (shown)</td><td>100 mm f/1.5, M42 mount</td></tr>
   <tr><td>Mounting / power</td><td>1/4″ thread; battery compartment, twist-to-activate</td></tr>
 </table>
