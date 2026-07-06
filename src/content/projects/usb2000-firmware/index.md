@@ -3,6 +3,8 @@ title: "Ocean Optics USB2000 firmware update"
 description: "A compilation of info about Ocean Optics USB2000 spectrometers, and a board-level guide to reflashing their firmware EEPROM."
 category: spectroscopy
 date: 2026-06-10
+cover: ./grabbers-in-place.jpg
+coverAlt: "Mini probing grabbers attached to the USB2000 firmware EEPROM"
 ---
 
 <!-- NOTE: images below are temporarily hotlinked to GitHub's asset CDN.
@@ -110,7 +112,7 @@ It should look something like this:
 
 <figure>
 
-![Probing grabbers attached to the EEPROM](https://github.com/user-attachments/assets/eb921588-6b9b-4bfe-9254-a1c86b63da56)
+![Probing grabbers attached to the EEPROM](./grabbers-in-place.jpg)
 
 <figcaption>FIG. 09 — Grabbers in place.</figcaption>
 </figure>
