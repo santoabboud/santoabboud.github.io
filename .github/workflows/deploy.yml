@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false   # let in-progress deploys finish; cancelling can leave Pages in a "try again later" state
 
 jobs:
   build:
