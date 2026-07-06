@@ -1,6 +1,6 @@
 ---
 title: "TEEM Photonics 266 nm microchip laser"
-description: "A teardown of a compact, deep-UV, passively Q-switched microchip laser — and a look at how a ~1 mm³ flat-flat cavity makes a clean beam."
+description: "A teardown of a compact, deep-UV, passively Q-switched microchip laser, and a look at how a tiny flat-flat cavity makes a clean beam."
 category: lasers
 date: 2026-06-10
 cover: ./overview.jpg
@@ -19,7 +19,7 @@ A teardown of a TEEM Photonics 266 nm microchip laser: a compact, passively Q-sw
 
 ## The microchip
 
-This is a **passively Q-switched (saturable-absorber) microchip laser**. The heart of it is a chip only about **1 mm³** — roughly 1 mm on each edge: a highly-doped **Nd:YVO₄** gain crystal bonded to a **Cr⁴⁺:YAG** saturable absorber, which acts as the passive Q-switch. That combination produces **~500 ps pulses** at the 1064 nm fundamental.
+This is a passively Q-switched (saturable-absorber) microchip laser. The heart of it is a chip only about 1 mm³, roughly 1 mm on each edge: a highly-doped Nd:YVO₄ gain crystal bonded to a Cr⁴⁺:YAG saturable absorber, which acts as the passive Q-switch. That combination produces about 500 ps pulses at the 1064 nm fundamental.
 
 <figure>
 
@@ -28,7 +28,7 @@ This is a **passively Q-switched (saturable-absorber) microchip laser**. The hea
 <figcaption>FIG. 04 — The laser block.</figcaption>
 </figure>
 
-What makes it work is the cavity. Other than the crystal faces it is a **plane-parallel (flat–flat) Fabry–Pérot** resonator — which on paper is unstable. A stable **TEM₀₀** mode forms anyway, purely from the **thermal lens** in the pumped crystal together with the **strong GRIN-focused pump**: together they provide the guiding that stabilizes the fundamental transverse mode. No curved mirror required.
+What makes it work is the cavity. Other than the crystal faces it is a plane-parallel (flat-flat) Fabry-Pérot resonator, which on paper is unstable. A stable TEM₀₀ mode forms anyway, purely from the thermal lens in the pumped crystal together with the strong GRIN-focused pump: together they provide the guiding that stabilizes the fundamental transverse mode. No curved mirror required.
 
 <figure>
 
@@ -39,7 +39,7 @@ What makes it work is the cavity. Other than the crystal faces it is a **plane-p
 
 ## From 1064 nm to the deep UV
 
-The 1064 nm fundamental is frequency-converted in two stages — **second-harmonic generation** to 532 nm, then **fourth-harmonic generation** (SHG of the 532 nm) to **266 nm**. A set of **harmonic separators** then reflects only the 266 nm, dumping the residual 1064 and 532.
+The 1064 nm fundamental is frequency-converted in two stages: second-harmonic generation to 532 nm, then fourth-harmonic generation (SHG of the 532 nm) to 266 nm. A set of harmonic separators then reflects only the 266 nm, dumping the residual 1064 and 532.
 
 <figure>
 
