@@ -21,5 +21,12 @@ const usedCats = [...new Set(projects.map((p) => p.data.category))];
   </section>
   <section class="grid">
     {projects.map((p) => <ProjectCard project={p} />)}
+    <article class="card">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">SOON</span>
+        <h3>More to come</h3>
+        <p>More build logs and write-ups are on the way.</p>
+      </div>
+    </article>
   </section>
 </Base>

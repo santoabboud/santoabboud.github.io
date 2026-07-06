@@ -1,6 +1,6 @@
 ---
 title: "Automated environmental-chamber battery cycler"
-description: "A thermally-controlled chamber for cycling parallel battery strings — balanced harnessing and per-cell Kelvin sensing for studying cell performance across temperature."
+description: "A thermally-controlled chamber for cycling parallel battery strings, with balanced harnessing and per-cell Kelvin sensing for studying cell performance across temperature."
 category: batteries
 date: 2026-06-10
 cover: ./chamber-insulated.jpg
@@ -8,9 +8,9 @@ coverAlt: "Open thermal chamber showing the two-row cell-holder array with balan
 draft: false
 ---
 
-An automated test setup for cycling battery strings inside a thermally-controlled, insulated chamber — built to study cell performance across temperature under realistic, hard duty cycles.
+An automated test setup for cycling battery strings inside a thermally-controlled, insulated chamber, built to study cell performance across temperature under realistic, hard duty cycles.
 
-The cell-holder structure carries **6 strings of 7 cells in parallel** (42 holders), each holder fitted with high-current, spring-loaded **Kelvin (4-wire) pin contacts** so the current and voltage-sense paths stay separate — voltage is measured at the cell, not across the harness. Every holder is individually sensed.
+The cell-holder structure carries 6 strings of 7 cells in parallel (42 holders), each holder fitted with high-current, spring-loaded Kelvin (4-wire) pin contacts so the current and voltage-sense paths stay separate. Voltage is measured at the cell, not across the harness. Every holder is individually sensed.
 
 <figure>
 
