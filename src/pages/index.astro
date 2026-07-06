@@ -28,6 +28,13 @@ const featured = projects.slice(0, 6);
   <p class="section-label"><span class="n">01</span> Selected work <a href="/projects/">All projects →</a></p>
   <section class="grid">
     {featured.map((p) => <ProjectCard project={p} />)}
+    <article class="card">
+      <div class="pad" style="padding-top:16px">
+        <span class="tag">SOON</span>
+        <h3>More to come</h3>
+        <p>More build logs and write-ups are on the way.</p>
+      </div>
+    </article>
   </section>
 
   <p class="section-label"><span class="n">02</span> Tools</p>
