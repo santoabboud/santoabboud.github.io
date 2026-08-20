@@ -13,7 +13,7 @@ export const SITE = {
   /** GoatCounter site code (the MYCODE in https://MYCODE.goatcounter.com).
    *  Empty string disables analytics entirely. Sign up at goatcounter.com,
    *  then set e.g. 'santoabboud'. */
-  goatcounter: '',
+  goatcounter: 'santoabboud',
 } as const;
 
 export const CATEGORIES: Record<string, string> = {

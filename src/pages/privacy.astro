@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
+---
+<Base title="Privacy" description="No cookies, no ads, no tracking pixels. Just anonymous visit counts.">
+  <section class="hero" style="padding-top:clamp(40px,7vw,72px)">
+    <h1>Privacy</h1>
+    <p class="bio">The short version: no cookies, no ads, and nothing that follows you around the web.</p>
+  </section>
+
+  <div class="cv">
+    <section class="cv-row">
+      <div class="cv-label">Analytics</div>
+      <div class="cv-body">
+        <p>I use <a href="https://www.goatcounter.com">GoatCounter</a> to count visits, mainly so I can see
+        which projects people actually read. It sets no cookies and stores no personal data — just aggregate
+        numbers like page views, referrers, browser type, and country. Because of that, there is no consent
+        banner to click away. Details are in <a href="https://www.goatcounter.com/help/privacy">GoatCounter's
+        privacy policy</a>.</p>
+      </div>
+    </section>
+
+    <section class="cv-row">
+      <div class="cv-label">Hosting</div>
+      <div class="cv-body">
+        <p>The site is served by GitHub Pages, which keeps standard server logs (IP addresses) for security
+        purposes. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's
+        privacy statement</a> for how they handle those.</p>
+      </div>
+    </section>
+
+    <section class="cv-row">
+      <div class="cv-label">Questions</div>
+      <div class="cv-body cv-links">
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </div>
+    </section>
+  </div>
+</Base>
