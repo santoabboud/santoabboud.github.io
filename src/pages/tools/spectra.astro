@@ -8,8 +8,6 @@ import Base from '../../layouts/Base.astro';
   </section>
 
   <div data-sv>
-    <div class="callout" data-caveat><span class="lbl">DATA</span> Loading…</div>
-
     <div class="pt-grid" data-pt aria-label="Periodic table element selector"></div>
 
     <div class="sv-controls">
@@ -25,6 +23,7 @@ import Base from '../../layouts/Base.astro';
       <div class="sv-tooltip" data-tooltip></div>
     </div>
     <p class="note" data-status style="margin-top:8px">Loading libraries…</p>
+    <p class="note" data-libnote style="margin-top:4px"></p>
 
     <div class="tool-panel" style="margin-top:22px">
       <h2>Line finder</h2>
@@ -44,11 +43,11 @@ import Base from '../../layouts/Base.astro';
       <div class="cv" style="margin-top:10px">
         <section class="cv-row">
           <div class="cv-label">NIST Handbook</div>
-          <div class="cv-body">Default. 11,996 strong lines (SRD 108), 2,401 of them flagged persistent. About a hundred per element, so a spectrum stays readable. A selection, not the whole catalogue.</div>
+          <div class="cv-body">Default. 11,996 strong lines from SRD 108, 2,401 flagged persistent. Stages I–II. <a href="/data/spectra/handbook/_manifest.json">Manifest</a></div>
         </section>
         <section class="cv-row">
           <div class="cv-label">NIST ASD 5.12</div>
-          <div class="cv-body">The lot: 209,390 lines, 376 species, stages I–V, 100 nm to 5 µm, with A<sub>ki</sub> where NIST has it. The <a href="/tools/libs/">LIBS analyzer</a> runs on the same data cut to 180–1100 nm, so this sees more — the He-Ne 1152 nm line, for one.</div>
+          <div class="cv-body">209,390 lines, 376 species, stages I–V, 100 nm to 5 µm, with A<sub>ki</sub> where NIST has it. The <a href="/tools/libs/">LIBS analyzer</a> uses the same data cut to 180–1100 nm. <a href="/data/spectra/asd/_manifest.json">Manifest</a></div>
         </section>
       </div>
       <p class="note" style="margin-top:14px" data-hidden-libs></p>

@@ -180,7 +180,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
   const hiddenEl = $('[data-hidden-libs]');
   const stagesEl = $('[data-stages]');
   const filtersEl = $('[data-filters]');
-  const caveatEl = $('[data-caveat]');
+  const libNoteEl = $('[data-libnote]');
   const resetBtn = $('[data-reset]');
 
   const state = {
@@ -408,32 +408,24 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     return l;
   }
 
-  function renderCaveat() {
-    if (!caveatEl) return;
-    // Kept deliberately short. The medium rule, the citation and the licence all
-    // live in the manifest, and the deep-UV note is in the panel below the tool.
-    const lib = activeLib();
-    caveatEl.innerHTML =
-      `<span class="lbl">${lib.label.toUpperCase()}</span> ${lib.description} ` +
-      `Bar heights compare only within one element. (<a href="${lib.manifest}">manifest</a>)`;
-
-    // A curated library is a subset by design, so say what to do when a line is
-    // not in it rather than leaving the reader to assume it does not exist.
+  /**
+   * One line, only when the active library is a subset: where to go for the rest.
+   * Everything else about a library lives in the notes panel and the manifest.
+   */
+  function renderLibNote() {
+    if (!libNoteEl) return;
     const full = state.desc.libraries.find((l) => l.id === state.desc.completeLibrary);
-    if (full && full.id !== lib.id) {
-      const p = document.createElement('p');
-      p.className = 'note';
-      p.style.margin = '8px 0 0';
-      p.append('Missing a line? ');
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'sv-linkbtn';
-      b.textContent = `Switch to ${full.label}`;
-      b.onclick = () => { libSel.value = full.id; switchLibrary(full.id); };
-      p.appendChild(b);
-      p.append(` — ${full.totalLines.toLocaleString()} of them.`);
-      caveatEl.appendChild(p);
-    }
+    libNoteEl.innerHTML = '';
+    if (!full || full.id === state.lib) { libNoteEl.hidden = true; return; }
+    libNoteEl.hidden = false;
+    libNoteEl.append('Missing a line? ');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sv-linkbtn';
+    b.textContent = `Switch to ${full.label}`;
+    b.onclick = () => { libSel.value = full.id; switchLibrary(full.id); };
+    libNoteEl.appendChild(b);
+    libNoteEl.append(` — ${full.totalLines.toLocaleString()} lines.`);
   }
 
   function renderPeriodicTable() {
@@ -483,7 +475,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     state.sel = state.sel.filter((s) => avail.has(s));
     for (const s of state.sel) { try { await ensureElement(s); } catch { /* reported below */ } }
 
-    renderLibrarySelect(); renderStages(); renderFilters(); renderCaveat();
+    renderLibrarySelect(); renderStages(); renderFilters(); renderLibNote();
     renderPeriodicTable(); renderChips(); renderHiddenLibs();
     findRes.innerHTML = '';
     requestDraw(); updateStatusCounts();   // reports the library summary when nothing is selected
@@ -829,7 +821,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     let m;
     try { m = await ensureManifest(state.lib); }
     catch (e) { setStatus(`Could not load ${state.lib}: ${e.message}`); return; }
-    renderStages(); renderFilters(); renderCaveat(); renderPeriodicTable(); renderHiddenLibs();
+    renderStages(); renderFilters(); renderLibNote(); renderPeriodicTable(); renderHiddenLibs();
     setStatus(`${lib.label} — ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
     requestDraw();
   })();
