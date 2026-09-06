@@ -187,6 +187,9 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--text); outline-o
 .sv-segbtn[aria-pressed="true"]{background:var(--text); border-color:var(--text); color:var(--bg)}
 .sv-tag{font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:1px 5px;
   border:1px solid var(--line-strong); color:var(--muted)}
+.sv-linkbtn{font:inherit; color:var(--text); background:none; border:0; padding:0;
+  cursor:pointer; text-decoration:underline; text-underline-offset:2px}
+.sv-linkbtn:hover{opacity:.7}
 .sv-chip{font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer;
   background:var(--text); color:var(--bg); border:1px solid var(--text); padding:4px 9px}
 .sv-canvas-wrap{position:relative; border:1px solid var(--line-strong); overflow:hidden; background:var(--rulebg)}

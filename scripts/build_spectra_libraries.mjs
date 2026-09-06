@@ -52,6 +52,12 @@ function parseCSV(text) {
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const roman = (n) => ROMAN[n] ?? `[${n}]`;
 
+/** NIST intensities carry qualifiers ("1000h", "50w", "(75)"); take the leading number. */
+const parseIntensity = (s) => {
+  const m = /^[\s([]*([0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?)/.exec(String(s ?? ''));
+  return m ? parseFloat(m[1]) : NaN;
+};
+
 function writeJSON(path, obj) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, JSON.stringify(obj));
@@ -101,77 +107,22 @@ function writeFinder(dir, lines) {
   return { shards, width: SHARD_NM, dp: FINDER_DP, bytes: total, worst };
 }
 
-/* ------------------------------------------------------- legacy relocation */
-
-/** The original scrape keeps its data verbatim; it only moves into legacy/. */
-function relocateLegacy() {
-  const dest = join(OUT, 'legacy');
-  if (existsSync(join(dest, '_manifest.json'))) return dest;
-  mkdirSync(dest, { recursive: true });
-  let moved = 0;
-  for (const f of readdirSync(OUT)) {
-    if (!f.endsWith('.json')) continue;
-    if (f === '_libraries.json') continue;
-    const src = join(OUT, f);
-    if (statSync(src).isDirectory()) continue;
-    if (f === '_finder.json') { rmSync(src); continue; }  // superseded by sharded index
-    renameSync(src, join(dest, f));
-    moved++;
-  }
-  log(`  legacy: moved ${moved} files into legacy/`);
-  return dest;
-}
-
 /* ------------------------------------------------------------- library: legacy */
 
+/**
+ * The site's original scrape. Hidden from the picker — its air/vacuum convention
+ * was never verified, so it is not something to measure against — but kept, and
+ * reachable, because it is the only set here that goes past ionization stage V.
+ * Nothing rebuilds it: the files are committed as they were.
+ */
 function buildLegacy() {
-  const dir = relocateLegacy();
-  const files = readdirSync(dir).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
-  const elements = [];
-  const all = [];
-  const stageSet = new Set();
-  let lines = 0;
-
-  for (const f of files) {
-    const sym = f.replace('.json', '');
-    const data = JSON.parse(readFileSync(join(dir, f), 'utf8'));
-    let n = 0;
-    const stages = [];
-    for (const [ion, rows] of Object.entries(data.stages)) {
-      stageSet.add(ion);
-      stages.push(ion);
-      n += rows.length;
-      for (const [lam, intStr] of rows) {
-        all.push({ lam, ion, int: parseIntensity(intStr) });
-      }
-    }
-    lines += n;
-    elements.push({ sym, lines: n, stages, bytes: statSync(join(dir, f)).size });
-  }
-
-  const finder = writeFinder(join(dir, '_finder'), all);
-  const manifest = {
-    id: 'legacy',
-    label: 'Legacy ASD scrape',
-    source: 'NIST Atomic Spectra Database (earlier scrape of this site)',
-    citation: 'Kramida, A., Ralchenko, Yu., Reader, J. and NIST ASD Team, NIST Atomic Spectra Database. DOI 10.18434/T4W30F',
-    licence: 'NIST ASD is a work of the U.S. Government, not subject to copyright in the United States. Citation requested.',
-    medium: 'unverified',
-    medium_note: 'Carried over unchanged from the original scrape; its air/vacuum convention was never verified. Use the ASD library for wavelengths you intend to rely on.',
-    row_format: 'legacy',
-    total_lines: lines,
-    elements,
-    finder,
-  };
-  writeJSON(join(dir, '_manifest.json'), manifest);
-  log(`  legacy    ${nf(lines)} lines, ${elements.length} elements, ${stageSet.size} species, finder ${mb(finder.bytes)} in ${finder.shards.length} shards (worst ${(finder.worst / 1024).toFixed(0)} KB)`);
-  return manifest;
+  const dir = join(OUT, 'legacy');
+  const prior = join(dir, '_manifest.json');
+  if (!existsSync(prior)) { log('  legacy    SKIPPED (not present)'); return null; }
+  const m = JSON.parse(readFileSync(prior, 'utf8'));
+  log(`  legacy    ${nf(m.total_lines)} lines, ${m.elements.length} elements (kept as-is, hidden)`);
+  return m;
 }
-
-const parseIntensity = (s) => {
-  const m = /^[\s([]*([0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?)/.exec(String(s ?? ''));
-  return m ? parseFloat(m[1]) : NaN;
-};
 
 /* ---------------------------------------------------------------- library: asd */
 
@@ -357,13 +308,19 @@ function buildHandbook() {
 log('Building spectra libraries…');
 if (!existsSync(MIRROR)) log(`  note: ${MIRROR} not found — only libraries that need it are skipped`);
 
-const built = [buildASD(), buildHandbook(), buildLegacy()].filter(Boolean);
+const built = [buildHandbook(), buildASD(), buildLegacy()].filter(Boolean);
 
 const DESCRIPTIONS = {
-  asd: 'Every observed and Ritz line NIST publishes for stages I–V, from 100 nm out to 5 µm, with transition probabilities. The default, and the one to trust for wavelengths.',
-  handbook: 'NIST’s curated strong-line tables — a few hundred lines per element instead of thousands. Best for working out what a discharge is made of.',
-  legacy: 'The site’s original scrape. Kept only because it reaches ionization stages VI and above, which the ASD mirror does not cover.',
+  handbook: 'NIST’s strong lines — the ones you actually see. About a hundred per element.',
+  asd: 'Everything NIST has: 209,390 lines, stages I–V, out to 5 µm. Dense.',
+  legacy: 'The old scrape. Kept only for stages above V; its air/vacuum convention was never checked.',
 };
+
+/** Where to point people when the curated set does not have what they are after. */
+const COMPLETE_LIBRARY = 'asd';
+
+/** Not offered in the picker; reachable from the notes below the tool. */
+const HIDDEN = new Set(['legacy']);
 
 // Stage groupings offered per library. `max` is inclusive; null means "everything above".
 // Stage 0 is the Handbook's handful of lines that NIST leaves without an ionization
@@ -405,10 +362,12 @@ const libraries = built.map((m) => ({
   elements: m.elements.length,
   hasPersistent: m.id === 'handbook',
   hasObservedFlag: m.id === 'asd',
+  hidden: HIDDEN.has(m.id),
 }));
 
 writeJSON(join(OUT, '_libraries.json'), {
-  default: 'asd',
+  default: 'handbook',
+  completeLibrary: COMPLETE_LIBRARY,
   defaultView: { min: 180, max: 1100 },
   libraries,
 });

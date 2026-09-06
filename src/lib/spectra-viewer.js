@@ -177,6 +177,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
   const chipsEl = $('[data-selected]');
   const findRes = $('[data-find-results]');
   const libSel = $('[data-lib]');
+  const hiddenEl = $('[data-hidden-libs]');
   const stagesEl = $('[data-stages]');
   const filtersEl = $('[data-filters]');
   const caveatEl = $('[data-caveat]');
@@ -294,15 +295,38 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
 
   /* ---------------- UI: library, stages, filters ---------------- */
 
+  /** Hidden libraries stay out of the picker unless one is already loaded. */
   function renderLibrarySelect() {
     libSel.innerHTML = '';
     for (const l of state.desc.libraries) {
+      if (l.hidden && l.id !== state.lib) continue;
       const o = document.createElement('option');
       o.value = l.id;
       o.textContent = l.label;
       o.selected = l.id === state.lib;
       libSel.appendChild(o);
     }
+  }
+
+  /** One quiet line under the notes, for the sets not worth putting in the picker. */
+  function renderHiddenLibs() {
+    if (!hiddenEl) return;
+    const hidden = state.desc.libraries.filter((l) => l.hidden && l.id !== state.lib);
+    hiddenEl.innerHTML = '';
+    if (!hidden.length) { hiddenEl.hidden = true; return; }
+    hiddenEl.hidden = false;
+    hiddenEl.append('Also here, if you need it: ');
+    hidden.forEach((l, i) => {
+      if (i) hiddenEl.append(', ');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sv-linkbtn';
+      b.textContent = l.label.toLowerCase();
+      b.title = l.description;
+      b.onclick = () => { switchLibrary(l.id); };
+      hiddenEl.appendChild(b);
+    });
+    hiddenEl.append('.');
   }
 
   function renderStages() {
@@ -386,14 +410,30 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
 
   function renderCaveat() {
     if (!caveatEl) return;
+    // Kept deliberately short. The medium rule, the citation and the licence all
+    // live in the manifest, and the deep-UV note is in the panel below the tool.
     const lib = activeLib();
-    const m = manifest();
-    const bits = [];
-    if (m?.medium_note) bits.push(m.medium_note);
-    bits.push('Relative intensities are per-species and source-condition-dependent: stick heights are log-normalized <em>within each element band</em> and are <em>not</em> comparable across species.');
     caveatEl.innerHTML =
-      `<span class="lbl">${lib.label.toUpperCase()}</span> ${lib.description} ${bits.join(' ')} ` +
-      `<a href="${lib.manifest}">Data manifest</a>${m?.citation ? ` · ${m.citation}` : ''}`;
+      `<span class="lbl">${lib.label.toUpperCase()}</span> ${lib.description} ` +
+      `Bar heights compare only within one element. (<a href="${lib.manifest}">manifest</a>)`;
+
+    // A curated library is a subset by design, so say what to do when a line is
+    // not in it rather than leaving the reader to assume it does not exist.
+    const full = state.desc.libraries.find((l) => l.id === state.desc.completeLibrary);
+    if (full && full.id !== lib.id) {
+      const p = document.createElement('p');
+      p.className = 'note';
+      p.style.margin = '8px 0 0';
+      p.append('Missing a line? ');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sv-linkbtn';
+      b.textContent = `Switch to ${full.label}`;
+      b.onclick = () => { libSel.value = full.id; switchLibrary(full.id); };
+      p.appendChild(b);
+      p.append(` — ${full.totalLines.toLocaleString()} of them.`);
+      caveatEl.appendChild(p);
+    }
   }
 
   function renderPeriodicTable() {
@@ -443,7 +483,8 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     state.sel = state.sel.filter((s) => avail.has(s));
     for (const s of state.sel) { try { await ensureElement(s); } catch { /* reported below */ } }
 
-    renderStages(); renderFilters(); renderCaveat(); renderPeriodicTable(); renderChips();
+    renderLibrarySelect(); renderStages(); renderFilters(); renderCaveat();
+    renderPeriodicTable(); renderChips(); renderHiddenLibs();
     findRes.innerHTML = '';
     requestDraw(); updateStatusCounts();   // reports the library summary when nothing is selected
     if (dropped.length) {
@@ -788,7 +829,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     let m;
     try { m = await ensureManifest(state.lib); }
     catch (e) { setStatus(`Could not load ${state.lib}: ${e.message}`); return; }
-    renderStages(); renderFilters(); renderCaveat(); renderPeriodicTable();
+    renderStages(); renderFilters(); renderCaveat(); renderPeriodicTable(); renderHiddenLibs();
     setStatus(`${lib.label} — ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
     requestDraw();
   })();

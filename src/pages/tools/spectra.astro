@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 <Base title="Atomic Spectra Viewer" description="Interactive atomic emission line viewer: NIST ASD and Handbook line libraries, ionization-stage filtering, air/vacuum wavelengths, line finder.">
   <section class="hero" style="padding-top:40px">
     <h1>Atomic Spectra Viewer</h1>
-    <p class="bio">Emission lines from the NIST databases, for working out what is glowing in a discharge tube. It opens on neutral and singly ionized lines between 180 and 1100 nm, which is what you actually see in a tube; switch libraries, turn on higher stages, or zoom out to the full 100 nm–5 µm range if you are looking at something hotter or further into the infrared. Pick up to three elements; scroll to zoom, drag to pan, double-click to reset.</p>
+    <p class="bio">NIST emission lines, for working out what is glowing in a discharge tube. Opens on the strong lines, 180–1100 nm; switch to the full ASD catalogue when you need everything. Pick up to three elements; scroll to zoom, drag to pan, double-click to reset.</p>
   </section>
 
   <div data-sv>
@@ -40,23 +40,19 @@ import Base from '../../layouts/Base.astro';
     </div>
 
     <div class="tool-panel" style="margin-top:22px">
-      <h2>About the libraries</h2>
-      <p class="note" style="margin-top:0">Three sets of lines, and they answer different questions.</p>
+      <h2>The libraries</h2>
       <div class="cv" style="margin-top:10px">
         <section class="cv-row">
-          <div class="cv-label">NIST ASD 5.12</div>
-          <div class="cv-body">209,390 lines over 99 elements and 376 species, stages I–V, from 100 nm out to 5 µm. The default. Everything NIST publishes as observed or Ritz, with transition probabilities where they exist, and the wavelengths to quote. The <a href="/tools/libs/">LIBS analyzer</a> uses the same ASD version but only the 180–1100 nm slice it needs for peak matching, so this viewer sees more than it does — the He-Ne 1152 nm neon line, for instance.</div>
-        </section>
-        <section class="cv-row">
           <div class="cv-label">NIST Handbook</div>
-          <div class="cv-body">11,996 lines, the curated strong-line tables (SRD 108), of which 2,401 are marked persistent — the ones that hang on as a source gets weaker. A few hundred lines per element instead of thousands, which is usually what you want when you are trying to recognise something rather than measure it.</div>
+          <div class="cv-body">Default. 11,996 strong lines (SRD 108), 2,401 of them flagged persistent. About a hundred per element, so a spectrum stays readable. A selection, not the whole catalogue.</div>
         </section>
         <section class="cv-row">
-          <div class="cv-label">Legacy scrape</div>
-          <div class="cv-body">The original 143,786-line set this page used to serve. It is kept for one reason: 264 of its species sit at ionization stage VI or higher, out to Xe LIV, which the ASD mirror stops short of. Useful for hot plasma work, but its air/vacuum convention was never verified, so it carries no medium label and you should not measure against it.</div>
+          <div class="cv-label">NIST ASD 5.12</div>
+          <div class="cv-body">The lot: 209,390 lines, 376 species, stages I–V, 100 nm to 5 µm, with A<sub>ki</sub> where NIST has it. The <a href="/tools/libs/">LIBS analyzer</a> runs on the same data cut to 180–1100 nm, so this sees more — the He-Ne 1152 nm line, for one.</div>
         </section>
       </div>
-      <p class="note" style="margin-top:14px">A note on the deep UV: NIST quotes vacuum wavelengths below about 185 nm and air above, and leaves the sub-185 nm values unconverted. Rather than guess from the wavelength, the viewer looks at whether a line actually carries a conversion, and tags the ones that do not with <span class="sv-tag">vac</span> — so it is always clear which convention you are reading, whichever way the toggle is set.</p>
+      <p class="note" style="margin-top:14px" data-hidden-libs></p>
+      <p class="note" style="margin-top:10px">Below ~185 nm NIST quotes vacuum and applies no conversion. The viewer checks whether a line was actually converted rather than guessing from its wavelength, and tags the ones that were not <span class="sv-tag">vac</span>.</p>
     </div>
   </div>
 
