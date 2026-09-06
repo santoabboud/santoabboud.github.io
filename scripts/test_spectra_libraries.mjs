@@ -64,11 +64,8 @@ function rowsOf(lib, sym, data) {
 const elementPath = (lib, sym) => join('public', lib.base.replace(/^\//, ''), `${sym}.json`);
 
 /**
- * Mirrors the viewer's stage parsing, which differs by library on purpose.
- * The Handbook files carry both "Es I" and a bare "Es" key, so a stageless key
- * there is genuinely unassigned (stage 0). The legacy scrape's only stageless key
- * is "H", which holds all 86 hydrogen lines — hydrogen has no second emitting
- * stage, so that one really is neutral.
+ * Mirrors the viewer's stage parsing. The Handbook files carry both "Es I" and a
+ * bare "Es" key, so a stageless key there is a line NIST left unassigned (stage 0).
  */
 const stageOfKey = (s, rowFormat) => {
   if (typeof s === 'number') return s;
@@ -82,11 +79,24 @@ check('_libraries.json exists', existsSync(join(OUT, '_libraries.json')));
 const desc = readJSON(join(OUT, '_libraries.json'));
 check('declares a default library', !!desc.libraries.find((l) => l.id === desc.default),
   `default=${desc.default}`);
-check('default is the ASD mirror', desc.default === 'asd', `got ${desc.default}`);
+check('default is the curated strong-line library', desc.default === 'handbook', `got ${desc.default}`);
 check('default view is the visible+near-IR window',
   desc.defaultView.min === 180 && desc.defaultView.max === 1100);
 check('every library has an adapter this viewer implements',
   desc.libraries.every((l) => ['libs', 'v2', 'legacy'].includes(l.rowFormat)));
+// The legacy scrape stays reachable but out of the picker: its air/vacuum
+// convention was never verified, so it should not be something you land on.
+const legacy = desc.libraries.find((l) => l.id === 'legacy');
+check('the unverified legacy scrape is hidden from the picker', legacy?.hidden === true);
+check('the legacy scrape is not the default', desc.default !== 'legacy');
+check('the legacy scrape claims no wavelength medium', legacy?.medium === 'unverified');
+// The default is a curated subset, so the UI must be able to point somewhere complete.
+const full = desc.libraries.find((l) => l.id === desc.completeLibrary);
+check('descriptor names a complete library to fall back to', !!full, `completeLibrary=${desc.completeLibrary}`);
+check('the complete library is not the default', desc.completeLibrary !== desc.default);
+check('the complete library really is the larger one',
+  full && full.totalLines > desc.libraries.find((l) => l.id === desc.default).totalLines,
+  full ? `${full.totalLines}` : 'missing');
 
 for (const lib of desc.libraries) {
   console.log(`\n— ${lib.id} —`);
