@@ -174,9 +174,19 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--text); outline-o
   color:var(--text); background:var(--panel); border:1px solid var(--line)}
 .pt-cell:hover{border-color:var(--text)}
 .pt-cell[aria-pressed="true"]{background:var(--text); border-color:var(--text); color:var(--bg); font-weight:600}
+.pt-cell[data-avail="no"]{opacity:.28; cursor:not-allowed}
+.pt-cell[data-avail="no"]:hover{border-color:var(--line)}
 .sv-controls{display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:10px;
   font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.04em}
 .sv-controls label{display:flex; gap:5px; align-items:center; color:var(--muted); cursor:pointer}
+.sv-libpick select{font-family:'JetBrains Mono',monospace; font-size:11.5px; margin-left:6px;
+  color:var(--text); background:var(--panel); border:1px solid var(--line-strong); padding:3px 6px}
+.sv-seg{display:flex; gap:4px; align-items:center; color:var(--muted)}
+.sv-segbtn{font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer; padding:3px 8px;
+  color:var(--muted); background:var(--panel); border:1px solid var(--line)}
+.sv-segbtn[aria-pressed="true"]{background:var(--text); border-color:var(--text); color:var(--bg)}
+.sv-tag{font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:1px 5px;
+  border:1px solid var(--line-strong); color:var(--muted)}
 .sv-chip{font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer;
   background:var(--text); color:var(--bg); border:1px solid var(--text); padding:4px 9px}
 .sv-canvas-wrap{position:relative; border:1px solid var(--line-strong); overflow:hidden; background:var(--rulebg)}
@@ -191,4 +201,8 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--text); outline-o
 .sv-findtable tr[data-lam]:hover td{background:var(--panel)}
 .cal-results td{font-variant-numeric:tabular-nums}
 .cal-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
-@media (max-width:820px){ .cal-grid{grid-template-columns:1fr} .pt-grid{grid-auto-rows:24px} .pt-cell{font-size:9px} }
+@media (max-width:820px){ .cal-grid{grid-template-columns:1fr}
+  /* 18 columns cannot fit a phone at a tappable size, so let the table scroll
+     sideways instead of shrinking the cells below a usable target. */
+  .pt-grid{grid-template-columns:repeat(18,minmax(26px,1fr)); grid-auto-rows:28px; overflow-x:auto}
+  .pt-cell{font-size:9.5px} }

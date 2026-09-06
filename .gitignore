@@ -5,3 +5,7 @@ _staging/
 *.log
 SESSION_STATE.json
 scripts/_nist_cache/
+
+# Local mirror of the upstream line databases (~3.5 GB). Input to
+# scripts/build_spectra_libraries.mjs; only its output is committed.
+LIBSlines/
