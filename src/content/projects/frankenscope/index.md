@@ -50,4 +50,4 @@ It is currently equipped with a passively Q-switched 1064 nm DPSS laser, or an o
   <tr><td>Control</td><td>LabJack T4</td></tr>
 </table>
 
-Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman analysis, a TILL Photonics Polychrome IV tunable-wavelength short-arc xenon light source, and a LabJack T4 for general control. It is also capable of conducting infrared in-situ microscopy — IRIS for short. See Bunnie Huang's work for more about that :-)
+Additional components include an Ocean Optics USB2000+ UV-NIR spectrometer for LIBS and Raman analysis, a TILL Photonics Polychrome IV tunable-wavelength short-arc xenon light source, and a LabJack T4 for general control. It is also capable of conducting infrared in-situ microscopy, IRIS for short. See Bunnie Huang's work for more about that :-)

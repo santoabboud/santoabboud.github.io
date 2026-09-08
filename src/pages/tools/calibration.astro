@@ -36,7 +36,7 @@ import Base from '../../layouts/Base.astro';
     <canvas data-plot style="width:100%; display:block" aria-label="Calibration fit and residual plots"></canvas>
   </div>
 
-  <p class="note">Numerics: the fit solves normal equations in a Chebyshev basis T<sub>k</sub>(u), u ∈ [−1, 1] over the pixel range, then converts exactly to monomial C<sub>k</sub> — avoiding the ~10²⁰ dynamic range that makes raw-monomial normal equations lose most coefficient digits in double precision. Cov(C) = J·s²(AᵀA)⁻¹·Jᵀ with s² = SSR/(N−p). Source: <a href="https://github.com/santoabboud/santoabboud.github.io">repo</a>, validated in <code>scripts/test_calibration.mjs</code>.</p>
+  <p class="note">Numerics: the fit solves normal equations in a Chebyshev basis T<sub>k</sub>(u), u ∈ [−1, 1] over the pixel range, then converts exactly to monomial C<sub>k</sub>, which avoids the ~10²⁰ dynamic range that makes raw-monomial normal equations lose most coefficient digits in double precision. Cov(C) = J·s²(AᵀA)⁻¹·Jᵀ with s² = SSR/(N−p). Source: <a href="https://github.com/santoabboud/santoabboud.github.io">repo</a>, validated in <code>scripts/test_calibration.mjs</code>.</p>
 
   <script>
     import { fitCalibration } from '../../lib/calibration.js';
@@ -121,7 +121,7 @@ import Base from '../../layouts/Base.astro';
       ctx.fillStyle = colA;
       for (const p of lastPts) { ctx.beginPath(); ctx.arc(X(p.x), Y1(p.y), 3.4, 0, 7); ctx.fill(); }
       ctx.fillStyle = colM; ctx.font = "10.5px 'JetBrains Mono', monospace";
-      ctx.fillText('λ [nm] vs pixel — points + fit', padL, y0t - 4);
+      ctx.fillText('λ [nm] vs pixel · points + fit', padL, y0t - 4);
       ctx.fillText(yMax.toFixed(1), 8, y0t + 10); ctx.fillText(yMin.toFixed(1), 8, y1t);
 
       // panel 2: residuals
@@ -158,7 +158,7 @@ import Base from '../../layouts/Base.astro';
       // generated from an arbitrary plausible cubic + rounding (NOT a real
       // instrument calibration).
       ta.value = [
-        '# pixel, λ[nm]  — synthetic Hg/Ar example',
+        '# pixel, λ[nm]  · synthetic Hg/Ar example',
         '78.4, 365.015', '287.1, 404.656', '450.9, 435.833',
         '1031.6, 546.074', '1194.7, 576.960', '1205.8, 579.066',
         '1822.4, 696.543', '2043.0, 738.398',

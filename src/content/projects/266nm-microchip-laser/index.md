@@ -1,6 +1,6 @@
 ---
 title: "TEEM Photonics 266 nm microchip laser"
-description: "A teardown of a compact, deep-UV, passively Q-switched microchip laser, and a look at how a tiny flat-flat cavity makes a clean beam."
+description: "A teardown of a passively Q-switched deep-UV microchip laser, and how a flat-flat cavity still makes a clean beam."
 category: lasers
 date: 2026-06-10
 cover: ./overview.jpg

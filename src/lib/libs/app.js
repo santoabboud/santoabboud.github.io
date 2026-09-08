@@ -82,7 +82,7 @@ export function initLibsApp(root) {
   /* ---------------- data loading ---------------- */
   fetch(`${DATA}/_manifest.json`).then((r) => r.json()).then((m) => {
     state.manifest = m;
-    setStatus(`Ready — ${m.total_lines.toLocaleString()} NIST lines, ${m.elements.length} elements. Load a CSV or a sample.`);
+    setStatus(`Ready: ${m.total_lines.toLocaleString()} NIST lines, ${m.elements.length} elements. Load a CSV or a sample.`);
   }).catch(() => setStatus('Could not load dataset manifest.'));
 
   async function ensureMatcher() {
@@ -208,8 +208,8 @@ export function initLibsApp(root) {
     const summary = `<div class="libs-summary"><span class="lbl">Identified</span>${
       confident.length
         ? chipEls.map((r) => `<button class="el-chip" data-ovl="${r.element}" title="overlay ${r.element} lines">${r.element}<i>${pct(r.confidence)}</i></button>`).join('')
-          + (more > 0 ? `<span class="note">+${more} more — narrow the pre-select to sharpen</span>` : '')
-        : '<span class="note">no high-confidence elements — see candidates below</span>'}</div>`;
+          + (more > 0 ? `<span class="note">+${more} more, narrow the pre-select to sharpen</span>` : '')
+        : '<span class="note">no high-confidence elements, see candidates below</span>'}</div>`;
     let body = '';
     for (const { key, label } of TIERS) {
       const tr = rows.filter((r) => tierOf(r.confidence) === key);
@@ -232,7 +232,7 @@ export function initLibsApp(root) {
     if (conf.length < 1) { diagEl.innerHTML = '<p class="note">Run analysis; diagnostics appear when confident elements are found.</p>'; return; }
     const tFits = conf.filter((r) => r.fittedT_K).map((r) => r.fittedT_K);
     const tAvg = tFits.length ? tFits.reduce((a, b) => a + b, 0) / tFits.length : null;
-    diagEl.innerHTML = `<p class="note">Plasma temperature (mean of per-species Boltzmann fits): <b>${tAvg ? tAvg.toFixed(0) + ' K' : 'n/a — need ≥3 clean lines/species'}</b>.
+    diagEl.innerHTML = `<p class="note">Plasma temperature (mean of per-species Boltzmann fits): <b>${tAvg ? tAvg.toFixed(0) + ' K' : 'n/a, need ≥3 clean lines/species'}</b>.
       CF-LIBS composition and n<sub>e</sub> require clean-line selection and a radiometric response curve; see the
       <a href="${DATA}/_manifest.json">data manifest</a> for provenance. Confidence is a transparent ranking score (coincidence × strong-line presence × Boltzmann consistency), not a calibrated probability.</p>`;
   }
