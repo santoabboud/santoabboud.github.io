@@ -1,5 +1,5 @@
 ---
-title: "Mullard / Philips XX1332 — giant Gen 2 intensifier"
+title: "Mullard / Philips XX1332: a giant Gen 2 intensifier"
 description: "A large-format Gen 2+ image intensifier tube built into a usable night-vision device, in a quick 3D-printed modular housing."
 category: night-vision
 date: 2026-06-10

@@ -387,12 +387,12 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     if (lib.hasObservedFlag) {
       filtersEl.appendChild(checkbox('Observed only', state.observedOnly, (v) => {
         state.observedOnly = v; requestDraw(); updateStatusCounts();
-      }, 'Hide Ritz lines — wavelengths calculated from energy levels rather than measured directly.'));
+      }, 'Hide Ritz lines: wavelengths calculated from energy levels rather than measured directly.'));
     }
     if (lib.hasPersistent) {
       filtersEl.appendChild(checkbox('Persistent only', state.persistentOnly, (v) => {
         state.persistentOnly = v; requestDraw(); updateStatusCounts();
-      }, 'Show only the lines NIST marks as persistent — the last to survive as a source weakens.'));
+      }, 'Show only the lines NIST marks as persistent: the last to survive as a source weakens.'));
     }
   }
 
@@ -425,7 +425,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     b.textContent = `Switch to ${full.label}`;
     b.onclick = () => { libSel.value = full.id; switchLibrary(full.id); };
     libNoteEl.appendChild(b);
-    libNoteEl.append(` — ${full.totalLines.toLocaleString()} lines.`);
+    libNoteEl.append(` (${full.totalLines.toLocaleString()} lines).`);
   }
 
   function renderPeriodicTable() {
@@ -440,7 +440,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
       b.style.gridRow = el.r;
       b.style.gridColumn = el.c;
       const has = avail.has(el.s);
-      b.title = has ? el.n : `${el.n} — not in this library`;
+      b.title = has ? el.n : `${el.n}: not in this library`;
       if (!has) { b.dataset.avail = 'no'; b.disabled = true; }
       b.setAttribute('aria-pressed', String(state.sel.includes(el.s)));
       b.onclick = () => toggle(el.s);
@@ -480,7 +480,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     findRes.innerHTML = '';
     requestDraw(); updateStatusCounts();   // reports the library summary when nothing is selected
     if (dropped.length) {
-      setStatus(`${dropped.join(', ')} ${dropped.length === 1 ? 'is' : 'are'} not in ${lib.label} — removed from the plot.`);
+      setStatus(`${dropped.join(', ')} ${dropped.length === 1 ? 'is' : 'are'} not in ${lib.label}, so they were removed from the plot.`);
     }
   }
 
@@ -543,7 +543,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
   function updateStatusCounts() {
     if (!state.sel.length) {
       const lib = activeLib(), m = manifest();
-      if (lib && m) setStatus(`${lib.label} — ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
+      if (lib && m) setStatus(`${lib.label}: ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
       return;
     }
     const parts = state.sel.map((sym) => {
@@ -738,7 +738,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     if (!Number.isFinite(lam)) { findRes.innerHTML = '<p class="note">Enter a wavelength in nm.</p>'; return; }
     const lib = activeLib();
     const m = manifest();
-    if (!lib || !m) { findRes.innerHTML = '<p class="note">The line library has not finished loading — reload the page and try again.</p>'; return; }
+    if (!lib || !m) { findRes.innerHTML = '<p class="note">The line library has not finished loading. Reload the page and try again.</p>'; return; }
     const width = m.finder.width;
     const first = Math.floor((lam - tol) / width) * width;
     const last = Math.floor((lam + tol) / width) * width;
@@ -767,7 +767,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     // The index is built on air wavelengths, so say so while the plot is in vacuum.
     const vacNote = state.medium === 'vac'
       ? ' The index searches air wavelengths, so this is an air λ while the plot is in vacuum.' : '';
-    const head = `<p class="note">${hits.length.toLocaleString()} match${hits.length === 1 ? '' : 'es'} within ±${tol} nm in ${lib.label}${hits.length > 200 ? ' — showing nearest 200' : ''}.${vacNote}</p>`;
+    const head = `<p class="note">${hits.length.toLocaleString()} match${hits.length === 1 ? '' : 'es'} within ±${tol} nm in ${lib.label}${hits.length > 200 ? ', showing nearest 200' : ''}.${vacNote}</p>`;
     findRes.innerHTML = head + (shown.length
       ? `<table class="sv-findtable"><tr><th>Species</th><th>λ [nm]</th><th>Δλ [nm]</th><th>Rel. int.</th></tr>` +
         shown.map((h) => `<tr data-lam="${h.lam}" data-ion="${h.ion}" tabindex="0"><td>${h.ion}</td><td>${h.lam.toFixed(3)}</td><td>${(h.lam - lam).toFixed(3)}</td><td>${h.i ? '▁▂▃▄▅▆▇█'[Math.min(7, Math.floor(h.i / 32))] : '—'}</td></tr>`).join('') +
@@ -822,7 +822,7 @@ export function initSpectraViewer(root, { librariesUrl = '/data/spectra/_librari
     try { m = await ensureManifest(state.lib); }
     catch (e) { setStatus(`Could not load ${state.lib}: ${e.message}`); return; }
     renderStages(); renderFilters(); renderLibNote(); renderPeriodicTable(); renderHiddenLibs();
-    setStatus(`${lib.label} — ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
+    setStatus(`${lib.label}: ${m.total_lines.toLocaleString()} lines across ${m.elements.length} elements. Pick an element.`);
     requestDraw();
   })();
 }

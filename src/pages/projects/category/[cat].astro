@@ -18,5 +18,5 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft && d
   </section>
   {projects.length > 0
     ? <section class="grid">{projects.map((p) => <ProjectCard project={p} />)}</section>
-    : <p class="note">Nothing published here yet — write-ups in progress.</p>}
+    : <p class="note">Nothing published here yet. Write-ups in progress.</p>}
 </Base>

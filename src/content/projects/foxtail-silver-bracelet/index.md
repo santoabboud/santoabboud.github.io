@@ -1,6 +1,6 @@
 ---
 title: "Twisted foxtail silver bracelet"
-description: "Crafting a sterling-silver bracelet using traditional wire-weaving — a twisted foxtail chain."
+description: "A sterling silver bracelet, wire-woven into a twisted foxtail chain."
 category: art
 date: 2026-06-10
 draft: true

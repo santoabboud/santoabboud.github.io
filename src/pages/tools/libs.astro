@@ -4,11 +4,11 @@ import Base from '../../layouts/Base.astro';
 <Base title="LIBS Analyzer" description="Client-side laser-induced breakdown spectroscopy analysis: NIST line matching, transparent elemental confidence, plasma temperature, and calibration-free composition.">
   <section class="hero" style="padding-top:40px">
     <h1>LIBS Analyzer</h1>
-    <p class="bio">Drop a spectrometer CSV (or load a synthetic sample). The tool removes the plasma continuum, finds emission peaks, matches them to 147,949 NIST ASD lines, and reports each element with an <em>auditable</em> confidence — coincidence-vs-chance × strong-line presence × Boltzmann consistency — plus a plasma temperature. Everything runs in your browser; your spectra are never uploaded.</p>
+    <p class="bio">Drop a spectrometer CSV (or load a synthetic sample). The tool removes the plasma continuum, finds emission peaks, matches them to 147,949 NIST ASD lines, and reports each element with an <em>auditable</em> confidence (coincidence-vs-chance × strong-line presence × Boltzmann consistency), plus a plasma temperature. Everything runs in your browser; your spectra are never uploaded.</p>
   </section>
 
   <div class="callout"><span class="lbl">METHOD &amp; CAVEATS</span>
-    Confidence is a transparent ranking score, not a calibrated probability — each component is shown. The coincidence guard penalizes line-rich elements that match by chance; the domain pre-select acts as a prior. Boltzmann temperatures assume optically-thin LTE and a flat (or pre-corrected) spectral response. NIST ASD v5.12 (DOI 10.18434/T4W30F); air wavelengths via Peck–Reeder. Provenance: <a href="/data/libs/_manifest.json">data manifest</a>.
+    Confidence is a transparent ranking score, not a calibrated probability; each component is shown. The coincidence guard penalizes line-rich elements that match by chance; the domain pre-select acts as a prior. Boltzmann temperatures assume optically-thin LTE and a flat (or pre-corrected) spectral response. NIST ASD v5.12 (DOI 10.18434/T4W30F); air wavelengths via Peck–Reeder. Provenance: <a href="/data/libs/_manifest.json">data manifest</a>.
   </div>
 
   <div data-libs>
@@ -43,7 +43,7 @@ import Base from '../../layouts/Base.astro';
     </div>
 
     <div class="tool-panel" style="margin-top:18px">
-      <h2>Detection settings <span class="note" style="font-weight:400">— baseline, threshold &amp; peak filters</span></h2>
+      <h2>Detection settings <span class="note" style="font-weight:400">· baseline, threshold &amp; peak filters</span></h2>
       <div class="libs-detect">
         <label>baseline
           <select data-baseline>
@@ -69,7 +69,7 @@ import Base from '../../layouts/Base.astro';
     </div>
 
     <div class="tool-panel" style="margin-top:18px">
-      <h2>Element pre-select <span class="note" style="font-weight:400">— prior on what's plausible</span></h2>
+      <h2>Element pre-select <span class="note" style="font-weight:400">· prior on what's plausible</span></h2>
       <div class="libs-presets">
         <button class="btn active" data-preset="all">ALL</button>
         <button class="btn" data-preset="metallurgy">METALLURGY</button>
